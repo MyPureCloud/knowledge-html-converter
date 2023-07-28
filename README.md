@@ -2,6 +2,10 @@
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
+Extracting the code that converts html to the knowledge article content json structure from https://bitbucket.org/inindca/knowledge-administration-ui/, so that it can be published and reused for importing articles from external knowledge sources.
+
+To do: add proper documentation.
+
 ### What is this repository for? ###
 
 * Quick summary

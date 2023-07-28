@@ -1,0 +1,30 @@
+{
+  "name": "knowledge-html-converter",
+  "version": "0.0.1",
+  "description": "Converts html to the json format of genesys knowledge article content.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "mocha"
+  },
+  "author": "Genesys Cloud Services, Inc.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14",
+    "npm": ">=9"
+  },
+  "dependencies": {
+    "html-parse-stringify": "3.0.1",
+    "sanitize-html": "2.11.0"
+  },
+  "devDependencies": {
+    "@types/chai": "4.3.5",
+    "@types/mocha": "10.0.1",
+    "@types/node": "14.18.54",
+    "@types/sanitize-html": "2.9.0",
+    "chai": "4.3.7",
+    "mocha": "10.2.0",
+    "ts-node": "10.9.1",
+    "typescript": "5.1.6"
+  }
+}
