@@ -3,7 +3,7 @@ import { BlockTypes, StyleProperties } from '../tags';
 import { AlignType } from './paragraph';
 
 export interface ImageBlock {
-  type: "Image";
+  type: 'Image';
   image: {
     url: string;
     hyperlink?: string;

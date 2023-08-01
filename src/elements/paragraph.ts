@@ -52,11 +52,11 @@ export const generateParagraphBlock = (blockData: AstElement): ParagraphBlock =>
   return paragraphBlock;
 };
 
-const generateProperties = (attrs: any): ParagraphProperties | undefined => {
+const generateProperties = (attrs: Record<string, string> | undefined): ParagraphProperties | undefined => {
   let paragraphProperties: ParagraphProperties | undefined;
   let indentation: number | undefined;
   let align: AlignType | undefined;
-  const styles: string = attrs?.style;
+  const styles: string | undefined = attrs?.style;
   if (styles) {
     styles
       .split(/\s*;\s*/) //split with extra spaces around the semi colon

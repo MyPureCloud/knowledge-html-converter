@@ -1,6 +1,8 @@
 import { AstElement } from 'html-parse-stringify';
 import { BlockTypes } from '../tags';
 import { AllowedProperties, TextBlocks, generateTextBlocks } from './text';
+import { ImageBlock } from './image';
+import { VideoBlock } from './video';
 
 export interface HyperlinkProperties {
   target: TargetActions;
@@ -18,7 +20,7 @@ export enum TargetActions {
 }
 
 export const generateHyperlinkBlock = (anchorElement: AstElement, marks: AllowedProperties[] = []): TextBlocks => {
-  const textBlocks: any[] = [];
+  const textBlocks: (TextBlocks | ImageBlock | VideoBlock)[] = [];
   const hyperlinkFormattings = marks;
   let displayText = '';
 
@@ -29,9 +31,11 @@ export const generateHyperlinkBlock = (anchorElement: AstElement, marks: Allowed
   const textBlock = textBlocks[0];
   if (hyperlink && textBlock && textBlock.type === BlockTypes.TextBlocks) {
     textBlocks.forEach((textContent) => {
-      displayText += textContent.text.text;
-      if (textContent.text.marks) {
-        hyperlinkFormattings.push(...textContent.text.marks);
+      if (textContent.type === BlockTypes.TextBlocks) {
+        displayText += textContent.text.text;
+        if (textContent.text.marks) {
+          hyperlinkFormattings.push(...textContent.text.marks);
+        }
       }
     });
     textBlock.text.text = displayText;

@@ -69,7 +69,7 @@ export const getBorderStyle = (jsonObject: Record<string, string>): string | und
   return borderStyle;
 };
 
-export const getBorderProperties = (jsonObject: Record<string, string>): any[] => {
+export const getBorderProperties = (jsonObject: Record<string, string>): (number | string | undefined)[] => {
   let borderWidth: number | undefined;
   let borderStyle: string | undefined;
   let borderColor: string | undefined;
@@ -146,7 +146,7 @@ export const getCaption = (captionData: AstElement): CaptionBlock => {
   } as CaptionBlock;
   const blocks: CaptionBlockType[] = [];
 
-  const textFormatMap = {
+  const textFormatMap: Record<string, AllowedProperties> = {
     strong: AllowedProperties.Bold,
     em: AllowedProperties.Italic,
     u: AllowedProperties.Underline,
@@ -158,8 +158,8 @@ export const getCaption = (captionData: AstElement): CaptionBlock => {
     let block: CaptionBlockType | undefined;
     let textBlocks: (TextBlocks | ImageBlock | VideoBlock)[] | undefined;
 
-    if ((textFormatMap as any)[child.name]) {
-      textBlocks = generateTextBlocks(child, [(textFormatMap as any)[captionData.name]]);
+    if (textFormatMap[child.name]) {
+      textBlocks = generateTextBlocks(child, [textFormatMap[captionData.name]]);
     }
 
     if (child.type === 'text') {

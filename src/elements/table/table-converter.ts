@@ -126,7 +126,7 @@ const generateCellBlock = (cell: AstElement): Block[] => {
   children?.forEach((blockData) => {
     let block: Block | undefined;
     let textBlocks: (TextBlocks | ImageBlock | VideoBlock)[] | undefined;
-    const textFormatMap = {
+    const textFormatMap: Record<string, AllowedProperties> = {
       strong: AllowedProperties.Bold,
       em: AllowedProperties.Italic,
       u: AllowedProperties.Underline,
@@ -135,8 +135,8 @@ const generateCellBlock = (cell: AstElement): Block[] => {
       sup: AllowedProperties.Superscript
     };
     blockData.children?.forEach((child) => {
-      if ((textFormatMap as any)[blockData.name]) {
-        textBlocks = generateTextBlocks(child, [(textFormatMap as any)[blockData.name]]);
+      if (textFormatMap[blockData.name]) {
+        textBlocks = generateTextBlocks(child, [textFormatMap[blockData.name]]);
       }
     });
     if (blockData.type === 'text') {

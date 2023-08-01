@@ -80,7 +80,7 @@ export const generateTextBlocks = (
         generateTextProperties(textData.attrs.style)
       );
     }
-    const textFormatMap = {
+    const textFormatMap: Record<string, AllowedProperties> = {
       strong: AllowedProperties.Bold,
       em: AllowedProperties.Italic,
       u: AllowedProperties.Underline,
@@ -89,7 +89,7 @@ export const generateTextBlocks = (
       sup: AllowedProperties.Superscript
     };
     textData.children?.forEach((child) => {
-      const attribute = (textFormatMap as any)[textData.name] as AllowedProperties | undefined;
+      const attribute = textFormatMap[textData.name] as AllowedProperties | undefined;
       if (attribute) {
         arr.push(...generateTextBlocks(child, [...attributes, attribute], properties, textProperties));
       } else {
@@ -141,7 +141,7 @@ export const getFontSizeName = (fontSize: string): string => {
 const assignAttributes = (text: string, properties: TextProperties | null = null, attributes: AllowedProperties[] = []): TextBlocks => {
   const textBlock: TextBlock = {
     text: ''
-  } as TextBlock;
+  };
   textBlock.text = text;
   if (properties) {
     textBlock.properties = properties;
@@ -158,7 +158,7 @@ const assignAttributes = (text: string, properties: TextProperties | null = null
   const textBlocks: TextBlocks = {
     type: BlockTypes.TextBlocks,
     text: textBlock
-  } as TextBlocks;
+  };
 
   return textBlocks;
 };
