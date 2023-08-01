@@ -2,7 +2,12 @@ import { AstElement } from 'html-parse-stringify';
 import { ImageBlock, generateImageBlock } from '../image';
 import { generateListBlock } from '../list';
 import { generateParagraphBlock } from '../paragraph';
-import { AllowedProperties, TextBlocks, TextDataType, generateTextBlocks } from '../text';
+import {
+  AllowedProperties,
+  TextBlocks,
+  TextDataType,
+  generateTextBlocks,
+} from '../text';
 import { Block, BlockTypes, StyleProperties, TagNames } from '../../tags';
 import { VideoBlock, generateVideoBlock } from '../video';
 import {
@@ -12,7 +17,7 @@ import {
   RowBlock,
   RowProperties,
   TableBlock,
-  TableProperties
+  TableProperties,
 } from './table-models';
 import {
   getAlignment,
@@ -29,7 +34,7 @@ import {
   getRowType,
   getTablePropertiesJSON,
   getVerticalAlign,
-  getWidth
+  getWidth,
 } from './table-properties';
 
 let childrenInDifferentTags: AstElement;
@@ -39,8 +44,8 @@ export const generateTableBlock = (blockData: AstElement): TableBlock => {
   const tableBlock: TableBlock = {
     type: BlockTypes.TableBlock,
     table: {
-      rows: []
-    }
+      rows: [],
+    },
   };
   const tableProperties = generateTableProperties(blockData);
   let colgroupIndex;
@@ -96,12 +101,12 @@ export const generateTableBlock = (blockData: AstElement): TableBlock => {
 
 const generateRowBlock = (row: AstElement, rowType: string): RowBlock => {
   const rowBlock: RowBlock = {
-    cells: []
+    cells: [],
   };
   const cells = row.children;
   cells?.forEach((cell, index) => {
     const cellBlock: CellBlock = {
-      blocks: []
+      blocks: [],
     };
     const blocksInCell = generateCellBlock(cell);
     const colGroup = childrenInDifferentTags?.children![index];
@@ -132,7 +137,7 @@ const generateCellBlock = (cell: AstElement): Block[] => {
       u: AllowedProperties.Underline,
       s: AllowedProperties.Strikethrough,
       sub: AllowedProperties.Subscript,
-      sup: AllowedProperties.Superscript
+      sup: AllowedProperties.Superscript,
     };
     blockData.children?.forEach((child) => {
       if (textFormatMap[blockData.name]) {
@@ -208,12 +213,23 @@ const generateTableProperties = (blockData: AstElement): TableProperties => {
     borderStyle = getBorderStyle(jsonObject);
     borderColor = getBorderColor(jsonObject);
     backgroundColor = getBackgroundColor(jsonObject);
-    if (Object.prototype.hasOwnProperty.call(jsonObject, StyleProperties.Border)) {
+    if (
+      Object.prototype.hasOwnProperty.call(jsonObject, StyleProperties.Border)
+    ) {
       [borderWidth, borderStyle, borderColor] = getBorderProperties(jsonObject);
     }
   }
 
-  if (alignment || backgroundColor || borderColor || borderStyle || borderWidth || cellSpacing || height || width) {
+  if (
+    alignment ||
+    backgroundColor ||
+    borderColor ||
+    borderStyle ||
+    borderWidth ||
+    cellSpacing ||
+    height ||
+    width
+  ) {
     tableProperties = Object.assign(
       {},
       alignment && { alignment },
@@ -223,13 +239,16 @@ const generateTableProperties = (blockData: AstElement): TableProperties => {
       borderWidth && { borderWidth },
       cellSpacing && { cellSpacing },
       height && { height },
-      width && { width }
+      width && { width },
     );
   }
   return tableProperties || {};
 };
 
-const generateRowProperties = (blockData: AstElement, type: string): RowProperties | undefined => {
+const generateRowProperties = (
+  blockData: AstElement,
+  type: string,
+): RowProperties | undefined => {
   let rowProperties: RowProperties | undefined;
   let alignment;
   let height;
@@ -250,7 +269,14 @@ const generateRowProperties = (blockData: AstElement, type: string): RowProperti
     height = getHeight(jsonObject);
   }
 
-  if (alignment || backgroundColor || borderColor || borderStyle || height || rowType) {
+  if (
+    alignment ||
+    backgroundColor ||
+    borderColor ||
+    borderStyle ||
+    height ||
+    rowType
+  ) {
     rowProperties = Object.assign(
       {},
       alignment && { alignment },
@@ -258,13 +284,16 @@ const generateRowProperties = (blockData: AstElement, type: string): RowProperti
       borderColor && { borderColor },
       borderStyle && { borderStyle },
       height && { height },
-      rowType && { rowType }
+      rowType && { rowType },
     );
   }
   return rowProperties;
 };
 
-const generateCellProperties = (cellBlockData: AstElement, colGroup: AstElement): CellProperties | undefined => {
+const generateCellProperties = (
+  cellBlockData: AstElement,
+  colGroup: AstElement,
+): CellProperties | undefined => {
   let cellProperties: CellProperties | undefined;
   let rowSpan;
   let colSpan;
@@ -280,15 +309,21 @@ const generateCellProperties = (cellBlockData: AstElement, colGroup: AstElement)
       .map((keyValue) => {
         if (keyValue.length === 2) {
           const styleJson = {
-            [keyValue[0]]: keyValue[1]
+            [keyValue[0]]: keyValue[1],
           };
           width = getWidth(styleJson);
         }
       });
   }
-  if (cellBlockData.type === TextDataType.Tag && cellBlockData.name === TagNames.HeaderCell) {
+  if (
+    cellBlockData.type === TextDataType.Tag &&
+    cellBlockData.name === TagNames.HeaderCell
+  ) {
     cellType = 'HeaderCell';
-  } else if (cellBlockData.type === TextDataType.Tag && cellBlockData.name === TagNames.DataCell) {
+  } else if (
+    cellBlockData.type === TextDataType.Tag &&
+    cellBlockData.name === TagNames.DataCell
+  ) {
     cellType = 'Cell';
   }
 
@@ -313,7 +348,9 @@ const generateCellProperties = (cellBlockData: AstElement, colGroup: AstElement)
   const borderColor = getBorderColor(cellStyleJson);
   const borderStyle = getBorderStyle(cellStyleJson);
   const borderWidth = getBorderWidth(cellStyleJson);
-  if (Object.prototype.hasOwnProperty.call(cellStyleJson, StyleProperties.Width)) {
+  if (
+    Object.prototype.hasOwnProperty.call(cellStyleJson, StyleProperties.Width)
+  ) {
     width = getWidth(cellStyleJson);
   }
 
@@ -344,7 +381,7 @@ const generateCellProperties = (cellBlockData: AstElement, colGroup: AstElement)
       rowSpan && { rowSpan },
       scope && { scope },
       verticalAlign && { verticalAlign },
-      width && { width }
+      width && { width },
     );
   }
   return cellProperties;

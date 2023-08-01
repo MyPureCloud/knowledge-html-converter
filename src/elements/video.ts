@@ -12,7 +12,7 @@ export const generateVideoBlock = (block: AstElement): VideoBlock => {
   return {
     type: BlockTypes.VideoBlock,
     video: {
-      url: block.attrs?.src || ''
-    }
+      url: block.attrs?.src || '',
+    },
   } as VideoBlock;
-}
+};

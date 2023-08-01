@@ -4,9 +4,8 @@ import { join } from 'path';
 import { convertHtmlToBlocks } from '../src/converter';
 import { expect } from 'chai';
 
-describe('converter', function() {
-  describe('convertHtmlToBlocks', function() {
-
+describe('converter', function () {
+  describe('convertHtmlToBlocks', function () {
     generateInputOutputTestCases();
 
     /**
@@ -19,11 +18,13 @@ describe('converter', function() {
       const baseDir = join('test', 'convert-html-to-blocks');
       const dirNames = readdirSync(baseDir);
 
-      dirNames.forEach(testCaseDirName => {
+      dirNames.forEach((testCaseDirName) => {
         const dirName = join(baseDir, testCaseDirName);
-        it(testCaseDirName, async function() {
+        it(testCaseDirName, async function () {
           const html = (await readFile(join(dirName, 'input.html'))).toString();
-          const expectedJson = JSON.parse((await readFile(join(dirName, 'output.json'))).toString());
+          const expectedJson = JSON.parse(
+            (await readFile(join(dirName, 'output.json'))).toString(),
+          );
 
           const actualJson = convertHtmlToBlocks(html);
 

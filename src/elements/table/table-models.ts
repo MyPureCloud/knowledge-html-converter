@@ -19,7 +19,14 @@ export interface RowBlock {
 }
 
 export interface CellBlock {
-  blocks: (TextBlocks | ImageBlock | VideoBlock | ListBlock | ParagraphBlock | TableBlock)[];
+  blocks: (
+    | TextBlocks
+    | ImageBlock
+    | VideoBlock
+    | ListBlock
+    | ParagraphBlock
+    | TableBlock
+  )[];
   properties?: CellProperties;
 }
 
@@ -81,7 +88,7 @@ export interface CellProperties {
 export enum HorizontalAlignType {
   Center = 'center',
   Left = 'left',
-  Right = 'right'
+  Right = 'right',
 }
 
 export enum BorderStyleType {
@@ -94,18 +101,18 @@ export enum BorderStyleType {
   Inset = 'inset',
   Outset = 'outset',
   Hidden = 'hidden',
-  None = 'none'
+  None = 'none',
 }
 
 export enum RowType {
   Header = 'Header',
   Body = 'Body',
-  Footer = 'Footer'
+  Footer = 'Footer',
 }
 
 export enum CellType {
   Cell = 'Cell',
-  HeaderCell = 'HeaderCell'
+  HeaderCell = 'HeaderCell',
 }
 
 export enum CellScopeType {
@@ -117,11 +124,11 @@ export enum CellScopeType {
   ['row'] = 'Row',
   ['col'] = 'Column',
   ['rowgroup'] = 'RowGroup',
-  ['colgroup'] = 'ColumnGroup'
+  ['colgroup'] = 'ColumnGroup',
 }
 
 export enum VerticalAlignType {
   Top = 'top',
   Middle = 'middle',
-  Bottom = 'bottom'
+  Bottom = 'bottom',
 }

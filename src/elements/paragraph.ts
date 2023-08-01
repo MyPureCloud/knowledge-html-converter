@@ -25,15 +25,17 @@ export enum AlignType {
   Center = 'center',
   Left = 'left',
   Right = 'right',
-  Justify = 'justify'
+  Justify = 'justify',
 }
 
-export const generateParagraphBlock = (blockData: AstElement): ParagraphBlock => {
+export const generateParagraphBlock = (
+  blockData: AstElement,
+): ParagraphBlock => {
   const paragraphBlock: ParagraphBlock = {
     type: BlockTypes.Paragraph,
     paragraph: {
-      blocks: []
-    }
+      blocks: [],
+    },
   };
   const children = blockData.children;
   const fontType = Object.keys(TagNames)[
@@ -52,7 +54,9 @@ export const generateParagraphBlock = (blockData: AstElement): ParagraphBlock =>
   return paragraphBlock;
 };
 
-const generateProperties = (attrs: Record<string, string> | undefined): ParagraphProperties | undefined => {
+const generateProperties = (
+  attrs: Record<string, string> | undefined,
+): ParagraphProperties | undefined => {
   let paragraphProperties: ParagraphProperties | undefined;
   let indentation: number | undefined;
   let align: AlignType | undefined;
@@ -73,7 +77,11 @@ const generateProperties = (attrs: Record<string, string> | undefined): Paragrap
         }
       });
     if (indentation || align) {
-      paragraphProperties = Object.assign({}, indentation && { indentation }, align && { align });
+      paragraphProperties = Object.assign(
+        {},
+        indentation && { indentation },
+        align && { align },
+      );
     }
   }
   return paragraphProperties;

@@ -16,10 +16,13 @@ export enum TargetActions {
   ParentWindow = 'parent_window',
   OpenEmail = 'open_email',
   CopyEmail = 'copy_email',
-  NewTab = 'new_tab'
+  NewTab = 'new_tab',
 }
 
-export const generateHyperlinkBlock = (anchorElement: AstElement, marks: AllowedProperties[] = []): TextBlocks => {
+export const generateHyperlinkBlock = (
+  anchorElement: AstElement,
+  marks: AllowedProperties[] = [],
+): TextBlocks => {
   const textBlocks: (TextBlocks | ImageBlock | VideoBlock)[] = [];
   const hyperlinkFormattings = marks;
   let displayText = '';

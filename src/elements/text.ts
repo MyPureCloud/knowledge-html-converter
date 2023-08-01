@@ -11,7 +11,7 @@ export interface TextBlocks {
 
 export enum TextDataType {
   Tag = 'tag',
-  Text = 'text'
+  Text = 'text',
 }
 
 export enum AllowedProperties {
@@ -20,7 +20,7 @@ export enum AllowedProperties {
   Underline = 'Underline',
   Strikethrough = 'Strikethrough',
   Subscript = 'Subscript',
-  Superscript = 'Superscript'
+  Superscript = 'Superscript',
 }
 
 export enum FontSize {
@@ -30,7 +30,7 @@ export enum FontSize {
   Medium = '16px',
   Large = '18px',
   XLarge = '24px',
-  XxLarge = '32px'
+  XxLarge = '32px',
 }
 
 export interface TextProperties {
@@ -58,26 +58,44 @@ export const generateTextBlocks = (
   textData: AstElement,
   attributes: AllowedProperties[] = [],
   properties = {},
-  textProperties?: TextProperties
+  textProperties?: TextProperties,
 ): (TextBlocks | ImageBlock | VideoBlock)[] => {
   const arr: (TextBlocks | ImageBlock | VideoBlock)[] = [];
   if (textData.type === TextDataType.Text) {
     if (textData.content) {
       arr.push(assignAttributes(textData.content, textProperties, attributes));
     }
-  } else if (textData.type === TextDataType.Tag && textData.name === TagNames.LineBreak) {
+  } else if (
+    textData.type === TextDataType.Tag &&
+    textData.name === TagNames.LineBreak
+  ) {
     arr.push(assignAttributes('\n'));
-  } else if (textData.type === TextDataType.Tag && textData.name === TagNames.Image) {
-    arr.push(generateImageBlock(textData, { ...properties, ...textProperties }));
-  } else if (textData.type === TextDataType.Tag && textData.name === TagNames.Anchor) {
+  } else if (
+    textData.type === TextDataType.Tag &&
+    textData.name === TagNames.Image
+  ) {
+    arr.push(
+      generateImageBlock(textData, { ...properties, ...textProperties }),
+    );
+  } else if (
+    textData.type === TextDataType.Tag &&
+    textData.name === TagNames.Anchor
+  ) {
     arr.push(generateHyperlinkBlock(textData, attributes));
-  } else if (textData.type === TextDataType.Tag && textData.name === TagNames.Video) {
+  } else if (
+    textData.type === TextDataType.Tag &&
+    textData.name === TagNames.Video
+  ) {
     arr.push(generateVideoBlock(textData));
   } else {
-    if (textData.type === TextDataType.Tag && textData.name === TagNames.Span && textData.attrs?.style) {
+    if (
+      textData.type === TextDataType.Tag &&
+      textData.name === TagNames.Span &&
+      textData.attrs?.style
+    ) {
       textProperties = Object.assign(
         textProperties ? textProperties : {},
-        generateTextProperties(textData.attrs.style)
+        generateTextProperties(textData.attrs.style),
       );
     }
     const textFormatMap: Record<string, AllowedProperties> = {
@@ -86,21 +104,34 @@ export const generateTextBlocks = (
       u: AllowedProperties.Underline,
       s: AllowedProperties.Strikethrough,
       sub: AllowedProperties.Subscript,
-      sup: AllowedProperties.Superscript
+      sup: AllowedProperties.Superscript,
     };
     textData.children?.forEach((child) => {
-      const attribute = textFormatMap[textData.name] as AllowedProperties | undefined;
+      const attribute = textFormatMap[textData.name] as
+        | AllowedProperties
+        | undefined;
       if (attribute) {
-        arr.push(...generateTextBlocks(child, [...attributes, attribute], properties, textProperties));
+        arr.push(
+          ...generateTextBlocks(
+            child,
+            [...attributes, attribute],
+            properties,
+            textProperties,
+          ),
+        );
       } else {
-        arr.push(...generateTextBlocks(child, attributes, properties, textProperties));
+        arr.push(
+          ...generateTextBlocks(child, attributes, properties, textProperties),
+        );
       }
     });
   }
   return arr;
 };
 
-export const generateTextProperties = (styles: string): TextProperties | undefined => {
+export const generateTextProperties = (
+  styles: string,
+): TextProperties | undefined => {
   let textProperties: TextProperties | undefined;
   if (styles) {
     let backgroundColor;
@@ -112,13 +143,17 @@ export const generateTextProperties = (styles: string): TextProperties | undefin
       .map((keyValue: string[]) => {
         if (keyValue.length === 2) {
           if (keyValue[0] === StyleProperties.BackgroundColor) {
-            backgroundColor = keyValue[1].startsWith('#') ? keyValue[1] : convertRgbToHex(keyValue[1]);
+            backgroundColor = keyValue[1].startsWith('#')
+              ? keyValue[1]
+              : convertRgbToHex(keyValue[1]);
           }
           if (keyValue[0] === StyleProperties.FontSize) {
             fontSize = getFontSizeName(keyValue[1]);
           }
           if (keyValue[0] === StyleProperties.TextColor) {
-            textColor = keyValue[1].startsWith('#') ? keyValue[1] : convertRgbToHex(keyValue[1]);
+            textColor = keyValue[1].startsWith('#')
+              ? keyValue[1]
+              : convertRgbToHex(keyValue[1]);
           }
         }
       });
@@ -127,7 +162,7 @@ export const generateTextProperties = (styles: string): TextProperties | undefin
         {},
         backgroundColor && { backgroundColor },
         fontSize && { fontSize },
-        textColor && { textColor }
+        textColor && { textColor },
       );
     }
   }
@@ -135,12 +170,18 @@ export const generateTextProperties = (styles: string): TextProperties | undefin
 };
 
 export const getFontSizeName = (fontSize: string): string => {
-  return Object.keys(FontSize)[Object.values(FontSize).indexOf(fontSize as unknown as FontSize)];
+  return Object.keys(FontSize)[
+    Object.values(FontSize).indexOf(fontSize as unknown as FontSize)
+  ];
 };
 
-const assignAttributes = (text: string, properties: TextProperties | null = null, attributes: AllowedProperties[] = []): TextBlocks => {
+const assignAttributes = (
+  text: string,
+  properties: TextProperties | null = null,
+  attributes: AllowedProperties[] = [],
+): TextBlocks => {
   const textBlock: TextBlock = {
-    text: ''
+    text: '',
   };
   textBlock.text = text;
   if (properties) {
@@ -157,7 +198,7 @@ const assignAttributes = (text: string, properties: TextProperties | null = null
 
   const textBlocks: TextBlocks = {
     type: BlockTypes.TextBlocks,
-    text: textBlock
+    text: textBlock,
   };
 
   return textBlocks;

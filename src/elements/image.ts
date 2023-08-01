@@ -18,14 +18,19 @@ export interface ImageProperties {
   hyperlink?: string;
 }
 
-export const generateImageBlock = (blockData: AstElement, imageProperties: ImageProperties = {}): ImageBlock => {
+export const generateImageBlock = (
+  blockData: AstElement,
+  imageProperties: ImageProperties = {},
+): ImageBlock => {
   let imgUrl = blockData.attrs?.src || '';
   imgUrl = imgUrl
     .replace(/&amp;/g, '&')
     .replace(/&gt;/g, '>')
     .replace(/&lt;/g, '<')
     .replace(/&quot;/g, '"');
-  const hyperlink = imageProperties.hyperlink ? imageProperties.hyperlink : null;
+  const hyperlink = imageProperties.hyperlink
+    ? imageProperties.hyperlink
+    : null;
   const backgroundColor = imageProperties?.backgroundColor;
   let properties = getImageProperties(blockData);
   if (backgroundColor) {
@@ -33,7 +38,12 @@ export const generateImageBlock = (blockData: AstElement, imageProperties: Image
   }
   return {
     type: BlockTypes.ImageBlock,
-    image: Object.assign({}, { url: imgUrl }, hyperlink && { hyperlink }, properties && { properties })
+    image: Object.assign(
+      {},
+      { url: imgUrl },
+      hyperlink && { hyperlink },
+      properties && { properties },
+    ),
   };
 };
 
@@ -49,10 +59,14 @@ export const convertRgbToHex = (rgb: string): string | undefined => {
   if (colorsArray?.length === 4) {
     colorsArray.pop();
   }
-  return colorsArray?.length === 3 ? rgbToHex(colorsArray[0], colorsArray[1], colorsArray[2]) : undefined;
+  return colorsArray?.length === 3
+    ? rgbToHex(colorsArray[0], colorsArray[1], colorsArray[2])
+    : undefined;
 };
 
-const getImageProperties = (blockData: AstElement): ImageProperties | undefined => {
+const getImageProperties = (
+  blockData: AstElement,
+): ImageProperties | undefined => {
   let imageProperties: ImageProperties | undefined;
   if (blockData.attrs) {
     let align: AlignType | undefined;
@@ -63,13 +77,22 @@ const getImageProperties = (blockData: AstElement): ImageProperties | undefined 
         .map((chunk) => chunk.split(/\s*:\s*/)) //split key:value with colon
         .map((keyValue) => {
           if (keyValue.length === 2) {
-            if (keyValue[0] === StyleProperties.Float && keyValue[1].toLocaleLowerCase() === 'left') {
+            if (
+              keyValue[0] === StyleProperties.Float &&
+              keyValue[1].toLocaleLowerCase() === 'left'
+            ) {
               align = AlignType.Left;
               return;
-            } else if (keyValue[0] === StyleProperties.Float && keyValue[1].toLocaleLowerCase() === 'right') {
+            } else if (
+              keyValue[0] === StyleProperties.Float &&
+              keyValue[1].toLocaleLowerCase() === 'right'
+            ) {
               align = AlignType.Right;
               return;
-            } else if (keyValue[0] === 'display' && keyValue[1].toLocaleLowerCase() === 'block') {
+            } else if (
+              keyValue[0] === 'display' &&
+              keyValue[1].toLocaleLowerCase() === 'block'
+            ) {
               // For center tiny mce adds style as "display: block; margin-left: auto; margin-right: auto;"
               align = AlignType.Center;
               return;
@@ -78,14 +101,20 @@ const getImageProperties = (blockData: AstElement): ImageProperties | undefined 
         });
     }
     if (align || backgroundColor) {
-      imageProperties = Object.assign({}, align && { align }, backgroundColor && { backgroundColor });
+      imageProperties = Object.assign(
+        {},
+        align && { align },
+        backgroundColor && { backgroundColor },
+      );
     }
   }
   return imageProperties;
 };
 
 const rgbToHex = (red: number, green: number, blue: number): string => {
-  return '#' + componentToHex(red) + componentToHex(green) + componentToHex(blue);
+  return (
+    '#' + componentToHex(red) + componentToHex(green) + componentToHex(blue)
+  );
 };
 
 const componentToHex = (c: number): string => {
