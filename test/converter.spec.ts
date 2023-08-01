@@ -1,7 +1,7 @@
 import { readdirSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import { convertHtmlToBlocks } from '../src/converter';
+import { convertHtmlToBlocks } from '../src';
 import { expect } from 'chai';
 
 describe('converter', function () {

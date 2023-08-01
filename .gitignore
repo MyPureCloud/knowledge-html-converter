@@ -7,21 +7,12 @@
 node_modules/
 dist/
 
-# Compiled Java class files
-*.class
-
-# Compiled Python bytecode
-*.py[cod]
+# nyc code coverage
+coverage/
+.nyc_output/
 
 # Log files
 *.log
-
-# Package files
-*.jar
-
-# Maven
-target/
-dist/
 
 # JetBrains IDE
 .idea/
@@ -50,4 +41,3 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
-
