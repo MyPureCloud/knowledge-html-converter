@@ -9,5 +9,8 @@
     "sourceMap": true,
     "typeRoots": ["node_modules/@types", "src/types"]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "ts-node": {
+    "files": true
+  }
 }
