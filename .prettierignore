@@ -1,3 +1,6 @@
 # Ignore artifacts:
 node_modules
 dist
+
+# Ignore test html files (avoid adding newlines)
+test/**/*.html

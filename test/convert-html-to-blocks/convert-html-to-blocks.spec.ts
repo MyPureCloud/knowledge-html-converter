@@ -3,6 +3,7 @@ import { join } from 'path';
 import { convertHtmlToBlocks } from '../../src';
 import { expect } from 'chai';
 import { Context } from 'mocha';
+import { Block } from '../../src/tags';
 
 describe('convert-html-to-blocks', function () {
   describe('basic', function () {
@@ -25,6 +26,33 @@ describe('convert-html-to-blocks', function () {
 
     const actualJson = convertHtmlToBlocks(html);
 
-    expect(actualJson).to.deep.equal(expectedJson);
+    try {
+      expect(actualJson).to.deep.equal(expectedJson);
+    } catch (error) {
+      // add details only when there is an error to avoid constructing the detail text in every test
+      addActualAndExpectedJsonsToErrorMessage(
+        <Error>error,
+        actualJson,
+        expectedJson,
+      );
+      throw error;
+    }
+  }
+
+  function addActualAndExpectedJsonsToErrorMessage(
+    error: Error,
+    actualJson: Block[],
+    expectedJson: unknown,
+  ): void {
+    error.message =
+      `\n- - - - - - - - - - - - - - - - - - - - -\n` +
+      `actual json:\n` +
+      `- - - - - - - - - - - - - - - - - - - - -\n` +
+      `${JSON.stringify(actualJson, null, 2)}\n` +
+      `- - - - - - - - - - - - - - - - - - - - -\n` +
+      `expected json:\n` +
+      `- - - - - - - - - - - - - - - - - - - - -\n` +
+      `${JSON.stringify(expectedJson, null, 2)}\n` +
+      error.message;
   }
 });
