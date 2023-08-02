@@ -1,0 +1,19 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Image",
+          "image": {
+            "url": "https://www.genesys.com/media/genesys-logo-base.svg",
+            "hyperlink": "https://example.com"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]

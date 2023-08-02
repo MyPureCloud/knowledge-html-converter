@@ -12,6 +12,11 @@ describe('convert-html-to-blocks', function () {
     it('paragraph', test);
   });
 
+  describe('hyperlink', function () {
+    it('hyperlink-with-formatting', test);
+    it('hyperlink-with-image', test);
+  });
+
   /**
    * Tests convertHtmlToBlocks with
    * input:  test/convert-html-to-blocks/${...test.titlePath()}/input.html

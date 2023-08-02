@@ -1,0 +1,20 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "test link",
+            "marks": ["Bold", "Italic", "Underline"],
+            "hyperlink": "https://example.com"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]
