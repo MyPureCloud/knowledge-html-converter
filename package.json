@@ -6,7 +6,9 @@
   "scripts": {
     "build": "tsc",
     "test": "mocha",
+    "test-jenkins": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=./reports/test-result.xml",
     "coverage": "nyc npm run test",
+    "coverage-jenkins": "nyc --reporter cobertura npm run test-jenkins",
     "lint": "eslint '**/*.ts'",
     "prettier-check": "prettier . --check",
     "prettier-write": "prettier . --write",
@@ -40,6 +42,7 @@
     "husky": "8.0.3",
     "lint-staged": "13.2.3",
     "mocha": "10.2.0",
+    "mocha-junit-reporter": "2.2.1",
     "nyc": "15.1.0",
     "prettier": "3.0.0",
     "ts-node": "10.9.1",

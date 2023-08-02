@@ -7,6 +7,9 @@
 node_modules/
 dist/
 
+# mocha junit reporter
+reports/
+
 # nyc code coverage
 coverage/
 .nyc_output/
