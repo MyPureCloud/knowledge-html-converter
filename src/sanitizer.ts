@@ -7,10 +7,14 @@ const options: IOptions = {
   allowedAttributes: {
     '*': ['style'],
     a: ['href'],
+    iframe: ['src'],
     img: ['src'],
   },
   allowedStyles: {
     '*': {},
+  },
+  parser: {
+    decodeEntities: false, // do not convert '&nbsp;' to ' '
   },
 };
 Object.values(StyleProperties).forEach((stylePropertyName) => {

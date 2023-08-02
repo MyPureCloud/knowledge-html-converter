@@ -13,8 +13,20 @@ describe('convert-html-to-blocks', function () {
   });
 
   describe('hyperlink', function () {
-    it('hyperlink-with-formatting', test);
-    it('hyperlink-with-image', test);
+    it('hyperlink-with-formatting', test); // knowledge-administration-ui / hyperlink-utils.spec.ts / should generate hyperlink text blocks from html
+    it('hyperlink-with-image', test); // knowledge-administration-ui / hyperlink-utils.spec.ts / should create an image block with hyperlink property when image is present inside anchor tag
+  });
+
+  describe('image', function () {
+    it('image', test); // knowledge-administration-ui / image-block-utils.spec.ts / should generate image block from image html
+    it('image-with-properties', test); // knowledge-administration-ui / image-block-utils.spec.ts / should generate image block with properties from image html
+  });
+
+  describe('list', function () {
+    it('text-format-tags', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate list blocks from html
+    it('text-format-tags2', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate list blocks from html
+    it('list-style-type', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate list blocks from html
+    it('nested-lists', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate nested list blocks with properties from mock html
   });
 
   /**

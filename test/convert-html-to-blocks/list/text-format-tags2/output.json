@@ -1,0 +1,34 @@
+[
+  {
+    "type": "UnorderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [{ "type": "Text", "text": { "text": "Option 1" } }]
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            { "type": "Text", "text": { "text": "Option " } },
+            {
+              "type": "Text",
+              "text": { "text": "2 ", "marks": ["Underline"] }
+            },
+            {
+              "type": "Text",
+              "text": { "text": "with ", "marks": ["Italic", "Underline"] }
+            },
+            {
+              "type": "Text",
+              "text": {
+                "text": "formatting",
+                "marks": ["Bold", "Italic", "Underline"]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

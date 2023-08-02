@@ -28,17 +28,6 @@ export type FontType =
   | 'Paragraph'
   | 'Preformatted';
 
-export const fontTypes = [
-  'Heading1',
-  'Heading2',
-  'Heading3',
-  'Heading4',
-  'Heading5',
-  'Heading6',
-  'Paragraph',
-  'Preformatted',
-];
-
 export interface ListBlockProperties {
   fontType?: FontType;
   unorderedType?: UnorderedTypes;
@@ -99,9 +88,7 @@ export const generateListBlock = (
   list.children?.forEach((listItem) => {
     const listItemBlock = generateListItemBlock(listItem, listBlock.type);
     if (listItemBlock.blocks.length) {
-      listBlock.list.blocks.push(
-        generateListItemBlock(listItem, listBlock.type),
-      );
+      listBlock.list.blocks.push(listItemBlock);
     }
   });
   return listBlock;
@@ -202,6 +189,15 @@ const generateListItemBlock = (
     );
   }
 
+  const fontTypes: string[] = [
+    TagNames.Heading1,
+    TagNames.Heading2,
+    TagNames.Heading3,
+    TagNames.Heading4,
+    TagNames.Heading5,
+    TagNames.Heading6,
+    TagNames.Preformatted,
+  ];
   listItemData?.children?.forEach((child: AstElement) => {
     if (child?.name?.toLowerCase() === TagNames.OrderedList) {
       listItemBlock.blocks.push(

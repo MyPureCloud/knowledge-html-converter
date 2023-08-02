@@ -1,0 +1,212 @@
+[
+  {
+    "type": "OrderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": "Grandparent element",
+                "marks": ["Underline"],
+                "properties": {
+                  "fontSize": "Large",
+                  "textColor": "#e03e2d",
+                  "backgroundColor": "#f1c40f"
+                }
+              }
+            },
+            {
+              "type": "OrderedList",
+              "list": {
+                "blocks": [
+                  {
+                    "type": "ListItem",
+                    "blocks": [
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "This is a sample for text block "
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "with-out",
+                          "hyperlink": "https://google.com/"
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "&nbsp;formatting for list item1"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "ListItem",
+                    "blocks": [
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "This is a sample for text block without formatting for list item2"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "properties": {
+                  "orderedType": "UpperAlpha"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "fontType": "Heading3",
+            "fontSize": "Small",
+            "align": "Center",
+            "backgroundColor": "#f1c40f",
+            "textColor": "#e03e2d"
+          }
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": "Another Grandparent element",
+                "marks": ["Bold", "Italic"],
+                "properties": {
+                  "fontSize": "Large",
+                  "textColor": "#e03e2d",
+                  "backgroundColor": "#f1c40f"
+                }
+              }
+            },
+            {
+              "type": "OrderedList",
+              "list": {
+                "blocks": [
+                  {
+                    "type": "ListItem",
+                    "blocks": [
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "This is a sample for text "
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "block",
+                          "marks": ["Bold"]
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": " with "
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "bold",
+                          "marks": ["Bold"],
+                          "properties": {
+                            "textColor": "#e03e2d",
+                            "backgroundColor": "#f1c40f"
+                          }
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": ", "
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "italics",
+                          "marks": ["Italic"],
+                          "properties": {
+                            "fontSize": "Small",
+                            "textColor": "#f1c40f",
+                            "backgroundColor": "#e03e2d"
+                          }
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": ", "
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "underline",
+                          "marks": ["Underline"],
+                          "properties": {
+                            "fontSize": "Large",
+                            "textColor": "#e03e2d",
+                            "backgroundColor": "#f1c40f"
+                          }
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": ", "
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "strikethrough",
+                          "marks": ["Strikethrough"]
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": ", "
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "subscript",
+                          "marks": ["Subscript"]
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": " &amp; "
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "superscript",
+                          "marks": ["Superscript"]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

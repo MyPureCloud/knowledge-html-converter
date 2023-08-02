@@ -1,0 +1,36 @@
+[
+  {
+    "type": "UnorderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [
+            { "type": "Text", "text": { "text": "a", "marks": ["Bold"] } }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            { "type": "Text", "text": { "text": "b", "marks": ["Italic"] } }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            { "type": "Text", "text": { "text": "c", "marks": ["Underline"] } }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": { "text": "d", "marks": ["Bold", "Italic", "Underline"] }
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

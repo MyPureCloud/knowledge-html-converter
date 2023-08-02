@@ -1,0 +1,23 @@
+[
+  {
+    "type": "OrderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Video",
+              "video": {
+                "url": "https://www.example.com/video"
+              }
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "orderedType": "LowerAlpha"
+      }
+    }
+  }
+]
