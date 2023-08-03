@@ -1,0 +1,20 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Test text"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Heading6",
+        "indentation": 2,
+        "align": "Justify"
+      }
+    }
+  }
+]

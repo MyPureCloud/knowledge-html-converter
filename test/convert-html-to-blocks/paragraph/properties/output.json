@@ -1,0 +1,158 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "This",
+            "properties": {
+              "fontSize": "XLarge"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " is a "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "sample",
+            "properties": {
+              "textColor": "#3598db"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " for "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "text",
+            "properties": {
+              "backgroundColor": "#fbeeb8"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "block",
+            "marks": ["Bold"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " with "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "bold",
+            "properties": {
+              "backgroundColor": "#f1c40f",
+              "textColor": "#e03e2d"
+            },
+            "marks": ["Bold"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": ", "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "italics",
+            "properties": {
+              "backgroundColor": "#e03e2d",
+              "fontSize": "Small",
+              "textColor": "#f1c40f"
+            },
+            "marks": ["Italic"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": ", "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "underline",
+            "properties": {
+              "backgroundColor": "#f1c40f",
+              "fontSize": "Large",
+              "textColor": "#e03e2d"
+            },
+            "marks": ["Underline"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": ", "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "strikethrough",
+            "marks": ["Strikethrough"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": ", "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "subscript",
+            "marks": ["Subscript"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " &amp; "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "superscript",
+            "marks": ["Superscript"]
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph",
+        "indentation": 1,
+        "align": "Center"
+      }
+    }
+  }
+]

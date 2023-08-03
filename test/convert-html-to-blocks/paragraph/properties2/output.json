@@ -1,0 +1,23 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Test text",
+            "properties": {
+              "fontSize": "XLarge",
+              "textColor": "#3598db",
+              "backgroundColor": "#fbeeb8"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]

@@ -22,10 +22,10 @@ export interface ParagraphProperties {
 }
 
 export enum AlignType {
-  Center = 'center',
-  Left = 'left',
-  Right = 'right',
-  Justify = 'justify',
+  Center = 'Center',
+  Left = 'Left',
+  Right = 'Right',
+  Justify = 'Justify',
 }
 
 export const generateParagraphBlock = (
@@ -71,8 +71,13 @@ const generateProperties = (
             // remove the em from the value
             indentation = Number(keyValue[1].replace(/\s*em\s*/g, ''));
           }
-          if (keyValue[0] === StyleProperties.Align) {
-            align = keyValue[1] as AlignType;
+          if (
+            keyValue[0] === StyleProperties.Align &&
+            keyValue[1] &&
+            keyValue[1].length > 0
+          ) {
+            align = (keyValue[1][0].toUpperCase() +
+              keyValue[1].substring(1).toLowerCase()) as AlignType;
           }
         }
       });

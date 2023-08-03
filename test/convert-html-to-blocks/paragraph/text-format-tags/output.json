@@ -1,0 +1,26 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        { "type": "Text", "text": { "text": "This " } },
+        {
+          "type": "Text",
+          "text": { "text": "is", "marks": ["Bold", "Italic"] }
+        },
+        {
+          "type": "Text",
+          "text": { "text": " a paragraph", "marks": ["Bold"] }
+        },
+        { "type": "Text", "text": { "text": " " } },
+        { "type": "Text", "text": { "text": "with", "marks": ["Underline"] } },
+        { "type": "Text", "text": { "text": " " } },
+        {
+          "type": "Text",
+          "text": { "text": "formatting", "marks": ["Italic", "Underline"] }
+        }
+      ],
+      "properties": { "fontType": "Paragraph" }
+    }
+  }
+]

@@ -141,13 +141,13 @@ const generateListProperties = (
               ? keyValue[1]
               : convertRgbToHex(keyValue[1]);
           }
-          if (keyValue[0] === StyleProperties.Align) {
-            align =
-              Object.keys(AlignType)[
-                Object.values(AlignType).indexOf(
-                  keyValue[1] as unknown as AlignType,
-                )
-              ];
+          if (
+            keyValue[0] === StyleProperties.Align &&
+            keyValue[1] &&
+            keyValue[1].length > 0
+          ) {
+            align = (keyValue[1][0].toUpperCase() +
+              keyValue[1].substring(1).toLowerCase()) as AlignType;
           }
         }
       });

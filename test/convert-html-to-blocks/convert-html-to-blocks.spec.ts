@@ -9,7 +9,6 @@ describe('convert-html-to-blocks', function () {
   describe('basic', function () {
     it('empty', test);
     it('invalid-html', test);
-    it('paragraph', test);
   });
 
   describe('hyperlink', function () {
@@ -27,6 +26,17 @@ describe('convert-html-to-blocks', function () {
     it('text-format-tags2', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate list blocks from html
     it('list-style-type', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate list blocks from html
     it('nested-lists', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate nested list blocks with properties from mock html
+  });
+
+  describe('paragraph', function () {
+    it('simple', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate paragraph blocks from html
+    it('text-format-tags', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate paragraph blocks from html
+    it('paragraph-and-list', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate paragraph blocks from html
+    it('paragraph-with-video', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate paragraph blocks from html
+    it('properties', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate paragraph blocks with properties from html
+    it('properties2', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate paragraph block with paragraph level properties with common properties
+    it('heading6', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate Heading6 block with properties
+    it('heading2', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate paragraph block with heading2
   });
 
   /**
