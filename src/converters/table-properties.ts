@@ -1,5 +1,5 @@
 import { AstElement } from 'html-parse-stringify';
-import { StyleProperties, TagNames } from '../models';
+import { StyleAttributes, Tags } from '../models/html';
 import { BlockTypes } from '../models/blocks/block-type';
 import { ImageBlock } from '../models/blocks/image';
 import { ListBlock } from '../models/blocks/list';
@@ -39,15 +39,15 @@ export const getPadding = (
 ): number | undefined => {
   let padding: number | undefined;
   if (
-    Object.prototype.hasOwnProperty.call(jsonObject, StyleProperties.Padding)
+    Object.prototype.hasOwnProperty.call(jsonObject, StyleAttributes.Padding)
   ) {
-    if (emPattern.test(jsonObject[StyleProperties.Padding])) {
+    if (emPattern.test(jsonObject[StyleAttributes.Padding])) {
       padding = Number(
-        jsonObject[StyleProperties.Padding].replace(/\s*em\s*/g, ''),
+        jsonObject[StyleAttributes.Padding].replace(/\s*em\s*/g, ''),
       );
-    } else if (pxPattern.test(jsonObject[StyleProperties.Padding])) {
+    } else if (pxPattern.test(jsonObject[StyleAttributes.Padding])) {
       padding = convertPixelsToEM(
-        Number(jsonObject[StyleProperties.Padding].replace(/\s*px\s*/g, '')),
+        Number(jsonObject[StyleAttributes.Padding].replace(/\s*px\s*/g, '')),
       );
     }
   }
@@ -62,14 +62,14 @@ export const getBackgroundColor = (
   if (
     Object.prototype.hasOwnProperty.call(
       jsonObject,
-      StyleProperties.BackgroundColor,
+      StyleAttributes.BackgroundColor,
     )
   ) {
-    backgroundColor = jsonObject[StyleProperties.BackgroundColor].startsWith(
+    backgroundColor = jsonObject[StyleAttributes.BackgroundColor].startsWith(
       '#',
     )
-      ? jsonObject[StyleProperties.BackgroundColor]
-      : convertRgbToHex(jsonObject[StyleProperties.BackgroundColor]);
+      ? jsonObject[StyleAttributes.BackgroundColor]
+      : convertRgbToHex(jsonObject[StyleAttributes.BackgroundColor]);
   }
   return backgroundColor;
 };
@@ -81,12 +81,12 @@ export const getBorderColor = (
   if (
     Object.prototype.hasOwnProperty.call(
       jsonObject,
-      StyleProperties.BorderColor,
+      StyleAttributes.BorderColor,
     )
   ) {
-    borderColor = jsonObject[StyleProperties.BorderColor].startsWith('#')
-      ? jsonObject[StyleProperties.BorderColor]
-      : convertRgbToHex(jsonObject[StyleProperties.BorderColor]);
+    borderColor = jsonObject[StyleAttributes.BorderColor].startsWith('#')
+      ? jsonObject[StyleAttributes.BorderColor]
+      : convertRgbToHex(jsonObject[StyleAttributes.BorderColor]);
   }
   return borderColor;
 };
@@ -98,12 +98,12 @@ export const getBorderStyle = (
   if (
     Object.prototype.hasOwnProperty.call(
       jsonObject,
-      StyleProperties.BorderStyle,
+      StyleAttributes.BorderStyle,
     )
   ) {
     borderStyle =
-      jsonObject[StyleProperties.BorderStyle].charAt(0).toUpperCase() +
-      jsonObject[StyleProperties.BorderStyle].slice(1);
+      jsonObject[StyleAttributes.BorderStyle].charAt(0).toUpperCase() +
+      jsonObject[StyleAttributes.BorderStyle].slice(1);
   }
   return borderStyle;
 };
@@ -115,9 +115,9 @@ export const getBorderProperties = (
   let borderStyle: string | undefined;
   let borderColor: string | undefined;
   if (
-    Object.prototype.hasOwnProperty.call(jsonObject, StyleProperties.Border)
+    Object.prototype.hasOwnProperty.call(jsonObject, StyleAttributes.Border)
   ) {
-    const properties = jsonObject[StyleProperties.Border].split(' ');
+    const properties = jsonObject[StyleAttributes.Border].split(' ');
     const result = properties.splice(0, 2);
     result.push(properties.join(' '));
 
@@ -147,26 +147,26 @@ export const getAlignment = (
   if (
     Object.prototype.hasOwnProperty.call(
       jsonObject,
-      StyleProperties.MarginLeft,
+      StyleAttributes.MarginLeft,
     ) &&
     Object.prototype.hasOwnProperty.call(
       jsonObject,
-      StyleProperties.MarginRight,
+      StyleAttributes.MarginRight,
     )
   ) {
     if (
-      jsonObject[StyleProperties.MarginLeft] === '0px' &&
-      jsonObject[StyleProperties.MarginRight] === 'auto'
+      jsonObject[StyleAttributes.MarginLeft] === '0px' &&
+      jsonObject[StyleAttributes.MarginRight] === 'auto'
     ) {
       alignment = 'Left';
     } else if (
-      jsonObject[StyleProperties.MarginLeft] === 'auto' &&
-      jsonObject[StyleProperties.MarginRight] === 'auto'
+      jsonObject[StyleAttributes.MarginLeft] === 'auto' &&
+      jsonObject[StyleAttributes.MarginRight] === 'auto'
     ) {
       alignment = 'Center';
     } else if (
-      jsonObject[StyleProperties.MarginLeft] === 'auto' &&
-      jsonObject[StyleProperties.MarginRight] === '0px'
+      jsonObject[StyleAttributes.MarginLeft] === 'auto' &&
+      jsonObject[StyleAttributes.MarginRight] === '0px'
     ) {
       alignment = 'Right';
     }
@@ -179,7 +179,7 @@ export const getHorizontalAlign = (
 ): string | undefined => {
   return getHorizontalAndVerticalAlignProperty(
     jsonObject,
-    StyleProperties.Align,
+    StyleAttributes.Align,
   );
 };
 
@@ -188,32 +188,32 @@ export const getVerticalAlign = (
 ): string | undefined => {
   return getHorizontalAndVerticalAlignProperty(
     jsonObject,
-    StyleProperties.VerticalAlign,
+    StyleAttributes.VerticalAlign,
   );
 };
 
 export const getBorderWidth = (
   jsonObject: Record<string, string>,
 ): number | undefined => {
-  return getHeightAndWidthProperty(jsonObject, StyleProperties.BorderWidth);
+  return getHeightAndWidthProperty(jsonObject, StyleAttributes.BorderWidth);
 };
 
 export const getBorderSpacing = (
   jsonObject: Record<string, string>,
 ): number | undefined => {
-  return getHeightAndWidthProperty(jsonObject, StyleProperties.BorderSpacing);
+  return getHeightAndWidthProperty(jsonObject, StyleAttributes.BorderSpacing);
 };
 
 export const getHeight = (
   jsonObject: Record<string, string>,
 ): number | undefined => {
-  return getHeightAndWidthProperty(jsonObject, StyleProperties.Height);
+  return getHeightAndWidthProperty(jsonObject, StyleAttributes.Height);
 };
 
 export const getWidth = (
   jsonObject: Record<string, string>,
 ): number | undefined => {
-  return getHeightAndWidthProperty(jsonObject, StyleProperties.Width);
+  return getHeightAndWidthProperty(jsonObject, StyleAttributes.Width);
 };
 
 export const getCaption = (captionData: AstElement): CaptionBlock => {
@@ -242,31 +242,31 @@ export const getCaption = (captionData: AstElement): CaptionBlock => {
       textBlocks = generateTextBlocks(child);
     } else {
       switch (child.name) {
-        case TagNames.Paragraph:
-        case TagNames.Heading1:
-        case TagNames.Heading2:
-        case TagNames.Heading3:
-        case TagNames.Heading4:
-        case TagNames.Heading5:
-        case TagNames.Heading6:
-        case TagNames.Preformatted:
+        case Tags.Paragraph:
+        case Tags.Heading1:
+        case Tags.Heading2:
+        case Tags.Heading3:
+        case Tags.Heading4:
+        case Tags.Heading5:
+        case Tags.Heading6:
+        case Tags.Preformatted:
           block = generateParagraphBlock(child);
           break;
-        case TagNames.OrderedList:
+        case Tags.OrderedList:
           block = generateListBlock(child, BlockTypes.OrderedList);
           break;
-        case TagNames.UnorderedList:
+        case Tags.UnorderedList:
           block = generateListBlock(child, BlockTypes.UnorderedList);
           break;
-        case TagNames.Image:
+        case Tags.Image:
           block = generateImageBlock(child);
           break;
-        case TagNames.Video:
+        case Tags.Video:
           block = generateVideoBlock(child);
           break;
-        case TagNames.Span:
-        case TagNames.LineBreak:
-        case TagNames.Anchor:
+        case Tags.Span:
+        case Tags.LineBreak:
+        case Tags.Anchor:
           textBlocks = generateTextBlocks(child);
           break;
       }
@@ -287,11 +287,11 @@ export const getCaption = (captionData: AstElement): CaptionBlock => {
 
 export const getRowType = (type: string): string | undefined => {
   let rowType: string | undefined;
-  if (type === TagNames.TableBody) {
+  if (type === Tags.TableBody) {
     rowType = RowType.Body;
-  } else if (type === TagNames.TableHead) {
+  } else if (type === Tags.TableHead) {
     rowType = RowType.Header;
-  } else if (type === TagNames.TableFooter) {
+  } else if (type === Tags.TableFooter) {
     rowType = RowType.Footer;
   }
   return rowType;

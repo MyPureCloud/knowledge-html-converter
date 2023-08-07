@@ -21,8 +21,8 @@ import {
 } from './table-properties';
 import { generateTextBlocks } from './text';
 import { generateVideoBlock } from './video';
-import { StyleProperties, TagNames } from '../models';
-import { Block } from '../models/block';
+import { StyleAttributes, Tags } from '../models/html';
+import { Block } from '../models/blocks/block';
 import { BlockTypes } from '../models/blocks/block-type';
 import { ImageBlock } from '../models/blocks/image';
 import {
@@ -185,34 +185,34 @@ const generateCellBlock = (cell: AstElement): Block[] => {
       textBlocks = generateTextBlocks(blockData);
     } else {
       switch (blockData.name) {
-        case TagNames.Paragraph:
-        case TagNames.Heading1:
-        case TagNames.Heading2:
-        case TagNames.Heading3:
-        case TagNames.Heading4:
-        case TagNames.Heading5:
-        case TagNames.Heading6:
-        case TagNames.Preformatted:
+        case Tags.Paragraph:
+        case Tags.Heading1:
+        case Tags.Heading2:
+        case Tags.Heading3:
+        case Tags.Heading4:
+        case Tags.Heading5:
+        case Tags.Heading6:
+        case Tags.Preformatted:
           block = generateParagraphBlock(blockData);
           break;
-        case TagNames.OrderedList:
+        case Tags.OrderedList:
           block = generateListBlock(blockData, BlockTypes.OrderedList);
           break;
-        case TagNames.UnorderedList:
+        case Tags.UnorderedList:
           block = generateListBlock(blockData, BlockTypes.UnorderedList);
           break;
-        case TagNames.Image:
+        case Tags.Image:
           block = generateImageBlock(blockData);
           break;
-        case TagNames.Video:
+        case Tags.Video:
           block = generateVideoBlock(blockData);
           break;
-        case TagNames.Table:
+        case Tags.Table:
           block = generateTableBlock(blockData);
           break;
-        case TagNames.Span:
-        case TagNames.LineBreak:
-        case TagNames.Anchor:
+        case Tags.Span:
+        case Tags.LineBreak:
+        case Tags.Anchor:
           textBlocks = generateTextBlocks(blockData);
           break;
       }
@@ -251,7 +251,7 @@ const generateTableProperties = (blockData: AstElement): TableProperties => {
     borderColor = getBorderColor(jsonObject);
     backgroundColor = getBackgroundColor(jsonObject);
     if (
-      Object.prototype.hasOwnProperty.call(jsonObject, StyleProperties.Border)
+      Object.prototype.hasOwnProperty.call(jsonObject, StyleAttributes.Border)
     ) {
       [borderWidth, borderStyle, borderColor] = getBorderProperties(jsonObject);
     }
@@ -355,12 +355,12 @@ const generateCellProperties = (
   }
   if (
     cellBlockData.type === TextDataType.Tag &&
-    cellBlockData.name === TagNames.HeaderCell
+    cellBlockData.name === Tags.HeaderCell
   ) {
     cellType = 'HeaderCell';
   } else if (
     cellBlockData.type === TextDataType.Tag &&
-    cellBlockData.name === TagNames.DataCell
+    cellBlockData.name === Tags.DataCell
   ) {
     cellType = 'Cell';
   }
@@ -387,7 +387,7 @@ const generateCellProperties = (
   const borderStyle = getBorderStyle(cellStyleJson);
   const borderWidth = getBorderWidth(cellStyleJson);
   if (
-    Object.prototype.hasOwnProperty.call(cellStyleJson, StyleProperties.Width)
+    Object.prototype.hasOwnProperty.call(cellStyleJson, StyleAttributes.Width)
   ) {
     width = getWidth(cellStyleJson);
   }

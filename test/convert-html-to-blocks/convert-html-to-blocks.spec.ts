@@ -3,7 +3,7 @@ import { join } from 'path';
 import { convertHtmlToBlocks } from '../../src';
 import { expect } from 'chai';
 import { Context } from 'mocha';
-import { Block } from '../../src/models/block';
+import { Block } from '../../src/models/blocks/block';
 
 describe('convert-html-to-blocks', function () {
   describe('basic', function () {

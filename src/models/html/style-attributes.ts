@@ -1,4 +1,4 @@
-export enum StyleProperties {
+export enum StyleAttributes {
   // Text block level
   FontSize = 'font-size',
   BackgroundColor = 'background-color',

@@ -2,8 +2,8 @@ import { AlignType } from './align-type';
 import { BlockTypes } from './block-type';
 import { FontType } from './font-type';
 import { ImageBlock } from './image';
-import { VideoBlock } from './video';
 import { FontSize, TextBlocks } from './text';
+import { VideoBlock } from './video';
 
 export interface ParagraphBlock {
   type: BlockTypes.Paragraph;

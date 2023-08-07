@@ -1,7 +1,7 @@
 import { parse, AstElement } from 'html-parse-stringify';
 import { sanitizeHtml } from './sanitizer';
-import { TagNames } from './models';
-import { Block } from './models/block';
+import { Tags } from './models/html';
+import { Block } from './models/blocks/block';
 import { BlockTypes } from './models/blocks/block-type';
 import { generateParagraphBlock } from './converters/paragraph';
 import { generateListBlock } from './converters/list';
@@ -24,29 +24,29 @@ const convertParsedHtmlToBlocks = (parsedHtml: AstElement[]): Block[] => {
   parsedHtml.forEach((blockData: AstElement) => {
     let block: Block | undefined;
     switch (blockData.name) {
-      case TagNames.Paragraph:
-      case TagNames.Heading1:
-      case TagNames.Heading2:
-      case TagNames.Heading3:
-      case TagNames.Heading4:
-      case TagNames.Heading5:
-      case TagNames.Heading6:
-      case TagNames.Preformatted:
+      case Tags.Paragraph:
+      case Tags.Heading1:
+      case Tags.Heading2:
+      case Tags.Heading3:
+      case Tags.Heading4:
+      case Tags.Heading5:
+      case Tags.Heading6:
+      case Tags.Preformatted:
         block = generateParagraphBlock(blockData);
         break;
-      case TagNames.OrderedList:
+      case Tags.OrderedList:
         block = generateListBlock(blockData, BlockTypes.OrderedList);
         break;
-      case TagNames.UnorderedList:
+      case Tags.UnorderedList:
         block = generateListBlock(blockData, BlockTypes.UnorderedList);
         break;
-      case TagNames.Image:
+      case Tags.Image:
         block = generateImageBlock(blockData);
         break;
-      case TagNames.Video:
+      case Tags.Video:
         block = generateVideoBlock(blockData);
         break;
-      case TagNames.Table:
+      case Tags.Table:
         block = generateTableBlock(blockData);
         break;
     }

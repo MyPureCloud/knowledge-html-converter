@@ -1,5 +1,5 @@
 import { AstElement } from 'html-parse-stringify';
-import { StyleProperties, TagNames } from '../models';
+import { StyleAttributes, Tags } from '../models/html';
 import { AlignType } from '../models/blocks/align-type';
 import { BlockTypes } from '../models/blocks/block-type';
 import { htmlTagToFontType } from '../models/blocks/font-type';
@@ -58,7 +58,7 @@ const generateListProperties = (
       .map((chunk) => chunk.split(/\s*:\s*/)) //split key:value with colon
       .map((keyValue) => {
         if (keyValue.length === 2) {
-          if (keyValue[0] === StyleProperties.ListStyleType) {
+          if (keyValue[0] === StyleAttributes.ListStyleType) {
             if (listType === BlockTypes.OrderedList) {
               orderedType =
                 Object.keys(OrderedTypes)[
@@ -75,21 +75,21 @@ const generateListProperties = (
                 ];
             }
           }
-          if (keyValue[0] === StyleProperties.FontSize) {
+          if (keyValue[0] === StyleAttributes.FontSize) {
             fontSize = getFontSizeName(keyValue[1]);
           }
-          if (keyValue[0] === StyleProperties.TextColor) {
+          if (keyValue[0] === StyleAttributes.TextColor) {
             textColor = keyValue[1].startsWith('#')
               ? keyValue[1]
               : convertRgbToHex(keyValue[1]);
           }
-          if (keyValue[0] === StyleProperties.BackgroundColor) {
+          if (keyValue[0] === StyleAttributes.BackgroundColor) {
             backgroundColor = keyValue[1].startsWith('#')
               ? keyValue[1]
               : convertRgbToHex(keyValue[1]);
           }
           if (
-            keyValue[0] === StyleProperties.Align &&
+            keyValue[0] === StyleAttributes.Align &&
             keyValue[1] &&
             keyValue[1].length > 0
           ) {
@@ -138,11 +138,11 @@ const generateListItemBlock = (
 
   listItemData?.children?.forEach((child: AstElement) => {
     const childNameLowerCase = child?.name?.toLowerCase();
-    if (childNameLowerCase === TagNames.OrderedList) {
+    if (childNameLowerCase === Tags.OrderedList) {
       listItemBlock.blocks.push(
         generateListBlock(child, BlockTypes.OrderedList),
       );
-    } else if (childNameLowerCase === TagNames.UnorderedList) {
+    } else if (childNameLowerCase === Tags.UnorderedList) {
       listItemBlock.blocks.push(
         generateListBlock(child, BlockTypes.UnorderedList),
       );

@@ -1,5 +1,5 @@
 import { AstElement } from 'html-parse-stringify';
-import { StyleProperties, TagNames } from '../models';
+import { StyleAttributes, Tags } from '../models/html';
 import { BlockTypes } from '../models/blocks/block-type';
 import { ImageBlock } from '../models/blocks/image';
 import {
@@ -28,30 +28,30 @@ export const generateTextBlocks = (
     }
   } else if (
     textData.type === TextDataType.Tag &&
-    textData.name === TagNames.LineBreak
+    textData.name === Tags.LineBreak
   ) {
     arr.push(assignAttributes('\n'));
   } else if (
     textData.type === TextDataType.Tag &&
-    textData.name === TagNames.Image
+    textData.name === Tags.Image
   ) {
     arr.push(
       generateImageBlock(textData, { ...properties, ...textProperties }),
     );
   } else if (
     textData.type === TextDataType.Tag &&
-    textData.name === TagNames.Anchor
+    textData.name === Tags.Anchor
   ) {
     arr.push(generateHyperlinkBlock(textData, attributes));
   } else if (
     textData.type === TextDataType.Tag &&
-    textData.name === TagNames.Video
+    textData.name === Tags.Video
   ) {
     arr.push(generateVideoBlock(textData));
   } else {
     if (
       textData.type === TextDataType.Tag &&
-      textData.name === TagNames.Span &&
+      textData.name === Tags.Span &&
       textData.attrs?.style
     ) {
       textProperties = Object.assign(
@@ -103,15 +103,15 @@ export const generateTextProperties = (
       .map((chunk: string) => chunk.split(/\s*:\s*/)) //split key:value with colon
       .map((keyValue: string[]) => {
         if (keyValue.length === 2) {
-          if (keyValue[0] === StyleProperties.BackgroundColor) {
+          if (keyValue[0] === StyleAttributes.BackgroundColor) {
             backgroundColor = keyValue[1].startsWith('#')
               ? keyValue[1]
               : convertRgbToHex(keyValue[1]);
           }
-          if (keyValue[0] === StyleProperties.FontSize) {
+          if (keyValue[0] === StyleAttributes.FontSize) {
             fontSize = getFontSizeName(keyValue[1]);
           }
-          if (keyValue[0] === StyleProperties.TextColor) {
+          if (keyValue[0] === StyleAttributes.TextColor) {
             textColor = keyValue[1].startsWith('#')
               ? keyValue[1]
               : convertRgbToHex(keyValue[1]);

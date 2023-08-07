@@ -1,9 +1,9 @@
 import * as sanitizeHtmlLib from 'sanitize-html';
 import { IOptions } from 'sanitize-html';
-import { StyleProperties, TagNames } from './models';
+import { StyleAttributes, Tags } from './models/html';
 
 const options: IOptions = {
-  allowedTags: Object.values(TagNames),
+  allowedTags: Object.values(Tags),
   allowedAttributes: {
     '*': ['style'],
     a: ['href'],
@@ -19,7 +19,7 @@ const options: IOptions = {
     decodeEntities: false, // do not convert '&nbsp;' to ' '
   },
 };
-Object.values(StyleProperties).forEach((stylePropertyName) => {
+Object.values(StyleAttributes).forEach((stylePropertyName) => {
   options.allowedStyles!['*'][stylePropertyName] = [/.*/];
 });
 
