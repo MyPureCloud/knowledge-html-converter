@@ -1,32 +1,13 @@
 import { AstElement } from 'html-parse-stringify';
-import { BlockTypes, StyleProperties, TagNames } from '../tags';
-import { ImageBlock } from './image';
-import { FontSize, TextBlocks, generateTextBlocks } from './text';
-import { VideoBlock } from './video';
-
-export interface ParagraphBlock {
-  type: BlockTypes.Paragraph;
-  paragraph: {
-    blocks: (TextBlocks | ImageBlock | VideoBlock)[];
-    properties?: ParagraphProperties;
-  };
-}
-
-export interface ParagraphProperties {
-  fontType?: TagNames;
-  textColor?: string;
-  backgroundColor?: string;
-  fontSize?: FontSize;
-  indentation?: number;
-  align?: AlignType;
-}
-
-export enum AlignType {
-  Center = 'Center',
-  Left = 'Left',
-  Right = 'Right',
-  Justify = 'Justify',
-}
+import { StyleProperties } from '../models';
+import { AlignType } from '../models/blocks/align-type';
+import { BlockTypes } from '../models/blocks/block-type';
+import { htmlTagToFontType } from '../models/blocks/font-type';
+import { generateTextBlocks } from './text';
+import {
+  ParagraphBlock,
+  ParagraphProperties,
+} from '../models/blocks/paragraph';
 
 export const generateParagraphBlock = (
   blockData: AstElement,
@@ -38,9 +19,7 @@ export const generateParagraphBlock = (
     },
   };
   const children = blockData.children;
-  const fontType = Object.keys(TagNames)[
-    Object.values(TagNames).indexOf(blockData.name as unknown as TagNames)
-  ] as TagNames;
+  const fontType = htmlTagToFontType(blockData.name);
   const properties = generateProperties(blockData.attrs);
   if (properties) {
     paragraphBlock.paragraph.properties = { ...properties, fontType };

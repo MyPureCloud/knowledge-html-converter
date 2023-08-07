@@ -1,23 +1,9 @@
 import { AstElement } from 'html-parse-stringify';
-import { BlockTypes } from '../tags';
-import { AllowedProperties, TextBlocks, generateTextBlocks } from './text';
-import { ImageBlock } from './image';
-import { VideoBlock } from './video';
-
-export interface HyperlinkProperties {
-  target: TargetActions;
-}
-
-export enum TargetActions {
-  NotSet = 'not_set',
-  NewWindow = 'new_window',
-  PopupWindow = 'popup_window',
-  SameWindow = 'same_window',
-  ParentWindow = 'parent_window',
-  OpenEmail = 'open_email',
-  CopyEmail = 'copy_email',
-  NewTab = 'new_tab',
-}
+import { BlockTypes } from '../models/blocks/block-type';
+import { ImageBlock } from '../models/blocks/image';
+import { AllowedProperties, TextBlocks } from '../models/blocks/text';
+import { VideoBlock } from '../models/blocks/video';
+import { generateTextBlocks } from './text';
 
 export const generateHyperlinkBlock = (
   anchorElement: AstElement,

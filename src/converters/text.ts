@@ -1,58 +1,19 @@
 import { AstElement } from 'html-parse-stringify';
-import { BlockTypes, StyleProperties, TagNames } from '../tags';
-import { HyperlinkProperties, generateHyperlinkBlock } from './hyperlink';
-import { ImageBlock, convertRgbToHex, generateImageBlock } from './image';
-import { VideoBlock, generateVideoBlock } from './video';
-
-export interface TextBlocks {
-  type: BlockTypes.TextBlocks;
-  text: TextBlock;
-}
-
-export enum TextDataType {
-  Tag = 'tag',
-  Text = 'text',
-}
-
-export enum AllowedProperties {
-  Bold = 'Bold',
-  Italic = 'Italic',
-  Underline = 'Underline',
-  Strikethrough = 'Strikethrough',
-  Subscript = 'Subscript',
-  Superscript = 'Superscript',
-}
-
-export enum FontSize {
-  XxSmall = '9px',
-  XSmall = '10px',
-  Small = '13.333px',
-  Medium = '16px',
-  Large = '18px',
-  XLarge = '24px',
-  XxLarge = '32px',
-}
-
-export interface TextProperties {
-  fontSize?: FontSize;
-  textColor?: string;
-  backgroundColor?: string;
-}
-
-export interface TextBlock {
-  text: string;
-  marks?: Array<
-    | AllowedProperties.Bold
-    | AllowedProperties.Italic
-    | AllowedProperties.Underline
-    | AllowedProperties.Strikethrough
-    | AllowedProperties.Subscript
-    | AllowedProperties.Superscript
-  >;
-  properties?: TextProperties;
-  hyperlink?: string;
-  hyperlinkProperties?: HyperlinkProperties;
-}
+import { StyleProperties, TagNames } from '../models';
+import { BlockTypes } from '../models/blocks/block-type';
+import { ImageBlock } from '../models/blocks/image';
+import {
+  AllowedProperties,
+  FontSize,
+  TextProperties,
+  TextBlock,
+  TextBlocks,
+  TextDataType,
+} from '../models/blocks/text';
+import { VideoBlock } from '../models/blocks/video';
+import { generateHyperlinkBlock } from './hyperlink';
+import { convertRgbToHex, generateImageBlock } from './image';
+import { generateVideoBlock } from './video';
 
 export const generateTextBlocks = (
   textData: AstElement,

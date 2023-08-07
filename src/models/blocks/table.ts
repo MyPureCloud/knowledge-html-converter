@@ -1,9 +1,9 @@
-import { BlockTypes } from '../../tags';
-import { ImageBlock } from '../image';
-import { ListBlock } from '../list';
-import { ParagraphBlock } from '../paragraph';
-import { TextBlocks, TextBlock } from '../text';
-import { VideoBlock } from '../video';
+import { BlockTypes } from './block-type';
+import { ImageBlock } from './image';
+import { ListBlock } from './list';
+import { ParagraphBlock } from './paragraph';
+import { TextBlock, TextBlocks } from './text';
+import { VideoBlock } from './video';
 
 export interface TableBlock {
   type: BlockTypes.TableBlock;
@@ -43,16 +43,16 @@ export interface TableProperties {
   caption?: CaptionBlock;
 }
 
+export interface CaptionBlock {
+  blocks: CaptionBlockItem[];
+}
+
 export type CaptionBlockItem =
   | ParagraphBlock
   | TextBlocks
   | ImageBlock
   | VideoBlock
   | ListBlock;
-
-export interface CaptionBlock {
-  blocks: CaptionBlockItem[];
-}
 
 export interface CaptionItem {
   type?:
@@ -90,25 +90,6 @@ export interface CellProperties {
   rowSpan?: number;
 }
 
-export enum HorizontalAlignType {
-  Center = 'center',
-  Left = 'left',
-  Right = 'right',
-}
-
-export enum BorderStyleType {
-  Solid = 'solid',
-  Dotted = 'dotted',
-  Dashed = 'dashed',
-  Double = 'double',
-  Groove = 'groove',
-  Ridge = 'ridge',
-  Inset = 'inset',
-  Outset = 'outset',
-  Hidden = 'hidden',
-  None = 'none',
-}
-
 export enum RowType {
   Header = 'Header',
   Body = 'Body',
@@ -132,8 +113,27 @@ export enum CellScopeType {
   ['colgroup'] = 'ColumnGroup',
 }
 
+export enum HorizontalAlignType {
+  Center = 'center',
+  Left = 'left',
+  Right = 'right',
+}
+
 export enum VerticalAlignType {
   Top = 'top',
   Middle = 'middle',
   Bottom = 'bottom',
+}
+
+export enum BorderStyleType {
+  Solid = 'solid',
+  Dotted = 'dotted',
+  Dashed = 'dashed',
+  Double = 'double',
+  Groove = 'groove',
+  Ridge = 'ridge',
+  Inset = 'inset',
+  Outset = 'outset',
+  Hidden = 'hidden',
+  None = 'none',
 }

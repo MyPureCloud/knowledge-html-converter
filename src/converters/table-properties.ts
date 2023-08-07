@@ -1,11 +1,21 @@
 import { AstElement } from 'html-parse-stringify';
-import { BlockTypes, StyleProperties, TagNames } from '../../tags';
-import { ImageBlock, convertRgbToHex, generateImageBlock } from '../image';
-import { ListBlock, generateListBlock } from '../list';
-import { ParagraphBlock, generateParagraphBlock } from '../paragraph';
-import { CaptionBlock, CaptionBlockItem, RowType } from './table-models';
-import { AllowedProperties, TextBlocks, generateTextBlocks } from '../text';
-import { VideoBlock, generateVideoBlock } from '../video';
+import { StyleProperties, TagNames } from '../models';
+import { BlockTypes } from '../models/blocks/block-type';
+import { ImageBlock } from '../models/blocks/image';
+import { ListBlock } from '../models/blocks/list';
+import { ParagraphBlock } from '../models/blocks/paragraph';
+import {
+  CaptionBlock,
+  CaptionBlockItem,
+  RowType,
+} from '../models/blocks/table';
+import { AllowedProperties, TextBlocks } from '../models/blocks/text';
+import { VideoBlock } from '../models/blocks/video';
+import { convertRgbToHex, generateImageBlock } from './image';
+import { generateListBlock } from './list';
+import { generateParagraphBlock } from './paragraph';
+import { generateTextBlocks } from './text';
+import { generateVideoBlock } from './video';
 
 const emPattern = /^\d+(?:\.\d+)?em$/;
 const pxPattern = /^\d+(?:\.\d+)?px$/;

@@ -1,24 +1,7 @@
 import { AstElement } from 'html-parse-stringify';
-import { ImageBlock, generateImageBlock } from '../image';
-import { generateListBlock } from '../list';
-import { generateParagraphBlock } from '../paragraph';
-import {
-  AllowedProperties,
-  TextBlocks,
-  TextDataType,
-  generateTextBlocks,
-} from '../text';
-import { Block, BlockTypes, StyleProperties, TagNames } from '../../tags';
-import { VideoBlock, generateVideoBlock } from '../video';
-import {
-  CellBlock,
-  CellProperties,
-  CellScopeType,
-  RowBlock,
-  RowProperties,
-  TableBlock,
-  TableProperties,
-} from './table-models';
+import { generateImageBlock } from './image';
+import { generateListBlock } from './list';
+import { generateParagraphBlock } from './paragraph';
 import {
   getAlignment,
   getBackgroundColor,
@@ -36,6 +19,27 @@ import {
   getVerticalAlign,
   getWidth,
 } from './table-properties';
+import { generateTextBlocks } from './text';
+import { generateVideoBlock } from './video';
+import { StyleProperties, TagNames } from '../models';
+import { Block } from '../models/block';
+import { BlockTypes } from '../models/blocks/block-type';
+import { ImageBlock } from '../models/blocks/image';
+import {
+  CellBlock,
+  CellProperties,
+  CellScopeType,
+  RowBlock,
+  RowProperties,
+  TableBlock,
+  TableProperties,
+} from '../models/blocks/table';
+import {
+  AllowedProperties,
+  TextBlocks,
+  TextDataType,
+} from '../models/blocks/text';
+import { VideoBlock } from '../models/blocks/video';
 
 type TablePaddingPropertyHolder = {
   value?: number;

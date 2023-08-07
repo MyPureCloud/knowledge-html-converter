@@ -1,22 +1,8 @@
 import { AstElement } from 'html-parse-stringify';
-import { BlockTypes, StyleProperties } from '../tags';
-import { AlignType } from './paragraph';
-
-export interface ImageBlock {
-  type: 'Image';
-  image: {
-    url: string;
-    hyperlink?: string;
-    properties?: ImageProperties;
-  };
-}
-
-export interface ImageProperties {
-  align?: AlignType;
-  backgroundColor?: string;
-  indentation?: number;
-  hyperlink?: string;
-}
+import { StyleProperties } from '../models';
+import { BlockTypes } from '../models/blocks/block-type';
+import { AlignType } from '../models/blocks/align-type';
+import { ImageBlock, ImageProperties } from '../models/blocks/image';
 
 export const generateImageBlock = (
   blockData: AstElement,

@@ -1,71 +1,18 @@
 import { AstElement } from 'html-parse-stringify';
-import { BlockTypes, StyleProperties, TagNames } from '../tags';
-import { ImageBlock, convertRgbToHex } from './image';
+import { StyleProperties, TagNames } from '../models';
+import { AlignType } from '../models/blocks/align-type';
+import { BlockTypes } from '../models/blocks/block-type';
+import { htmlTagToFontType } from '../models/blocks/font-type';
+import { convertRgbToHex } from './image';
 import {
-  FontSize,
-  TextBlocks,
-  generateTextBlocks,
-  getFontSizeName,
-} from './text';
-import { AlignType } from './paragraph';
-import { VideoBlock } from './video';
-
-export interface ListBlock {
-  type: BlockTypes.OrderedList | BlockTypes.UnorderedList;
-  list: {
-    blocks: ListItemBlock[];
-    properties?: ListBlockProperties;
-  };
-}
-
-export type FontType =
-  | 'Heading1'
-  | 'Heading2'
-  | 'Heading3'
-  | 'Heading4'
-  | 'Heading5'
-  | 'Heading6'
-  | 'Paragraph'
-  | 'Preformatted';
-
-export interface ListBlockProperties {
-  fontType?: FontType;
-  unorderedType?: UnorderedTypes;
-  orderedType?: OrderedTypes;
-}
-
-export enum UnorderedTypes {
-  Normal = 'normal',
-  Square = 'square',
-  Circle = 'circle',
-  None = 'none',
-}
-
-export enum OrderedTypes {
-  LowerAlpha = 'lower-alpha',
-  LowerGreek = 'lower-greek',
-  LowerRoman = 'lower-roman',
-  UpperAlpha = 'upper-alpha',
-  UpperRoman = 'upper-roman',
-  None = 'none',
-}
-
-export interface ListItemBlock {
-  type: BlockTypes.ListItem;
-  blocks: (TextBlocks | ImageBlock | VideoBlock | ListBlock)[];
-  properties?: ListItemBlockProperties;
-}
-
-export interface ListItemBlockProperties {
-  fontType?: FontType;
-  fontSize?: FontSize;
-  textColor?: string;
-  backgroundColor?: string;
-  align?: AlignType;
-  indentation?: number;
-  unorderedType?: UnorderedTypes;
-  orderedType?: OrderedTypes;
-}
+  ListBlock,
+  ListBlockProperties,
+  ListItemBlock,
+  ListItemBlockProperties,
+  OrderedTypes,
+  UnorderedTypes,
+} from '../models/blocks/list';
+import { generateTextBlocks, getFontSizeName } from './text';
 
 export const generateListBlock = (
   list: AstElement,
@@ -189,28 +136,18 @@ const generateListItemBlock = (
     );
   }
 
-  const fontTypes: string[] = [
-    TagNames.Heading1,
-    TagNames.Heading2,
-    TagNames.Heading3,
-    TagNames.Heading4,
-    TagNames.Heading5,
-    TagNames.Heading6,
-    TagNames.Preformatted,
-  ];
   listItemData?.children?.forEach((child: AstElement) => {
-    if (child?.name?.toLowerCase() === TagNames.OrderedList) {
+    const childNameLowerCase = child?.name?.toLowerCase();
+    if (childNameLowerCase === TagNames.OrderedList) {
       listItemBlock.blocks.push(
         generateListBlock(child, BlockTypes.OrderedList),
       );
-    } else if (child?.name?.toLowerCase() === TagNames.UnorderedList) {
+    } else if (childNameLowerCase === TagNames.UnorderedList) {
       listItemBlock.blocks.push(
         generateListBlock(child, BlockTypes.UnorderedList),
       );
-    } else if (fontTypes.includes(child?.name?.toLowerCase())) {
-      const fontType = Object.keys(TagNames)[
-        Object.values(TagNames).indexOf(child?.name?.toLowerCase() as TagNames)
-      ] as FontType;
+    } else if (htmlTagToFontType(childNameLowerCase)) {
+      const fontType = htmlTagToFontType(childNameLowerCase);
 
       if (listItemBlock.properties) {
         listItemBlock.properties.fontType = fontType;

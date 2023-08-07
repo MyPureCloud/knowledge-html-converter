@@ -1,6 +1,6 @@
 import * as sanitizeHtmlLib from 'sanitize-html';
 import { IOptions } from 'sanitize-html';
-import { TagNames, StyleProperties } from './tags';
+import { StyleProperties, TagNames } from './models';
 
 const options: IOptions = {
   allowedTags: Object.values(TagNames),

@@ -1,11 +1,13 @@
 import { parse, AstElement } from 'html-parse-stringify';
 import { sanitizeHtml } from './sanitizer';
-import { Block, BlockTypes, TagNames } from './tags';
-import { generateParagraphBlock } from './elements/paragraph';
-import { generateListBlock } from './elements/list';
-import { generateVideoBlock } from './elements/video';
-import { generateImageBlock } from './elements/image';
-import { generateTableBlock } from './elements/table/table-converter';
+import { TagNames } from './models';
+import { Block } from './models/block';
+import { BlockTypes } from './models/blocks/block-type';
+import { generateParagraphBlock } from './converters/paragraph';
+import { generateListBlock } from './converters/list';
+import { generateVideoBlock } from './converters/video';
+import { generateImageBlock } from './converters/image';
+import { generateTableBlock } from './converters/table';
 
 export const convertHtmlToBlocks = (html: string): Block[] => {
   if (!html) {
