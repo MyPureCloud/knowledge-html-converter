@@ -48,6 +48,14 @@ describe('convert-html-to-blocks', function () {
     it('video', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with video html
   });
 
+  describe('text', function () {
+    it('properties', test); // knowledge-administration-ui / text-block-utils.spec.ts / should generate text blocks with properties from html
+  });
+
+  describe('video', function () {
+    it('simple', test); // knowledge-administration-ui / video-block-utils.spec.ts / should generate video blocks from html
+  });
+
   /**
    * Tests convertHtmlToBlocks with
    * input:  test/convert-html-to-blocks/${...test.titlePath()}/input.html

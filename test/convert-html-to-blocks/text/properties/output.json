@@ -1,0 +1,23 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Plans and Pricing",
+            "properties": {
+              "backgroundColor": "#eccafa",
+              "fontSize": "XLarge",
+              "textColor": "#3598db"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]
