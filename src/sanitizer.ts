@@ -9,6 +9,8 @@ const options: IOptions = {
     a: ['href'],
     iframe: ['src'],
     img: ['src'],
+    td: ['colspan', 'scope'],
+    th: ['colspan', 'scope'],
   },
   allowedStyles: {
     '*': {},

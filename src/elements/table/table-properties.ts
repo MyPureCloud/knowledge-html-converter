@@ -1,13 +1,9 @@
 import { AstElement } from 'html-parse-stringify';
 import { BlockTypes, StyleProperties, TagNames } from '../../tags';
 import { ImageBlock, convertRgbToHex, generateImageBlock } from '../image';
-import { generateListBlock } from '../list';
-import {
-  CaptionBlock,
-  CaptionBlockType,
-  CaptionItem,
-  RowType,
-} from './table-models';
+import { ListBlock, generateListBlock } from '../list';
+import { ParagraphBlock, generateParagraphBlock } from '../paragraph';
+import { CaptionBlock, CaptionBlockItem, RowType } from './table-models';
 import { AllowedProperties, TextBlocks, generateTextBlocks } from '../text';
 import { VideoBlock, generateVideoBlock } from '../video';
 
@@ -211,10 +207,10 @@ export const getWidth = (
 };
 
 export const getCaption = (captionData: AstElement): CaptionBlock => {
-  const captionBlock = {
-    blocks: [] as CaptionItem[],
-  } as CaptionBlock;
-  const blocks: CaptionBlockType[] = [];
+  const captionBlock: CaptionBlock = {
+    blocks: [],
+  };
+  const blocks: CaptionBlockItem[] = [];
 
   const textFormatMap: Record<string, AllowedProperties> = {
     strong: AllowedProperties.Bold,
@@ -225,7 +221,7 @@ export const getCaption = (captionData: AstElement): CaptionBlock => {
     sup: AllowedProperties.Superscript,
   };
   captionData.children?.forEach((child) => {
-    let block: CaptionBlockType | undefined;
+    let block: ParagraphBlock | ListBlock | ImageBlock | VideoBlock | undefined;
     let textBlocks: (TextBlocks | ImageBlock | VideoBlock)[] | undefined;
 
     if (textFormatMap[child.name]) {
@@ -236,6 +232,16 @@ export const getCaption = (captionData: AstElement): CaptionBlock => {
       textBlocks = generateTextBlocks(child);
     } else {
       switch (child.name) {
+        case TagNames.Paragraph:
+        case TagNames.Heading1:
+        case TagNames.Heading2:
+        case TagNames.Heading3:
+        case TagNames.Heading4:
+        case TagNames.Heading5:
+        case TagNames.Heading6:
+        case TagNames.Preformatted:
+          block = generateParagraphBlock(child);
+          break;
         case TagNames.OrderedList:
           block = generateListBlock(child, BlockTypes.OrderedList);
           break;
@@ -286,9 +292,9 @@ export const convertPixelsToEM = (value: number): number => {
 };
 
 export const convertPercentageToEM = (value: number): number => {
-  // TODO tox-edit-area?
+  // TODO tox-edit-area? pass in as an option?
   //const parentWidth = document.getElementsByClassName('tox-edit-area')[0].clientWidth - 32;
-  const parentWidth = 800;
+  const parentWidth = 1168;
   const pxValue = (parentWidth / 100) * value;
   return convertPixelsToEM(pxValue);
 };

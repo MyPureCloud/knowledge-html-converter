@@ -1,0 +1,91 @@
+[
+  {
+    "type": "Table",
+    "table": {
+      "rows": [
+        {
+          "cells": [
+            {
+              "blocks": [
+                {
+                  "type": "Table",
+                  "table": {
+                    "rows": [
+                      {
+                        "cells": [
+                          {
+                            "blocks": [
+                              {
+                                "type": "Text",
+                                "text": {
+                                  "text": "Nested Table Col-1"
+                                }
+                              }
+                            ],
+                            "properties": {
+                              "cellType": "Cell",
+                              "scope": "None",
+                              "width": 37.5
+                            }
+                          },
+                          {
+                            "blocks": [
+                              {
+                                "type": "Text",
+                                "text": {
+                                  "text": "Nested Table Col-2"
+                                }
+                              }
+                            ],
+                            "properties": {
+                              "cellType": "Cell",
+                              "scope": "None",
+                              "width": 37.5
+                            }
+                          }
+                        ],
+                        "properties": {
+                          "rowType": "Body"
+                        }
+                      }
+                    ],
+                    "properties": {
+                      "width": 43.0625,
+                      "height": 1.0625
+                    }
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell",
+                "scope": "None",
+                "width": 37.5
+              }
+            },
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": "Outer Table Col - 2&nbsp;"
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell",
+                "scope": "None",
+                "width": 37.5
+              }
+            }
+          ],
+          "properties": {
+            "rowType": "Body"
+          }
+        }
+      ],
+      "properties": {
+        "width": 75.0315
+      }
+    }
+  }
+]

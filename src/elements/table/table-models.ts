@@ -43,10 +43,15 @@ export interface TableProperties {
   caption?: CaptionBlock;
 }
 
-export type CaptionBlockType = TextBlocks | ImageBlock | VideoBlock | ListBlock;
+export type CaptionBlockItem =
+  | ParagraphBlock
+  | TextBlocks
+  | ImageBlock
+  | VideoBlock
+  | ListBlock;
 
 export interface CaptionBlock {
-  blocks: CaptionBlockType[];
+  blocks: CaptionBlockItem[];
 }
 
 export interface CaptionItem {

@@ -39,6 +39,15 @@ describe('convert-html-to-blocks', function () {
     it('heading2', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate paragraph block with heading2
   });
 
+  describe('table', function () {
+    it('simple', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks from html
+    it('properties', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with properties in html
+    it('merged-cells', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with merged cells html
+    it('nested-table', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with nested table html
+    it('caption-paragraph', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with paragraph in caption block
+    it('video', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with video html
+  });
+
   /**
    * Tests convertHtmlToBlocks with
    * input:  test/convert-html-to-blocks/${...test.titlePath()}/input.html

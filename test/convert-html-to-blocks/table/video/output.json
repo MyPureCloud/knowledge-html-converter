@@ -1,0 +1,49 @@
+[
+  {
+    "type": "Table",
+    "table": {
+      "rows": [
+        {
+          "cells": [
+            {
+              "blocks": [
+                {
+                  "type": "Video",
+                  "video": {
+                    "url": "https://www.example.com/video"
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell",
+                "scope": "None",
+                "width": 35.6248
+              }
+            },
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": "&nbsp;"
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell",
+                "scope": "None",
+                "width": 35.6248
+              }
+            }
+          ],
+          "properties": {
+            "rowType": "Body"
+          }
+        }
+      ],
+      "properties": {
+        "width": 71.291534
+      }
+    }
+  }
+]
