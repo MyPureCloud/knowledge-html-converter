@@ -16,7 +16,6 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "scope": "None",
                 "width": 35.6248
               }
             },
@@ -31,7 +30,6 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "scope": "None",
                 "width": 35.6248
               }
             }

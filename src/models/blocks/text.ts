@@ -7,14 +7,7 @@ export interface TextBlock {
 
 export interface Text {
   text: string;
-  marks?: Array<
-    | TextMark.Bold
-    | TextMark.Italic
-    | TextMark.Underline
-    | TextMark.Strikethrough
-    | TextMark.Subscript
-    | TextMark.Superscript
-  >;
+  marks?: TextMark[];
   properties?: TextProperties;
   hyperlink?: string;
 }

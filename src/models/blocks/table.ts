@@ -91,16 +91,24 @@ export enum TableBlockCellType {
 }
 
 export enum TableBlockScopeType {
-  Row = 'row',
-  Column = 'col',
-  RowGroup = 'rowgroup',
-  ColumnGroup = 'colgroup',
-  None = 'none',
-  ['row'] = 'Row',
-  ['col'] = 'Column',
-  ['rowgroup'] = 'RowGroup',
-  ['colgroup'] = 'ColumnGroup',
+  Row = 'Row',
+  Column = 'Column',
+  RowGroup = 'RowGroup',
+  ColumnGroup = 'ColumnGroup',
 }
+
+const tableBlockScopeTypesByHtmlScope: Record<string, TableBlockScopeType> = {
+  row: TableBlockScopeType.Row,
+  col: TableBlockScopeType.Column,
+  rowgroup: TableBlockScopeType.RowGroup,
+  colgroup: TableBlockScopeType.ColumnGroup,
+};
+
+export const htmlScopeToTableBlockScopeType = (
+  scope: string,
+): TableBlockScopeType | undefined => {
+  return tableBlockScopeTypesByHtmlScope[scope];
+};
 
 export enum TableBlockHorizontalAlignType {
   Center = 'center',

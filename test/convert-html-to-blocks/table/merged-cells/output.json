@@ -17,7 +17,6 @@
               "properties": {
                 "cellType": "Cell",
                 "width": 24.999975,
-                "scope": "None",
                 "borderWidth": 0.0625,
                 "borderColor": "#e03e2d"
               }
@@ -34,7 +33,6 @@
               "properties": {
                 "cellType": "Cell",
                 "width": 24.999975,
-                "scope": "None",
                 "borderWidth": 0.0625,
                 "borderColor": "#e03e2d",
                 "colSpan": 2
@@ -59,7 +57,6 @@
               "properties": {
                 "cellType": "Cell",
                 "width": 24.999975,
-                "scope": "None",
                 "borderWidth": 0.0625,
                 "borderColor": "#e03e2d"
               }
@@ -76,7 +73,6 @@
               "properties": {
                 "cellType": "Cell",
                 "width": 24.999975,
-                "scope": "None",
                 "borderWidth": 0.0625,
                 "borderColor": "#e03e2d"
               }
@@ -93,7 +89,6 @@
               "properties": {
                 "cellType": "Cell",
                 "width": 24.999975,
-                "scope": "None",
                 "borderWidth": 0.0625,
                 "borderColor": "#e03e2d"
               }

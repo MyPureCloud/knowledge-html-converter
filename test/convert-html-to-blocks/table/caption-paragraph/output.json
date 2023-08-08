@@ -16,7 +16,6 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "scope": "None",
                 "height": 1.3999,
                 "borderWidth": 0.125,
                 "borderColor": "#e03e2d"
@@ -33,7 +32,6 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "scope": "None",
                 "height": 1.3999,
                 "borderWidth": 0.125,
                 "borderColor": "#e03e2d"
@@ -58,7 +56,6 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "scope": "None",
                 "height": 1.3999,
                 "borderWidth": 0.125,
                 "borderColor": "#e03e2d"
@@ -75,7 +72,6 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "scope": "None",
                 "height": 1.3999,
                 "borderWidth": 0.125,
                 "borderColor": "#e03e2d"
@@ -100,7 +96,6 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "scope": "None",
                 "height": 1.3999,
                 "borderWidth": 0.125,
                 "borderColor": "#e03e2d"
@@ -117,7 +112,6 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "scope": "None",
                 "height": 1.3999,
                 "borderWidth": 0.125,
                 "borderColor": "#e03e2d"

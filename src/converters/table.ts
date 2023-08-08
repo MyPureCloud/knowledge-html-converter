@@ -26,12 +26,14 @@ import { BlockType } from '../models/blocks/block';
 import {
   TableCellBlock,
   TableCellProperties,
-  TableBlockScopeType,
   TableRowBlock,
   TableRowProperties,
   TableBlock,
   TableProperties,
   TableCellContentBlock,
+  TableBlockCellType,
+  htmlScopeToTableBlockScopeType,
+  TableBlockScopeType,
 } from '../models/blocks/table';
 import { TextMark, TextDataType } from '../models/blocks/text';
 import { ContentBlock } from '../models/blocks/content-block';
@@ -330,8 +332,8 @@ const generateCellProperties = (
   let cellProperties: TableCellProperties | undefined;
   let rowSpan;
   let colSpan;
-  let cellType;
-  let scope;
+  let cellType: TableBlockCellType | undefined;
+  let scope: TableBlockScopeType | undefined;
   let width;
   let cellStyleJson = {};
 
@@ -352,16 +354,16 @@ const generateCellProperties = (
     cellBlockData.type === TextDataType.Tag &&
     cellBlockData.name === Tag.HeaderCell
   ) {
-    cellType = 'HeaderCell';
+    cellType = TableBlockCellType.HeaderCell;
   } else if (
     cellBlockData.type === TextDataType.Tag &&
     cellBlockData.name === Tag.DataCell
   ) {
-    cellType = 'Cell';
+    cellType = TableBlockCellType.Cell;
   }
 
   if (cellBlockData.attrs && cellBlockData.attrs.scope) {
-    scope = getScope(cellBlockData.attrs.scope);
+    scope = htmlScopeToTableBlockScopeType(cellBlockData.attrs.scope);
   }
   if (cellBlockData.attrs && cellBlockData.attrs.colspan !== 'None') {
     colSpan = Number(cellBlockData.attrs.colspan);
@@ -418,19 +420,4 @@ const generateCellProperties = (
     );
   }
   return cellProperties;
-};
-
-const getScope = (scope: string): string => {
-  switch (scope) {
-    case TableBlockScopeType.Row:
-      return TableBlockScopeType[TableBlockScopeType.Row];
-    case TableBlockScopeType.Column:
-      return TableBlockScopeType[TableBlockScopeType.Column];
-    case TableBlockScopeType.RowGroup:
-      return TableBlockScopeType[TableBlockScopeType.RowGroup];
-    case TableBlockScopeType.ColumnGroup:
-      return TableBlockScopeType[TableBlockScopeType.ColumnGroup];
-    default:
-      return 'None';
-  }
 };
