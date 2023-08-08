@@ -1,8 +1,8 @@
 import { AlignType } from './align-type';
-import { BlockType } from './block-type';
+import { BlockType } from './block';
 
 export interface ImageBlock {
-  type: BlockType.ImageBlock;
+  type: BlockType.Image;
   image: {
     url: string;
     hyperlink?: string;

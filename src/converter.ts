@@ -1,8 +1,7 @@
 import { parse, AstElement } from 'html-parse-stringify';
 import { sanitizeHtml } from './sanitizer';
 import { Tags } from './models/html';
-import { Block } from './models/blocks/block';
-import { BlockType } from './models/blocks/block-type';
+import { Block, BlockType } from './models/blocks/block';
 import { generateParagraphBlock } from './converters/paragraph';
 import { generateListBlock } from './converters/list';
 import { generateVideoBlock } from './converters/video';

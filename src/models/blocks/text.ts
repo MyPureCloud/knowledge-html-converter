@@ -1,11 +1,11 @@
-import { BlockType } from './block-type';
-
-export interface TextBlocks {
-  type: BlockType.TextBlocks;
-  text: TextBlock;
-}
+import { ContentBlockType } from './content-block';
 
 export interface TextBlock {
+  type: ContentBlockType.Text;
+  text: Text;
+}
+
+export interface Text {
   text: string;
   marks?: Array<
     | TextMark.Bold

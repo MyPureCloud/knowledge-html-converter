@@ -1,15 +1,13 @@
 import { AstElement } from 'html-parse-stringify';
-import { BlockType } from '../models/blocks/block-type';
-import { ImageBlock } from '../models/blocks/image';
-import { TextMark, TextBlocks } from '../models/blocks/text';
-import { VideoBlock } from '../models/blocks/video';
+import { TextMark, TextBlock } from '../models/blocks/text';
 import { generateTextBlocks } from './text';
+import { ContentBlock, ContentBlockType } from '../models/blocks/content-block';
 
 export const generateHyperlinkBlock = (
   anchorElement: AstElement,
   marks: TextMark[] = [],
-): TextBlocks => {
-  const textBlocks: (TextBlocks | ImageBlock | VideoBlock)[] = [];
+): TextBlock => {
+  const textBlocks: ContentBlock[] = [];
   const hyperlinkFormattings = marks;
   let displayText = '';
 
@@ -18,9 +16,9 @@ export const generateHyperlinkBlock = (
     textBlocks.push(...generateTextBlocks(child, [], { hyperlink }));
   });
   const textBlock = textBlocks[0];
-  if (hyperlink && textBlock && textBlock.type === BlockType.TextBlocks) {
+  if (hyperlink && textBlock && textBlock.type === ContentBlockType.Text) {
     textBlocks.forEach((textContent) => {
-      if (textContent.type === BlockType.TextBlocks) {
+      if (textContent.type === ContentBlockType.Text) {
         displayText += textContent.text.text;
         if (textContent.text.marks) {
           hyperlinkFormattings.push(...textContent.text.marks);
@@ -33,5 +31,5 @@ export const generateHyperlinkBlock = (
       textBlock.text.marks = Array.from(new Set(hyperlinkFormattings));
     }
   }
-  return textBlock as TextBlocks;
+  return textBlock as TextBlock;
 };

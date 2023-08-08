@@ -1,8 +1,8 @@
 import { AlignType } from './align-type';
-import { BlockType } from './block-type';
+import { BlockType } from './block';
 import { FontType } from './font-type';
 import { ImageBlock } from './image';
-import { FontSize, TextBlocks } from './text';
+import { FontSize, TextBlock } from './text';
 import { VideoBlock } from './video';
 
 export interface ListBlock {
@@ -14,33 +14,35 @@ export interface ListBlock {
 }
 
 export interface ListItemBlock {
-  type: BlockType.ListItem;
-  blocks: (TextBlocks | ImageBlock | VideoBlock | ListBlock)[];
+  type: ListItemBlockType.ListItem;
+  blocks: ListItemContentBlock[];
   properties?: ListItemBlockProperties;
 }
 
+export enum ListItemBlockType {
+  ListItem = 'ListItem',
+}
+
+export type ListItemContentBlock =
+  | TextBlock
+  | ImageBlock
+  | VideoBlock
+  | ListBlock;
+
 export interface ListBlockProperties {
-  fontType?: FontType;
-  unorderedType?: UnorderedType;
   orderedType?: OrderedType;
+  unorderedType?: UnorderedType;
 }
 
 export interface ListItemBlockProperties {
-  fontType?: FontType;
-  fontSize?: FontSize;
-  textColor?: string;
-  backgroundColor?: string;
   align?: AlignType;
+  backgroundColor?: string;
+  textColor?: string;
+  fontSize?: FontSize;
+  fontType?: FontType;
   indentation?: number;
-  unorderedType?: UnorderedType;
   orderedType?: OrderedType;
-}
-
-export enum UnorderedType {
-  Normal = 'normal',
-  Square = 'square',
-  Circle = 'circle',
-  None = 'none',
+  unorderedType?: UnorderedType;
 }
 
 export enum OrderedType {
@@ -49,5 +51,12 @@ export enum OrderedType {
   LowerRoman = 'lower-roman',
   UpperAlpha = 'upper-alpha',
   UpperRoman = 'upper-roman',
+  None = 'none',
+}
+
+export enum UnorderedType {
+  Normal = 'normal',
+  Square = 'square',
+  Circle = 'circle',
   None = 'none',
 }

@@ -1,21 +1,18 @@
 import { AstElement } from 'html-parse-stringify';
 import { StyleAttributes, Tags } from '../models/html';
-import { BlockType } from '../models/blocks/block-type';
-import { ImageBlock } from '../models/blocks/image';
-import { ListBlock } from '../models/blocks/list';
-import { ParagraphBlock } from '../models/blocks/paragraph';
+import { BlockType } from '../models/blocks/block';
 import {
-  CaptionBlock,
-  CaptionBlockItem,
-  RowType,
+  TableCaptionBlock,
+  TableCaptionContentBlock,
+  TableRowType,
 } from '../models/blocks/table';
-import { TextMark, TextBlocks } from '../models/blocks/text';
-import { VideoBlock } from '../models/blocks/video';
+import { TextMark } from '../models/blocks/text';
 import { convertRgbToHex, generateImageBlock } from './image';
 import { generateListBlock } from './list';
 import { generateParagraphBlock } from './paragraph';
 import { generateTextBlocks } from './text';
 import { generateVideoBlock } from './video';
+import { ContentBlock } from '../models/blocks/content-block';
 
 const emPattern = /^\d+(?:\.\d+)?em$/;
 const pxPattern = /^\d+(?:\.\d+)?px$/;
@@ -216,11 +213,11 @@ export const getWidth = (
   return getHeightAndWidthProperty(jsonObject, StyleAttributes.Width);
 };
 
-export const getCaption = (captionData: AstElement): CaptionBlock => {
-  const captionBlock: CaptionBlock = {
+export const getCaption = (captionData: AstElement): TableCaptionBlock => {
+  const captionBlock: TableCaptionBlock = {
     blocks: [],
   };
-  const blocks: CaptionBlockItem[] = [];
+  const blocks: TableCaptionContentBlock[] = [];
 
   const textFormatMap: Record<string, TextMark> = {
     strong: TextMark.Bold,
@@ -231,8 +228,8 @@ export const getCaption = (captionData: AstElement): CaptionBlock => {
     sup: TextMark.Superscript,
   };
   captionData.children?.forEach((child) => {
-    let block: ParagraphBlock | ListBlock | ImageBlock | VideoBlock | undefined;
-    let textBlocks: (TextBlocks | ImageBlock | VideoBlock)[] | undefined;
+    let block: TableCaptionContentBlock | undefined;
+    let textBlocks: ContentBlock[] | undefined;
 
     if (textFormatMap[child.name]) {
       textBlocks = generateTextBlocks(child, [textFormatMap[captionData.name]]);
@@ -274,7 +271,6 @@ export const getCaption = (captionData: AstElement): CaptionBlock => {
     if (block) {
       blocks.push(block);
     }
-
     if (textBlocks) {
       blocks.push(...textBlocks);
     }
@@ -288,11 +284,11 @@ export const getCaption = (captionData: AstElement): CaptionBlock => {
 export const getRowType = (type: string): string | undefined => {
   let rowType: string | undefined;
   if (type === Tags.TableBody) {
-    rowType = RowType.Body;
+    rowType = TableRowType.Body;
   } else if (type === Tags.TableHead) {
-    rowType = RowType.Header;
+    rowType = TableRowType.Header;
   } else if (type === Tags.TableFooter) {
-    rowType = RowType.Footer;
+    rowType = TableRowType.Footer;
   }
   return rowType;
 };

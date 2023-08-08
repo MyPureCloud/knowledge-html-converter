@@ -1,34 +1,35 @@
-import { BlockType } from './block-type';
+import { BlockType } from './block';
 import { ImageBlock } from './image';
 import { ListBlock } from './list';
 import { ParagraphBlock } from './paragraph';
-import { TextBlock, TextBlocks } from './text';
+import { TextBlock } from './text';
 import { VideoBlock } from './video';
 
 export interface TableBlock {
-  type: BlockType.TableBlock;
+  type: BlockType.Table;
   table: {
-    rows: RowBlock[];
+    rows: TableRowBlock[];
     properties?: TableProperties;
   };
 }
 
-export interface RowBlock {
-  cells: CellBlock[];
-  properties?: RowProperties;
+export interface TableRowBlock {
+  cells: TableCellBlock[];
+  properties?: TableRowProperties;
 }
 
-export interface CellBlock {
-  blocks: (
-    | TextBlocks
-    | ImageBlock
-    | VideoBlock
-    | ListBlock
-    | ParagraphBlock
-    | TableBlock
-  )[];
-  properties?: CellProperties;
+export interface TableCellBlock {
+  blocks: TableCellContentBlock[];
+  properties?: TableCellProperties;
 }
+
+export type TableCellContentBlock =
+  | ParagraphBlock
+  | TextBlock
+  | ImageBlock
+  | VideoBlock
+  | ListBlock
+  | TableBlock;
 
 export interface TableProperties {
   width?: number;
@@ -36,72 +37,60 @@ export interface TableProperties {
   cellSpacing?: number;
   cellPadding?: number;
   borderWidth?: number;
-  alignment?: HorizontalAlignType;
-  borderStyle?: BorderStyleType;
+  alignment?: TableBlockHorizontalAlignType;
+  borderStyle?: TableBorderStyleType;
   borderColor?: string;
   backgroundColor?: string;
-  caption?: CaptionBlock;
+  caption?: TableCaptionBlock;
 }
 
-export interface CaptionBlock {
-  blocks: CaptionBlockItem[];
+export interface TableCaptionBlock {
+  blocks: TableCaptionContentBlock[];
 }
 
-export type CaptionBlockItem =
+export type TableCaptionContentBlock =
+  | TextBlock
   | ParagraphBlock
-  | TextBlocks
   | ImageBlock
   | VideoBlock
   | ListBlock;
 
-export interface CaptionItem {
-  type?:
-    | BlockType.TextBlocks
-    | BlockType.ImageBlock
-    | BlockType.VideoBlock
-    | BlockType.OrderedList
-    | BlockType.UnorderedList;
-  text?: TextBlock;
-  image?: ImageBlock;
-  video?: VideoBlock;
-  list?: ListBlock;
-}
-
-export interface RowProperties {
-  rowType?: RowType;
-  alignment?: HorizontalAlignType;
+export interface TableRowProperties {
+  rowType?: TableRowType;
+  alignment?: TableBlockHorizontalAlignType;
   height?: number;
-  borderStyle?: BorderStyleType;
+  borderStyle?: TableBorderStyleType;
   borderColor?: string;
   backgroundColor?: string;
 }
-export interface CellProperties {
-  cellType?: CellType;
-  scope?: CellScopeType;
+
+export interface TableCellProperties {
+  cellType?: TableBlockCellType;
+  scope?: TableBlockScopeType;
   width?: number;
   height?: number;
-  horizontalAlign?: HorizontalAlignType;
-  verticalAlign?: VerticalAlignType;
+  horizontalAlign?: TableBlockHorizontalAlignType;
+  verticalAlign?: TableBlockVerticalAlignType;
   borderWidth?: number;
-  borderStyle?: BorderStyleType;
+  borderStyle?: TableBorderStyleType;
   borderColor?: string;
   backgroundColor?: string;
   colSpan?: number;
   rowSpan?: number;
 }
 
-export enum RowType {
+export enum TableRowType {
   Header = 'Header',
   Body = 'Body',
   Footer = 'Footer',
 }
 
-export enum CellType {
+export enum TableBlockCellType {
   Cell = 'Cell',
   HeaderCell = 'HeaderCell',
 }
 
-export enum CellScopeType {
+export enum TableBlockScopeType {
   Row = 'row',
   Column = 'col',
   RowGroup = 'rowgroup',
@@ -113,19 +102,19 @@ export enum CellScopeType {
   ['colgroup'] = 'ColumnGroup',
 }
 
-export enum HorizontalAlignType {
+export enum TableBlockHorizontalAlignType {
   Center = 'center',
   Left = 'left',
   Right = 'right',
 }
 
-export enum VerticalAlignType {
+export enum TableBlockVerticalAlignType {
   Top = 'top',
   Middle = 'middle',
   Bottom = 'bottom',
 }
 
-export enum BorderStyleType {
+export enum TableBorderStyleType {
   Solid = 'solid',
   Dotted = 'dotted',
   Dashed = 'dashed',

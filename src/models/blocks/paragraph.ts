@@ -1,23 +1,22 @@
 import { AlignType } from './align-type';
-import { BlockType } from './block-type';
+import { BlockType } from './block';
+import { ContentBlock } from './content-block';
 import { FontType } from './font-type';
-import { ImageBlock } from './image';
-import { FontSize, TextBlocks } from './text';
-import { VideoBlock } from './video';
+import { FontSize } from './text';
 
 export interface ParagraphBlock {
   type: BlockType.Paragraph;
   paragraph: {
-    blocks: (TextBlocks | ImageBlock | VideoBlock)[];
+    blocks: ContentBlock[];
     properties?: ParagraphProperties;
   };
 }
 
 export interface ParagraphProperties {
-  fontType?: FontType;
-  textColor?: string;
-  backgroundColor?: string;
-  fontSize?: FontSize;
-  indentation?: number;
   align?: AlignType;
+  backgroundColor?: string;
+  textColor?: string;
+  fontSize?: FontSize;
+  fontType?: FontType;
+  indentation?: number;
 }

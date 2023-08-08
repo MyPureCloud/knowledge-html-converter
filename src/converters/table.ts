@@ -22,20 +22,19 @@ import {
 import { generateTextBlocks } from './text';
 import { generateVideoBlock } from './video';
 import { StyleAttributes, Tags } from '../models/html';
-import { Block } from '../models/blocks/block';
-import { BlockType } from '../models/blocks/block-type';
-import { ImageBlock } from '../models/blocks/image';
+import { BlockType } from '../models/blocks/block';
 import {
-  CellBlock,
-  CellProperties,
-  CellScopeType,
-  RowBlock,
-  RowProperties,
+  TableCellBlock,
+  TableCellProperties,
+  TableBlockScopeType,
+  TableRowBlock,
+  TableRowProperties,
   TableBlock,
   TableProperties,
+  TableCellContentBlock,
 } from '../models/blocks/table';
-import { TextMark, TextBlocks, TextDataType } from '../models/blocks/text';
-import { VideoBlock } from '../models/blocks/video';
+import { TextMark, TextDataType } from '../models/blocks/text';
+import { ContentBlock } from '../models/blocks/content-block';
 
 type TablePaddingPropertyHolder = {
   value?: number;
@@ -43,7 +42,7 @@ type TablePaddingPropertyHolder = {
 
 export const generateTableBlock = (blockData: AstElement): TableBlock => {
   const tableBlock: TableBlock = {
-    type: BlockType.TableBlock,
+    type: BlockType.Table,
     table: {
       rows: [],
     },
@@ -128,13 +127,13 @@ const generateRowBlock = (
   rowType: string,
   childrenInDifferentTags: AstElement,
   tablePaddingProperty: TablePaddingPropertyHolder,
-): RowBlock => {
-  const rowBlock: RowBlock = {
+): TableRowBlock => {
+  const rowBlock: TableRowBlock = {
     cells: [],
   };
   const cells = row.children;
   cells?.forEach((cell, index) => {
-    const cellBlock: CellBlock = {
+    const cellBlock: TableCellBlock = {
       blocks: [],
     };
     const blocksInCell = generateCellBlock(cell);
@@ -157,13 +156,13 @@ const generateRowBlock = (
   return rowBlock;
 };
 
-const generateCellBlock = (cell: AstElement): Block[] => {
-  const blocks: Block[] = [];
+const generateCellBlock = (cell: AstElement): TableCellContentBlock[] => {
+  const blocks: TableCellContentBlock[] = [];
 
   const children = cell.children;
   children?.forEach((blockData) => {
-    let block: Block | undefined;
-    let textBlocks: (TextBlocks | ImageBlock | VideoBlock)[] | undefined;
+    let block: TableCellContentBlock | undefined;
+    let textBlocks: ContentBlock[] | undefined;
     const textFormatMap: Record<string, TextMark> = {
       strong: TextMark.Bold,
       em: TextMark.Italic,
@@ -281,8 +280,8 @@ const generateTableProperties = (blockData: AstElement): TableProperties => {
 const generateRowProperties = (
   blockData: AstElement,
   type: string,
-): RowProperties | undefined => {
-  let rowProperties: RowProperties | undefined;
+): TableRowProperties | undefined => {
+  let rowProperties: TableRowProperties | undefined;
   let alignment;
   let height;
   let borderStyle;
@@ -327,8 +326,8 @@ const generateCellProperties = (
   cellBlockData: AstElement,
   colGroup: AstElement,
   tablePaddingProperty: TablePaddingPropertyHolder,
-): CellProperties | undefined => {
-  let cellProperties: CellProperties | undefined;
+): TableCellProperties | undefined => {
+  let cellProperties: TableCellProperties | undefined;
   let rowSpan;
   let colSpan;
   let cellType;
@@ -423,14 +422,14 @@ const generateCellProperties = (
 
 const getScope = (scope: string): string => {
   switch (scope) {
-    case CellScopeType.Row:
-      return CellScopeType[CellScopeType.Row];
-    case CellScopeType.Column:
-      return CellScopeType[CellScopeType.Column];
-    case CellScopeType.RowGroup:
-      return CellScopeType[CellScopeType.RowGroup];
-    case CellScopeType.ColumnGroup:
-      return CellScopeType[CellScopeType.ColumnGroup];
+    case TableBlockScopeType.Row:
+      return TableBlockScopeType[TableBlockScopeType.Row];
+    case TableBlockScopeType.Column:
+      return TableBlockScopeType[TableBlockScopeType.Column];
+    case TableBlockScopeType.RowGroup:
+      return TableBlockScopeType[TableBlockScopeType.RowGroup];
+    case TableBlockScopeType.ColumnGroup:
+      return TableBlockScopeType[TableBlockScopeType.ColumnGroup];
     default:
       return 'None';
   }

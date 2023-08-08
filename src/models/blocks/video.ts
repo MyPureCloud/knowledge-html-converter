@@ -1,7 +1,7 @@
-import { BlockType } from './block-type';
+import { BlockType } from './block';
 
 export interface VideoBlock {
-  type: BlockType.VideoBlock;
+  type: BlockType.Video;
   video: {
     url: string;
   };

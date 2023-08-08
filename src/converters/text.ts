@@ -1,16 +1,14 @@
 import { AstElement } from 'html-parse-stringify';
 import { StyleAttributes, Tags } from '../models/html';
-import { BlockType } from '../models/blocks/block-type';
-import { ImageBlock } from '../models/blocks/image';
+import { ContentBlock, ContentBlockType } from '../models/blocks/content-block';
 import {
   TextMark,
   FontSize,
   TextProperties,
+  Text,
   TextBlock,
-  TextBlocks,
   TextDataType,
 } from '../models/blocks/text';
-import { VideoBlock } from '../models/blocks/video';
 import { generateHyperlinkBlock } from './hyperlink';
 import { convertRgbToHex, generateImageBlock } from './image';
 import { generateVideoBlock } from './video';
@@ -20,8 +18,8 @@ export const generateTextBlocks = (
   attributes: TextMark[] = [],
   properties = {},
   textProperties?: TextProperties,
-): (TextBlocks | ImageBlock | VideoBlock)[] => {
-  const arr: (TextBlocks | ImageBlock | VideoBlock)[] = [];
+): ContentBlock[] => {
+  const arr: ContentBlock[] = [];
   if (textData.type === TextDataType.Text) {
     if (textData.content) {
       arr.push(assignAttributes(textData.content, textProperties, attributes));
@@ -138,8 +136,8 @@ const assignAttributes = (
   text: string,
   properties: TextProperties | null = null,
   attributes: TextMark[] = [],
-): TextBlocks => {
-  const textBlock: TextBlock = {
+): TextBlock => {
+  const textBlock: Text = {
     text: '',
   };
   textBlock.text = text;
@@ -155,8 +153,8 @@ const assignAttributes = (
     });
   }
 
-  const textBlocks: TextBlocks = {
-    type: BlockType.TextBlocks,
+  const textBlocks: TextBlock = {
+    type: ContentBlockType.Text,
     text: textBlock,
   };
 

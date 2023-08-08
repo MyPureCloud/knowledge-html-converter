@@ -1,7 +1,7 @@
 import { AstElement } from 'html-parse-stringify';
 import { StyleAttributes, Tags } from '../models/html';
 import { AlignType } from '../models/blocks/align-type';
-import { BlockType } from '../models/blocks/block-type';
+import { BlockType } from '../models/blocks/block';
 import { htmlTagToFontType } from '../models/blocks/font-type';
 import { convertRgbToHex } from './image';
 import {
@@ -9,6 +9,7 @@ import {
   ListBlockProperties,
   ListItemBlock,
   ListItemBlockProperties,
+  ListItemBlockType,
   OrderedType,
   UnorderedType,
 } from '../models/blocks/list';
@@ -125,7 +126,7 @@ const generateListItemBlock = (
   listType: BlockType.OrderedList | BlockType.UnorderedList,
 ): ListItemBlock => {
   const listItemBlock: ListItemBlock = {
-    type: BlockType.ListItem,
+    type: ListItemBlockType.ListItem,
     blocks: [],
   };
 
