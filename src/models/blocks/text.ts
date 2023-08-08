@@ -17,7 +17,6 @@ export interface Text {
   >;
   properties?: TextProperties;
   hyperlink?: string;
-  hyperlinkProperties?: HyperlinkProperties;
 }
 
 export interface TextProperties {
@@ -34,21 +33,6 @@ export enum FontSize {
   Large = 'Large',
   XLarge = 'XLarge',
   XxLarge = 'XxLarge',
-}
-
-export interface HyperlinkProperties {
-  target: TargetAction;
-}
-
-export enum TargetAction {
-  NotSet = 'not_set',
-  NewWindow = 'new_window',
-  PopupWindow = 'popup_window',
-  SameWindow = 'same_window',
-  ParentWindow = 'parent_window',
-  OpenEmail = 'open_email',
-  CopyEmail = 'copy_email',
-  NewTab = 'new_tab',
 }
 
 export enum TextDataType {
