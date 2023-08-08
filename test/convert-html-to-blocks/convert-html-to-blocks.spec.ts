@@ -24,8 +24,9 @@ describe('convert-html-to-blocks', function () {
   describe('list', function () {
     it('text-format-tags', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate list blocks from html
     it('text-format-tags2', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate list blocks from html
-    it('list-style-type', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate list blocks from html
+    it('video', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate list blocks from html
     it('nested-lists', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate nested list blocks with properties from mock html
+    it('list-style-types', test);
   });
 
   describe('paragraph', function () {

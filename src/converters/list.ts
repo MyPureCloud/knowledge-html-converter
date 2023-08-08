@@ -12,6 +12,8 @@ import {
   ListItemBlockType,
   OrderedType,
   UnorderedType,
+  htmlListStyleTypeToOrderedType,
+  htmlListStyleTypeToUnorderedType,
 } from '../models/blocks/list';
 import { generateTextBlocks, getFontSizeName } from './text';
 
@@ -48,8 +50,8 @@ const generateListProperties = (
 ): ListBlockProperties | ListItemBlockProperties => {
   let properties;
   if (styles) {
-    let orderedType;
-    let unorderedType;
+    let orderedType: OrderedType | undefined;
+    let unorderedType: UnorderedType | undefined;
     let fontSize;
     let textColor;
     let backgroundColor;
@@ -61,19 +63,9 @@ const generateListProperties = (
         if (keyValue.length === 2) {
           if (keyValue[0] === StyleAttribute.ListStyleType) {
             if (listType === BlockType.OrderedList) {
-              orderedType =
-                Object.keys(OrderedType)[
-                  Object.values(OrderedType).indexOf(
-                    keyValue[1] as unknown as OrderedType,
-                  )
-                ];
+              orderedType = htmlListStyleTypeToOrderedType(keyValue[1]);
             } else {
-              unorderedType =
-                Object.keys(UnorderedType)[
-                  Object.values(UnorderedType).indexOf(
-                    keyValue[1] as unknown as UnorderedType,
-                  )
-                ];
+              unorderedType = htmlListStyleTypeToUnorderedType(keyValue[1]);
             }
           }
           if (keyValue[0] === StyleAttribute.FontSize) {

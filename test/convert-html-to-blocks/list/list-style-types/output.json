@@ -1,0 +1,110 @@
+[
+  {
+    "type": "OrderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [{ "type": "Text", "text": { "text": "item" } }]
+        }
+      ],
+      "properties": { "orderedType": "LowerAlpha" }
+    }
+  },
+  {
+    "type": "OrderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [{ "type": "Text", "text": { "text": "item" } }]
+        }
+      ],
+      "properties": { "orderedType": "LowerGreek" }
+    }
+  },
+  {
+    "type": "OrderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [{ "type": "Text", "text": { "text": "item" } }]
+        }
+      ],
+      "properties": { "orderedType": "LowerRoman" }
+    }
+  },
+  {
+    "type": "OrderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [{ "type": "Text", "text": { "text": "item" } }]
+        }
+      ],
+      "properties": { "orderedType": "UpperAlpha" }
+    }
+  },
+  {
+    "type": "OrderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [{ "type": "Text", "text": { "text": "item" } }]
+        }
+      ],
+      "properties": { "orderedType": "UpperRoman" }
+    }
+  },
+  {
+    "type": "OrderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [{ "type": "Text", "text": { "text": "item" } }]
+        }
+      ],
+      "properties": { "orderedType": "None" }
+    }
+  },
+  {
+    "type": "UnorderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [{ "type": "Text", "text": { "text": "item" } }]
+        }
+      ],
+      "properties": { "unorderedType": "Circle" }
+    }
+  },
+  {
+    "type": "UnorderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [{ "type": "Text", "text": { "text": "item" } }]
+        }
+      ],
+      "properties": { "unorderedType": "Square" }
+    }
+  },
+  {
+    "type": "UnorderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [{ "type": "Text", "text": { "text": "item" } }]
+        }
+      ],
+      "properties": { "unorderedType": "None" }
+    }
+  }
+]
