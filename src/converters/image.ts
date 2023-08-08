@@ -1,5 +1,5 @@
 import { AstElement } from 'html-parse-stringify';
-import { StyleAttributes } from '../models/html';
+import { StyleAttribute } from '../models/html';
 import { BlockType } from '../models/blocks/block';
 import { AlignType } from '../models/blocks/align-type';
 import { ImageBlock, ImageProperties } from '../models/blocks/image';
@@ -64,13 +64,13 @@ const getImageProperties = (
         .map((keyValue) => {
           if (keyValue.length === 2) {
             if (
-              keyValue[0] === StyleAttributes.Float &&
+              keyValue[0] === StyleAttribute.Float &&
               keyValue[1].toLocaleLowerCase() === 'left'
             ) {
               align = AlignType.Left;
               return;
             } else if (
-              keyValue[0] === StyleAttributes.Float &&
+              keyValue[0] === StyleAttribute.Float &&
               keyValue[1].toLocaleLowerCase() === 'right'
             ) {
               align = AlignType.Right;

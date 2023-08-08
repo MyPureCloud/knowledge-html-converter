@@ -21,7 +21,7 @@ import {
 } from './table-properties';
 import { generateTextBlocks } from './text';
 import { generateVideoBlock } from './video';
-import { StyleAttributes, Tags } from '../models/html';
+import { StyleAttribute, Tag } from '../models/html';
 import { BlockType } from '../models/blocks/block';
 import {
   TableCellBlock,
@@ -180,34 +180,34 @@ const generateCellBlock = (cell: AstElement): TableCellContentBlock[] => {
       textBlocks = generateTextBlocks(blockData);
     } else {
       switch (blockData.name) {
-        case Tags.Paragraph:
-        case Tags.Heading1:
-        case Tags.Heading2:
-        case Tags.Heading3:
-        case Tags.Heading4:
-        case Tags.Heading5:
-        case Tags.Heading6:
-        case Tags.Preformatted:
+        case Tag.Paragraph:
+        case Tag.Heading1:
+        case Tag.Heading2:
+        case Tag.Heading3:
+        case Tag.Heading4:
+        case Tag.Heading5:
+        case Tag.Heading6:
+        case Tag.Preformatted:
           block = generateParagraphBlock(blockData);
           break;
-        case Tags.OrderedList:
+        case Tag.OrderedList:
           block = generateListBlock(blockData, BlockType.OrderedList);
           break;
-        case Tags.UnorderedList:
+        case Tag.UnorderedList:
           block = generateListBlock(blockData, BlockType.UnorderedList);
           break;
-        case Tags.Image:
+        case Tag.Image:
           block = generateImageBlock(blockData);
           break;
-        case Tags.Video:
+        case Tag.Video:
           block = generateVideoBlock(blockData);
           break;
-        case Tags.Table:
+        case Tag.Table:
           block = generateTableBlock(blockData);
           break;
-        case Tags.Span:
-        case Tags.LineBreak:
-        case Tags.Anchor:
+        case Tag.Span:
+        case Tag.LineBreak:
+        case Tag.Anchor:
           textBlocks = generateTextBlocks(blockData);
           break;
       }
@@ -246,7 +246,7 @@ const generateTableProperties = (blockData: AstElement): TableProperties => {
     borderColor = getBorderColor(jsonObject);
     backgroundColor = getBackgroundColor(jsonObject);
     if (
-      Object.prototype.hasOwnProperty.call(jsonObject, StyleAttributes.Border)
+      Object.prototype.hasOwnProperty.call(jsonObject, StyleAttribute.Border)
     ) {
       [borderWidth, borderStyle, borderColor] = getBorderProperties(jsonObject);
     }
@@ -350,12 +350,12 @@ const generateCellProperties = (
   }
   if (
     cellBlockData.type === TextDataType.Tag &&
-    cellBlockData.name === Tags.HeaderCell
+    cellBlockData.name === Tag.HeaderCell
   ) {
     cellType = 'HeaderCell';
   } else if (
     cellBlockData.type === TextDataType.Tag &&
-    cellBlockData.name === Tags.DataCell
+    cellBlockData.name === Tag.DataCell
   ) {
     cellType = 'Cell';
   }
@@ -382,7 +382,7 @@ const generateCellProperties = (
   const borderStyle = getBorderStyle(cellStyleJson);
   const borderWidth = getBorderWidth(cellStyleJson);
   if (
-    Object.prototype.hasOwnProperty.call(cellStyleJson, StyleAttributes.Width)
+    Object.prototype.hasOwnProperty.call(cellStyleJson, StyleAttribute.Width)
   ) {
     width = getWidth(cellStyleJson);
   }

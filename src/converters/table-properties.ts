@@ -1,5 +1,5 @@
 import { AstElement } from 'html-parse-stringify';
-import { StyleAttributes, Tags } from '../models/html';
+import { StyleAttribute, Tag } from '../models/html';
 import { BlockType } from '../models/blocks/block';
 import {
   TableCaptionBlock,
@@ -36,15 +36,15 @@ export const getPadding = (
 ): number | undefined => {
   let padding: number | undefined;
   if (
-    Object.prototype.hasOwnProperty.call(jsonObject, StyleAttributes.Padding)
+    Object.prototype.hasOwnProperty.call(jsonObject, StyleAttribute.Padding)
   ) {
-    if (emPattern.test(jsonObject[StyleAttributes.Padding])) {
+    if (emPattern.test(jsonObject[StyleAttribute.Padding])) {
       padding = Number(
-        jsonObject[StyleAttributes.Padding].replace(/\s*em\s*/g, ''),
+        jsonObject[StyleAttribute.Padding].replace(/\s*em\s*/g, ''),
       );
-    } else if (pxPattern.test(jsonObject[StyleAttributes.Padding])) {
+    } else if (pxPattern.test(jsonObject[StyleAttribute.Padding])) {
       padding = convertPixelsToEM(
-        Number(jsonObject[StyleAttributes.Padding].replace(/\s*px\s*/g, '')),
+        Number(jsonObject[StyleAttribute.Padding].replace(/\s*px\s*/g, '')),
       );
     }
   }
@@ -59,14 +59,12 @@ export const getBackgroundColor = (
   if (
     Object.prototype.hasOwnProperty.call(
       jsonObject,
-      StyleAttributes.BackgroundColor,
+      StyleAttribute.BackgroundColor,
     )
   ) {
-    backgroundColor = jsonObject[StyleAttributes.BackgroundColor].startsWith(
-      '#',
-    )
-      ? jsonObject[StyleAttributes.BackgroundColor]
-      : convertRgbToHex(jsonObject[StyleAttributes.BackgroundColor]);
+    backgroundColor = jsonObject[StyleAttribute.BackgroundColor].startsWith('#')
+      ? jsonObject[StyleAttribute.BackgroundColor]
+      : convertRgbToHex(jsonObject[StyleAttribute.BackgroundColor]);
   }
   return backgroundColor;
 };
@@ -76,14 +74,11 @@ export const getBorderColor = (
 ): string | undefined => {
   let borderColor: string | undefined;
   if (
-    Object.prototype.hasOwnProperty.call(
-      jsonObject,
-      StyleAttributes.BorderColor,
-    )
+    Object.prototype.hasOwnProperty.call(jsonObject, StyleAttribute.BorderColor)
   ) {
-    borderColor = jsonObject[StyleAttributes.BorderColor].startsWith('#')
-      ? jsonObject[StyleAttributes.BorderColor]
-      : convertRgbToHex(jsonObject[StyleAttributes.BorderColor]);
+    borderColor = jsonObject[StyleAttribute.BorderColor].startsWith('#')
+      ? jsonObject[StyleAttribute.BorderColor]
+      : convertRgbToHex(jsonObject[StyleAttribute.BorderColor]);
   }
   return borderColor;
 };
@@ -93,14 +88,11 @@ export const getBorderStyle = (
 ): string | undefined => {
   let borderStyle: string | undefined;
   if (
-    Object.prototype.hasOwnProperty.call(
-      jsonObject,
-      StyleAttributes.BorderStyle,
-    )
+    Object.prototype.hasOwnProperty.call(jsonObject, StyleAttribute.BorderStyle)
   ) {
     borderStyle =
-      jsonObject[StyleAttributes.BorderStyle].charAt(0).toUpperCase() +
-      jsonObject[StyleAttributes.BorderStyle].slice(1);
+      jsonObject[StyleAttribute.BorderStyle].charAt(0).toUpperCase() +
+      jsonObject[StyleAttribute.BorderStyle].slice(1);
   }
   return borderStyle;
 };
@@ -111,10 +103,8 @@ export const getBorderProperties = (
   let borderWidth: number | undefined;
   let borderStyle: string | undefined;
   let borderColor: string | undefined;
-  if (
-    Object.prototype.hasOwnProperty.call(jsonObject, StyleAttributes.Border)
-  ) {
-    const properties = jsonObject[StyleAttributes.Border].split(' ');
+  if (Object.prototype.hasOwnProperty.call(jsonObject, StyleAttribute.Border)) {
+    const properties = jsonObject[StyleAttribute.Border].split(' ');
     const result = properties.splice(0, 2);
     result.push(properties.join(' '));
 
@@ -144,26 +134,23 @@ export const getAlignment = (
   if (
     Object.prototype.hasOwnProperty.call(
       jsonObject,
-      StyleAttributes.MarginLeft,
+      StyleAttribute.MarginLeft,
     ) &&
-    Object.prototype.hasOwnProperty.call(
-      jsonObject,
-      StyleAttributes.MarginRight,
-    )
+    Object.prototype.hasOwnProperty.call(jsonObject, StyleAttribute.MarginRight)
   ) {
     if (
-      jsonObject[StyleAttributes.MarginLeft] === '0px' &&
-      jsonObject[StyleAttributes.MarginRight] === 'auto'
+      jsonObject[StyleAttribute.MarginLeft] === '0px' &&
+      jsonObject[StyleAttribute.MarginRight] === 'auto'
     ) {
       alignment = 'Left';
     } else if (
-      jsonObject[StyleAttributes.MarginLeft] === 'auto' &&
-      jsonObject[StyleAttributes.MarginRight] === 'auto'
+      jsonObject[StyleAttribute.MarginLeft] === 'auto' &&
+      jsonObject[StyleAttribute.MarginRight] === 'auto'
     ) {
       alignment = 'Center';
     } else if (
-      jsonObject[StyleAttributes.MarginLeft] === 'auto' &&
-      jsonObject[StyleAttributes.MarginRight] === '0px'
+      jsonObject[StyleAttribute.MarginLeft] === 'auto' &&
+      jsonObject[StyleAttribute.MarginRight] === '0px'
     ) {
       alignment = 'Right';
     }
@@ -176,7 +163,7 @@ export const getHorizontalAlign = (
 ): string | undefined => {
   return getHorizontalAndVerticalAlignProperty(
     jsonObject,
-    StyleAttributes.Align,
+    StyleAttribute.Align,
   );
 };
 
@@ -185,32 +172,32 @@ export const getVerticalAlign = (
 ): string | undefined => {
   return getHorizontalAndVerticalAlignProperty(
     jsonObject,
-    StyleAttributes.VerticalAlign,
+    StyleAttribute.VerticalAlign,
   );
 };
 
 export const getBorderWidth = (
   jsonObject: Record<string, string>,
 ): number | undefined => {
-  return getHeightAndWidthProperty(jsonObject, StyleAttributes.BorderWidth);
+  return getHeightAndWidthProperty(jsonObject, StyleAttribute.BorderWidth);
 };
 
 export const getBorderSpacing = (
   jsonObject: Record<string, string>,
 ): number | undefined => {
-  return getHeightAndWidthProperty(jsonObject, StyleAttributes.BorderSpacing);
+  return getHeightAndWidthProperty(jsonObject, StyleAttribute.BorderSpacing);
 };
 
 export const getHeight = (
   jsonObject: Record<string, string>,
 ): number | undefined => {
-  return getHeightAndWidthProperty(jsonObject, StyleAttributes.Height);
+  return getHeightAndWidthProperty(jsonObject, StyleAttribute.Height);
 };
 
 export const getWidth = (
   jsonObject: Record<string, string>,
 ): number | undefined => {
-  return getHeightAndWidthProperty(jsonObject, StyleAttributes.Width);
+  return getHeightAndWidthProperty(jsonObject, StyleAttribute.Width);
 };
 
 export const getCaption = (captionData: AstElement): TableCaptionBlock => {
@@ -239,31 +226,31 @@ export const getCaption = (captionData: AstElement): TableCaptionBlock => {
       textBlocks = generateTextBlocks(child);
     } else {
       switch (child.name) {
-        case Tags.Paragraph:
-        case Tags.Heading1:
-        case Tags.Heading2:
-        case Tags.Heading3:
-        case Tags.Heading4:
-        case Tags.Heading5:
-        case Tags.Heading6:
-        case Tags.Preformatted:
+        case Tag.Paragraph:
+        case Tag.Heading1:
+        case Tag.Heading2:
+        case Tag.Heading3:
+        case Tag.Heading4:
+        case Tag.Heading5:
+        case Tag.Heading6:
+        case Tag.Preformatted:
           block = generateParagraphBlock(child);
           break;
-        case Tags.OrderedList:
+        case Tag.OrderedList:
           block = generateListBlock(child, BlockType.OrderedList);
           break;
-        case Tags.UnorderedList:
+        case Tag.UnorderedList:
           block = generateListBlock(child, BlockType.UnorderedList);
           break;
-        case Tags.Image:
+        case Tag.Image:
           block = generateImageBlock(child);
           break;
-        case Tags.Video:
+        case Tag.Video:
           block = generateVideoBlock(child);
           break;
-        case Tags.Span:
-        case Tags.LineBreak:
-        case Tags.Anchor:
+        case Tag.Span:
+        case Tag.LineBreak:
+        case Tag.Anchor:
           textBlocks = generateTextBlocks(child);
           break;
       }
@@ -283,11 +270,11 @@ export const getCaption = (captionData: AstElement): TableCaptionBlock => {
 
 export const getRowType = (type: string): string | undefined => {
   let rowType: string | undefined;
-  if (type === Tags.TableBody) {
+  if (type === Tag.TableBody) {
     rowType = TableRowType.Body;
-  } else if (type === Tags.TableHead) {
+  } else if (type === Tag.TableHead) {
     rowType = TableRowType.Header;
-  } else if (type === Tags.TableFooter) {
+  } else if (type === Tag.TableFooter) {
     rowType = TableRowType.Footer;
   }
   return rowType;

@@ -1,5 +1,5 @@
 import { AstElement } from 'html-parse-stringify';
-import { StyleAttributes } from '../models/html';
+import { StyleAttribute } from '../models/html';
 import { AlignType } from '../models/blocks/align-type';
 import { BlockType } from '../models/blocks/block';
 import { htmlTagToFontType } from '../models/blocks/font-type';
@@ -46,12 +46,12 @@ const generateProperties = (
       .map((chunk) => chunk.split(/\s*:\s*/)) //split key:value with colon
       .map((keyValue) => {
         if (keyValue.length === 2) {
-          if (keyValue[0] === StyleAttributes.Indentation) {
+          if (keyValue[0] === StyleAttribute.Indentation) {
             // remove the em from the value
             indentation = Number(keyValue[1].replace(/\s*em\s*/g, ''));
           }
           if (
-            keyValue[0] === StyleAttributes.Align &&
+            keyValue[0] === StyleAttribute.Align &&
             keyValue[1] &&
             keyValue[1].length > 0
           ) {

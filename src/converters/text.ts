@@ -1,5 +1,5 @@
 import { AstElement } from 'html-parse-stringify';
-import { StyleAttributes, Tags } from '../models/html';
+import { StyleAttribute, Tag } from '../models/html';
 import { ContentBlock, ContentBlockType } from '../models/blocks/content-block';
 import {
   TextMark,
@@ -26,30 +26,30 @@ export const generateTextBlocks = (
     }
   } else if (
     textData.type === TextDataType.Tag &&
-    textData.name === Tags.LineBreak
+    textData.name === Tag.LineBreak
   ) {
     arr.push(assignAttributes('\n'));
   } else if (
     textData.type === TextDataType.Tag &&
-    textData.name === Tags.Image
+    textData.name === Tag.Image
   ) {
     arr.push(
       generateImageBlock(textData, { ...properties, ...textProperties }),
     );
   } else if (
     textData.type === TextDataType.Tag &&
-    textData.name === Tags.Anchor
+    textData.name === Tag.Anchor
   ) {
     arr.push(generateHyperlinkBlock(textData, attributes));
   } else if (
     textData.type === TextDataType.Tag &&
-    textData.name === Tags.Video
+    textData.name === Tag.Video
   ) {
     arr.push(generateVideoBlock(textData));
   } else {
     if (
       textData.type === TextDataType.Tag &&
-      textData.name === Tags.Span &&
+      textData.name === Tag.Span &&
       textData.attrs?.style
     ) {
       textProperties = Object.assign(
@@ -99,15 +99,15 @@ export const generateTextProperties = (
       .map((chunk: string) => chunk.split(/\s*:\s*/)) //split key:value with colon
       .map((keyValue: string[]) => {
         if (keyValue.length === 2) {
-          if (keyValue[0] === StyleAttributes.BackgroundColor) {
+          if (keyValue[0] === StyleAttribute.BackgroundColor) {
             backgroundColor = keyValue[1].startsWith('#')
               ? keyValue[1]
               : convertRgbToHex(keyValue[1]);
           }
-          if (keyValue[0] === StyleAttributes.FontSize) {
+          if (keyValue[0] === StyleAttribute.FontSize) {
             fontSize = getFontSizeName(keyValue[1]);
           }
-          if (keyValue[0] === StyleAttributes.TextColor) {
+          if (keyValue[0] === StyleAttribute.TextColor) {
             textColor = keyValue[1].startsWith('#')
               ? keyValue[1]
               : convertRgbToHex(keyValue[1]);
