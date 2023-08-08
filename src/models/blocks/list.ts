@@ -54,7 +54,7 @@ export enum OrderedType {
   None = 'None',
 }
 
-const orderedTypesByHtmlListStyleType: Record<string, OrderedType> = {
+const orderedTypesByCssListStyleType: Record<string, OrderedType> = {
   'lower-alpha': OrderedType.LowerAlpha,
   'lower-greek': OrderedType.LowerGreek,
   'lower-roman': OrderedType.LowerRoman,
@@ -63,10 +63,10 @@ const orderedTypesByHtmlListStyleType: Record<string, OrderedType> = {
   none: OrderedType.None,
 };
 
-export const htmlListStyleTypeToOrderedType = (
+export const cssListStyleTypeToOrderedType = (
   listStyleType: string,
 ): OrderedType | undefined => {
-  return orderedTypesByHtmlListStyleType[listStyleType];
+  return orderedTypesByCssListStyleType[listStyleType];
 };
 
 export enum UnorderedType {
@@ -76,15 +76,15 @@ export enum UnorderedType {
   None = 'None',
 }
 
-const unorderedTypesByHtmlListStyleType: Record<string, UnorderedType> = {
+const unorderedTypesByCssListStyleType: Record<string, UnorderedType> = {
   normal: UnorderedType.Normal, // TODO 'normal' is not a list-style-type value
   square: UnorderedType.Square,
   circle: UnorderedType.Circle,
   none: UnorderedType.None,
 };
 
-export const htmlListStyleTypeToUnorderedType = (
+export const cssListStyleTypeToUnorderedType = (
   listStyleType: string,
 ): UnorderedType | undefined => {
-  return unorderedTypesByHtmlListStyleType[listStyleType];
+  return unorderedTypesByCssListStyleType[listStyleType];
 };

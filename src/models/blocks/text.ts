@@ -27,13 +27,13 @@ export interface TextProperties {
 }
 
 export enum FontSize {
-  XxSmall = '9px',
-  XSmall = '10px',
-  Small = '13.333px',
-  Medium = '16px',
-  Large = '18px',
-  XLarge = '24px',
-  XxLarge = '32px',
+  XxSmall = 'XxSmall',
+  XSmall = 'XSmall',
+  Small = 'Small',
+  Medium = 'Medium',
+  Large = 'Large',
+  XLarge = 'XLarge',
+  XxLarge = 'XxLarge',
 }
 
 export interface HyperlinkProperties {

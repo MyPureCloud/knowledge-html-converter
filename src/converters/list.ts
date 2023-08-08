@@ -1,6 +1,9 @@
 import { AstElement } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
-import { AlignType } from '../models/blocks/align-type';
+import {
+  AlignType,
+  cssTextAlignToAlignType,
+} from '../models/blocks/align-type';
 import { BlockType } from '../models/blocks/block';
 import { htmlTagToFontType } from '../models/blocks/font-type';
 import { convertRgbToHex } from './image';
@@ -12,10 +15,11 @@ import {
   ListItemBlockType,
   OrderedType,
   UnorderedType,
-  htmlListStyleTypeToOrderedType,
-  htmlListStyleTypeToUnorderedType,
+  cssListStyleTypeToOrderedType,
+  cssListStyleTypeToUnorderedType,
 } from '../models/blocks/list';
 import { generateTextBlocks, getFontSizeName } from './text';
+import { FontSize } from '../models/blocks/text';
 
 export const generateListBlock = (
   list: AstElement,
@@ -52,10 +56,10 @@ const generateListProperties = (
   if (styles) {
     let orderedType: OrderedType | undefined;
     let unorderedType: UnorderedType | undefined;
-    let fontSize;
-    let textColor;
-    let backgroundColor;
-    let align;
+    let fontSize: FontSize | undefined;
+    let textColor: string | undefined;
+    let backgroundColor: string | undefined;
+    let align: AlignType | undefined;
     styles
       .split(/\s*;\s*/) //split with extra spaces around the semi colon
       .map((chunk) => chunk.split(/\s*:\s*/)) //split key:value with colon
@@ -63,9 +67,9 @@ const generateListProperties = (
         if (keyValue.length === 2) {
           if (keyValue[0] === StyleAttribute.ListStyleType) {
             if (listType === BlockType.OrderedList) {
-              orderedType = htmlListStyleTypeToOrderedType(keyValue[1]);
+              orderedType = cssListStyleTypeToOrderedType(keyValue[1]);
             } else {
-              unorderedType = htmlListStyleTypeToUnorderedType(keyValue[1]);
+              unorderedType = cssListStyleTypeToUnorderedType(keyValue[1]);
             }
           }
           if (keyValue[0] === StyleAttribute.FontSize) {
@@ -81,13 +85,8 @@ const generateListProperties = (
               ? keyValue[1]
               : convertRgbToHex(keyValue[1]);
           }
-          if (
-            keyValue[0] === StyleAttribute.Align &&
-            keyValue[1] &&
-            keyValue[1].length > 0
-          ) {
-            align = (keyValue[1][0].toUpperCase() +
-              keyValue[1].substring(1).toLowerCase()) as AlignType;
+          if (keyValue[0] === StyleAttribute.Align) {
+            align = cssTextAlignToAlignType(keyValue[1]);
           }
         }
       });

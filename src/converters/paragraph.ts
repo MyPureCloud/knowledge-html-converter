@@ -1,6 +1,9 @@
 import { AstElement } from 'html-parse-stringify';
 import { StyleAttribute } from '../models/html';
-import { AlignType } from '../models/blocks/align-type';
+import {
+  AlignType,
+  cssTextAlignToAlignType,
+} from '../models/blocks/align-type';
 import { BlockType } from '../models/blocks/block';
 import { htmlTagToFontType } from '../models/blocks/font-type';
 import { generateTextBlocks } from './text';
@@ -50,13 +53,8 @@ const generateProperties = (
             // remove the em from the value
             indentation = Number(keyValue[1].replace(/\s*em\s*/g, ''));
           }
-          if (
-            keyValue[0] === StyleAttribute.Align &&
-            keyValue[1] &&
-            keyValue[1].length > 0
-          ) {
-            align = (keyValue[1][0].toUpperCase() +
-              keyValue[1].substring(1).toLowerCase()) as AlignType;
+          if (keyValue[0] === StyleAttribute.Align) {
+            align = cssTextAlignToAlignType(keyValue[1]);
           }
         }
       });

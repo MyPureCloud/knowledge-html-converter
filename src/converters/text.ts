@@ -91,9 +91,9 @@ export const generateTextProperties = (
 ): TextProperties | undefined => {
   let textProperties: TextProperties | undefined;
   if (styles) {
-    let backgroundColor;
-    let fontSize;
-    let textColor;
+    let backgroundColor: string | undefined;
+    let fontSize: FontSize | undefined;
+    let textColor: string | undefined;
     styles
       .split(/\s*;\s*/) //split with extra spaces around the semi colon
       .map((chunk: string) => chunk.split(/\s*:\s*/)) //split key:value with colon
@@ -126,10 +126,28 @@ export const generateTextProperties = (
   return textProperties;
 };
 
-export const getFontSizeName = (fontSize: string): string => {
-  return Object.keys(FontSize)[
-    Object.values(FontSize).indexOf(fontSize as unknown as FontSize)
-  ];
+export const getFontSizeName = (
+  htmlFontSizeValue: string,
+): FontSize | undefined => {
+  // TODO make this more robust
+  switch (htmlFontSizeValue) {
+    case '9px':
+      return FontSize.XxSmall;
+    case '10px':
+      return FontSize.XSmall;
+    case '13.333px':
+      return FontSize.Small;
+    case '16px':
+      return FontSize.Medium;
+    case '18px':
+      return FontSize.Large;
+    case '24px':
+      return FontSize.XLarge;
+    case '32px':
+      return FontSize.XxLarge;
+    default:
+      return undefined;
+  }
 };
 
 const assignAttributes = (
