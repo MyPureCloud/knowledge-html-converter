@@ -1,2 +1,2 @@
-export { StyleAttributes } from './style-attributes';
-export { Tags } from './tags';
+export { StyleAttribute as StyleAttributes } from './style-attributes';
+export { Tag as Tags } from './tags';

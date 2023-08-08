@@ -1,6 +1,6 @@
 import { AstElement } from 'html-parse-stringify';
 import { StyleAttributes } from '../models/html';
-import { BlockTypes } from '../models/blocks/block-type';
+import { BlockType } from '../models/blocks/block-type';
 import { AlignType } from '../models/blocks/align-type';
 import { ImageBlock, ImageProperties } from '../models/blocks/image';
 
@@ -23,7 +23,7 @@ export const generateImageBlock = (
     properties = { ...properties, ...{ backgroundColor } };
   }
   return {
-    type: BlockTypes.ImageBlock,
+    type: BlockType.ImageBlock,
     image: Object.assign(
       {},
       { url: imgUrl },

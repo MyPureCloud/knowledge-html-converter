@@ -1,19 +1,19 @@
-import { BlockTypes } from './block-type';
+import { BlockType } from './block-type';
 
 export interface TextBlocks {
-  type: BlockTypes.TextBlocks;
+  type: BlockType.TextBlocks;
   text: TextBlock;
 }
 
 export interface TextBlock {
   text: string;
   marks?: Array<
-    | AllowedProperties.Bold
-    | AllowedProperties.Italic
-    | AllowedProperties.Underline
-    | AllowedProperties.Strikethrough
-    | AllowedProperties.Subscript
-    | AllowedProperties.Superscript
+    | TextMark.Bold
+    | TextMark.Italic
+    | TextMark.Underline
+    | TextMark.Strikethrough
+    | TextMark.Subscript
+    | TextMark.Superscript
   >;
   properties?: TextProperties;
   hyperlink?: string;
@@ -37,10 +37,10 @@ export enum FontSize {
 }
 
 export interface HyperlinkProperties {
-  target: TargetActions;
+  target: TargetAction;
 }
 
-export enum TargetActions {
+export enum TargetAction {
   NotSet = 'not_set',
   NewWindow = 'new_window',
   PopupWindow = 'popup_window',
@@ -56,7 +56,7 @@ export enum TextDataType {
   Text = 'text',
 }
 
-export enum AllowedProperties {
+export enum TextMark {
   Bold = 'Bold',
   Italic = 'Italic',
   Underline = 'Underline',

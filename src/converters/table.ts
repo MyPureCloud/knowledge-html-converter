@@ -23,7 +23,7 @@ import { generateTextBlocks } from './text';
 import { generateVideoBlock } from './video';
 import { StyleAttributes, Tags } from '../models/html';
 import { Block } from '../models/blocks/block';
-import { BlockTypes } from '../models/blocks/block-type';
+import { BlockType } from '../models/blocks/block-type';
 import { ImageBlock } from '../models/blocks/image';
 import {
   CellBlock,
@@ -34,11 +34,7 @@ import {
   TableBlock,
   TableProperties,
 } from '../models/blocks/table';
-import {
-  AllowedProperties,
-  TextBlocks,
-  TextDataType,
-} from '../models/blocks/text';
+import { TextMark, TextBlocks, TextDataType } from '../models/blocks/text';
 import { VideoBlock } from '../models/blocks/video';
 
 type TablePaddingPropertyHolder = {
@@ -47,7 +43,7 @@ type TablePaddingPropertyHolder = {
 
 export const generateTableBlock = (blockData: AstElement): TableBlock => {
   const tableBlock: TableBlock = {
-    type: BlockTypes.TableBlock,
+    type: BlockType.TableBlock,
     table: {
       rows: [],
     },
@@ -168,13 +164,13 @@ const generateCellBlock = (cell: AstElement): Block[] => {
   children?.forEach((blockData) => {
     let block: Block | undefined;
     let textBlocks: (TextBlocks | ImageBlock | VideoBlock)[] | undefined;
-    const textFormatMap: Record<string, AllowedProperties> = {
-      strong: AllowedProperties.Bold,
-      em: AllowedProperties.Italic,
-      u: AllowedProperties.Underline,
-      s: AllowedProperties.Strikethrough,
-      sub: AllowedProperties.Subscript,
-      sup: AllowedProperties.Superscript,
+    const textFormatMap: Record<string, TextMark> = {
+      strong: TextMark.Bold,
+      em: TextMark.Italic,
+      u: TextMark.Underline,
+      s: TextMark.Strikethrough,
+      sub: TextMark.Subscript,
+      sup: TextMark.Superscript,
     };
     blockData.children?.forEach((child) => {
       if (textFormatMap[blockData.name]) {
@@ -196,10 +192,10 @@ const generateCellBlock = (cell: AstElement): Block[] => {
           block = generateParagraphBlock(blockData);
           break;
         case Tags.OrderedList:
-          block = generateListBlock(blockData, BlockTypes.OrderedList);
+          block = generateListBlock(blockData, BlockType.OrderedList);
           break;
         case Tags.UnorderedList:
-          block = generateListBlock(blockData, BlockTypes.UnorderedList);
+          block = generateListBlock(blockData, BlockType.UnorderedList);
           break;
         case Tags.Image:
           block = generateImageBlock(blockData);

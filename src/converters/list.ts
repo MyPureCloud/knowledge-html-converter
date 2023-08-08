@@ -1,7 +1,7 @@
 import { AstElement } from 'html-parse-stringify';
 import { StyleAttributes, Tags } from '../models/html';
 import { AlignType } from '../models/blocks/align-type';
-import { BlockTypes } from '../models/blocks/block-type';
+import { BlockType } from '../models/blocks/block-type';
 import { htmlTagToFontType } from '../models/blocks/font-type';
 import { convertRgbToHex } from './image';
 import {
@@ -9,23 +9,23 @@ import {
   ListBlockProperties,
   ListItemBlock,
   ListItemBlockProperties,
-  OrderedTypes,
-  UnorderedTypes,
+  OrderedType,
+  UnorderedType,
 } from '../models/blocks/list';
 import { generateTextBlocks, getFontSizeName } from './text';
 
 export const generateListBlock = (
   list: AstElement,
-  listType: BlockTypes,
+  listType: BlockType,
 ): ListBlock => {
   const listBlock: ListBlock = {
-    type: BlockTypes.UnorderedList,
+    type: BlockType.UnorderedList,
     list: {
       blocks: [],
     },
   };
-  if (listType === BlockTypes.OrderedList) {
-    listBlock.type = BlockTypes.OrderedList;
+  if (listType === BlockType.OrderedList) {
+    listBlock.type = BlockType.OrderedList;
   }
   const properties = generateListProperties(list.attrs?.style, listBlock.type);
   if (properties) {
@@ -43,7 +43,7 @@ export const generateListBlock = (
 
 const generateListProperties = (
   styles: string | undefined,
-  listType: BlockTypes.OrderedList | BlockTypes.UnorderedList,
+  listType: BlockType.OrderedList | BlockType.UnorderedList,
 ): ListBlockProperties | ListItemBlockProperties => {
   let properties;
   if (styles) {
@@ -59,18 +59,18 @@ const generateListProperties = (
       .map((keyValue) => {
         if (keyValue.length === 2) {
           if (keyValue[0] === StyleAttributes.ListStyleType) {
-            if (listType === BlockTypes.OrderedList) {
+            if (listType === BlockType.OrderedList) {
               orderedType =
-                Object.keys(OrderedTypes)[
-                  Object.values(OrderedTypes).indexOf(
-                    keyValue[1] as unknown as OrderedTypes,
+                Object.keys(OrderedType)[
+                  Object.values(OrderedType).indexOf(
+                    keyValue[1] as unknown as OrderedType,
                   )
                 ];
             } else {
               unorderedType =
-                Object.keys(UnorderedTypes)[
-                  Object.values(UnorderedTypes).indexOf(
-                    keyValue[1] as unknown as UnorderedTypes,
+                Object.keys(UnorderedType)[
+                  Object.values(UnorderedType).indexOf(
+                    keyValue[1] as unknown as UnorderedType,
                   )
                 ];
             }
@@ -122,10 +122,10 @@ const generateListProperties = (
 
 const generateListItemBlock = (
   listItemData: AstElement,
-  listType: BlockTypes.OrderedList | BlockTypes.UnorderedList,
+  listType: BlockType.OrderedList | BlockType.UnorderedList,
 ): ListItemBlock => {
   const listItemBlock: ListItemBlock = {
-    type: BlockTypes.ListItem,
+    type: BlockType.ListItem,
     blocks: [],
   };
 
@@ -140,11 +140,11 @@ const generateListItemBlock = (
     const childNameLowerCase = child?.name?.toLowerCase();
     if (childNameLowerCase === Tags.OrderedList) {
       listItemBlock.blocks.push(
-        generateListBlock(child, BlockTypes.OrderedList),
+        generateListBlock(child, BlockType.OrderedList),
       );
     } else if (childNameLowerCase === Tags.UnorderedList) {
       listItemBlock.blocks.push(
-        generateListBlock(child, BlockTypes.UnorderedList),
+        generateListBlock(child, BlockType.UnorderedList),
       );
     } else if (htmlTagToFontType(childNameLowerCase)) {
       const fontType = htmlTagToFontType(childNameLowerCase);

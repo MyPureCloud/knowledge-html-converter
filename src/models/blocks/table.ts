@@ -1,4 +1,4 @@
-import { BlockTypes } from './block-type';
+import { BlockType } from './block-type';
 import { ImageBlock } from './image';
 import { ListBlock } from './list';
 import { ParagraphBlock } from './paragraph';
@@ -6,7 +6,7 @@ import { TextBlock, TextBlocks } from './text';
 import { VideoBlock } from './video';
 
 export interface TableBlock {
-  type: BlockTypes.TableBlock;
+  type: BlockType.TableBlock;
   table: {
     rows: RowBlock[];
     properties?: TableProperties;
@@ -56,11 +56,11 @@ export type CaptionBlockItem =
 
 export interface CaptionItem {
   type?:
-    | BlockTypes.TextBlocks
-    | BlockTypes.ImageBlock
-    | BlockTypes.VideoBlock
-    | BlockTypes.OrderedList
-    | BlockTypes.UnorderedList;
+    | BlockType.TextBlocks
+    | BlockType.ImageBlock
+    | BlockType.VideoBlock
+    | BlockType.OrderedList
+    | BlockType.UnorderedList;
   text?: TextBlock;
   image?: ImageBlock;
   video?: VideoBlock;

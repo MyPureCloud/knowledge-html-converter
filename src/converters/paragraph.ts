@@ -1,7 +1,7 @@
 import { AstElement } from 'html-parse-stringify';
 import { StyleAttributes } from '../models/html';
 import { AlignType } from '../models/blocks/align-type';
-import { BlockTypes } from '../models/blocks/block-type';
+import { BlockType } from '../models/blocks/block-type';
 import { htmlTagToFontType } from '../models/blocks/font-type';
 import { generateTextBlocks } from './text';
 import {
@@ -13,7 +13,7 @@ export const generateParagraphBlock = (
   blockData: AstElement,
 ): ParagraphBlock => {
   const paragraphBlock: ParagraphBlock = {
-    type: BlockTypes.Paragraph,
+    type: BlockType.Paragraph,
     paragraph: {
       blocks: [],
     },

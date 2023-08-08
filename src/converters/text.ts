@@ -1,9 +1,9 @@
 import { AstElement } from 'html-parse-stringify';
 import { StyleAttributes, Tags } from '../models/html';
-import { BlockTypes } from '../models/blocks/block-type';
+import { BlockType } from '../models/blocks/block-type';
 import { ImageBlock } from '../models/blocks/image';
 import {
-  AllowedProperties,
+  TextMark,
   FontSize,
   TextProperties,
   TextBlock,
@@ -17,7 +17,7 @@ import { generateVideoBlock } from './video';
 
 export const generateTextBlocks = (
   textData: AstElement,
-  attributes: AllowedProperties[] = [],
+  attributes: TextMark[] = [],
   properties = {},
   textProperties?: TextProperties,
 ): (TextBlocks | ImageBlock | VideoBlock)[] => {
@@ -59,18 +59,16 @@ export const generateTextBlocks = (
         generateTextProperties(textData.attrs.style),
       );
     }
-    const textFormatMap: Record<string, AllowedProperties> = {
-      strong: AllowedProperties.Bold,
-      em: AllowedProperties.Italic,
-      u: AllowedProperties.Underline,
-      s: AllowedProperties.Strikethrough,
-      sub: AllowedProperties.Subscript,
-      sup: AllowedProperties.Superscript,
+    const textFormatMap: Record<string, TextMark> = {
+      strong: TextMark.Bold,
+      em: TextMark.Italic,
+      u: TextMark.Underline,
+      s: TextMark.Strikethrough,
+      sub: TextMark.Subscript,
+      sup: TextMark.Superscript,
     };
     textData.children?.forEach((child) => {
-      const attribute = textFormatMap[textData.name] as
-        | AllowedProperties
-        | undefined;
+      const attribute = textFormatMap[textData.name] as TextMark | undefined;
       if (attribute) {
         arr.push(
           ...generateTextBlocks(
@@ -139,7 +137,7 @@ export const getFontSizeName = (fontSize: string): string => {
 const assignAttributes = (
   text: string,
   properties: TextProperties | null = null,
-  attributes: AllowedProperties[] = [],
+  attributes: TextMark[] = [],
 ): TextBlocks => {
   const textBlock: TextBlock = {
     text: '',
@@ -158,7 +156,7 @@ const assignAttributes = (
   }
 
   const textBlocks: TextBlocks = {
-    type: BlockTypes.TextBlocks,
+    type: BlockType.TextBlocks,
     text: textBlock,
   };
 

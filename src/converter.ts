@@ -2,7 +2,7 @@ import { parse, AstElement } from 'html-parse-stringify';
 import { sanitizeHtml } from './sanitizer';
 import { Tags } from './models/html';
 import { Block } from './models/blocks/block';
-import { BlockTypes } from './models/blocks/block-type';
+import { BlockType } from './models/blocks/block-type';
 import { generateParagraphBlock } from './converters/paragraph';
 import { generateListBlock } from './converters/list';
 import { generateVideoBlock } from './converters/video';
@@ -35,10 +35,10 @@ const convertParsedHtmlToBlocks = (parsedHtml: AstElement[]): Block[] => {
         block = generateParagraphBlock(blockData);
         break;
       case Tags.OrderedList:
-        block = generateListBlock(blockData, BlockTypes.OrderedList);
+        block = generateListBlock(blockData, BlockType.OrderedList);
         break;
       case Tags.UnorderedList:
-        block = generateListBlock(blockData, BlockTypes.UnorderedList);
+        block = generateListBlock(blockData, BlockType.UnorderedList);
         break;
       case Tags.Image:
         block = generateImageBlock(blockData);

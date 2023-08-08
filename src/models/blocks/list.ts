@@ -1,12 +1,12 @@
 import { AlignType } from './align-type';
-import { BlockTypes } from './block-type';
+import { BlockType } from './block-type';
 import { FontType } from './font-type';
 import { ImageBlock } from './image';
 import { FontSize, TextBlocks } from './text';
 import { VideoBlock } from './video';
 
 export interface ListBlock {
-  type: BlockTypes.OrderedList | BlockTypes.UnorderedList;
+  type: BlockType.OrderedList | BlockType.UnorderedList;
   list: {
     blocks: ListItemBlock[];
     properties?: ListBlockProperties;
@@ -14,15 +14,15 @@ export interface ListBlock {
 }
 
 export interface ListItemBlock {
-  type: BlockTypes.ListItem;
+  type: BlockType.ListItem;
   blocks: (TextBlocks | ImageBlock | VideoBlock | ListBlock)[];
   properties?: ListItemBlockProperties;
 }
 
 export interface ListBlockProperties {
   fontType?: FontType;
-  unorderedType?: UnorderedTypes;
-  orderedType?: OrderedTypes;
+  unorderedType?: UnorderedType;
+  orderedType?: OrderedType;
 }
 
 export interface ListItemBlockProperties {
@@ -32,18 +32,18 @@ export interface ListItemBlockProperties {
   backgroundColor?: string;
   align?: AlignType;
   indentation?: number;
-  unorderedType?: UnorderedTypes;
-  orderedType?: OrderedTypes;
+  unorderedType?: UnorderedType;
+  orderedType?: OrderedType;
 }
 
-export enum UnorderedTypes {
+export enum UnorderedType {
   Normal = 'normal',
   Square = 'square',
   Circle = 'circle',
   None = 'none',
 }
 
-export enum OrderedTypes {
+export enum OrderedType {
   LowerAlpha = 'lower-alpha',
   LowerGreek = 'lower-greek',
   LowerRoman = 'lower-roman',

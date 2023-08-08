@@ -1,6 +1,6 @@
 import { AstElement } from 'html-parse-stringify';
 import { StyleAttributes, Tags } from '../models/html';
-import { BlockTypes } from '../models/blocks/block-type';
+import { BlockType } from '../models/blocks/block-type';
 import { ImageBlock } from '../models/blocks/image';
 import { ListBlock } from '../models/blocks/list';
 import { ParagraphBlock } from '../models/blocks/paragraph';
@@ -9,7 +9,7 @@ import {
   CaptionBlockItem,
   RowType,
 } from '../models/blocks/table';
-import { AllowedProperties, TextBlocks } from '../models/blocks/text';
+import { TextMark, TextBlocks } from '../models/blocks/text';
 import { VideoBlock } from '../models/blocks/video';
 import { convertRgbToHex, generateImageBlock } from './image';
 import { generateListBlock } from './list';
@@ -222,13 +222,13 @@ export const getCaption = (captionData: AstElement): CaptionBlock => {
   };
   const blocks: CaptionBlockItem[] = [];
 
-  const textFormatMap: Record<string, AllowedProperties> = {
-    strong: AllowedProperties.Bold,
-    em: AllowedProperties.Italic,
-    u: AllowedProperties.Underline,
-    s: AllowedProperties.Strikethrough,
-    sub: AllowedProperties.Subscript,
-    sup: AllowedProperties.Superscript,
+  const textFormatMap: Record<string, TextMark> = {
+    strong: TextMark.Bold,
+    em: TextMark.Italic,
+    u: TextMark.Underline,
+    s: TextMark.Strikethrough,
+    sub: TextMark.Subscript,
+    sup: TextMark.Superscript,
   };
   captionData.children?.forEach((child) => {
     let block: ParagraphBlock | ListBlock | ImageBlock | VideoBlock | undefined;
@@ -253,10 +253,10 @@ export const getCaption = (captionData: AstElement): CaptionBlock => {
           block = generateParagraphBlock(child);
           break;
         case Tags.OrderedList:
-          block = generateListBlock(child, BlockTypes.OrderedList);
+          block = generateListBlock(child, BlockType.OrderedList);
           break;
         case Tags.UnorderedList:
-          block = generateListBlock(child, BlockTypes.UnorderedList);
+          block = generateListBlock(child, BlockType.UnorderedList);
           break;
         case Tags.Image:
           block = generateImageBlock(child);

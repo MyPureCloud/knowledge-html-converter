@@ -1,4 +1,4 @@
-export enum BlockTypes {
+export enum BlockType {
   Paragraph = 'Paragraph',
   OrderedList = 'OrderedList',
   UnorderedList = 'UnorderedList',

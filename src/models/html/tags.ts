@@ -1,4 +1,4 @@
-export enum Tags {
+export enum Tag {
   Paragraph = 'p',
   Heading1 = 'h1',
   Heading2 = 'h2',
