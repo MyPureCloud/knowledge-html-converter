@@ -8,8 +8,17 @@ export interface TextBlock {
 export interface Text {
   text: string;
   marks?: TextMark[];
-  properties?: TextProperties;
   hyperlink?: string;
+  properties?: TextProperties;
+}
+
+export enum TextMark {
+  Bold = 'Bold',
+  Italic = 'Italic',
+  Underline = 'Underline',
+  Strikethrough = 'Strikethrough',
+  Subscript = 'Subscript',
+  Superscript = 'Superscript',
 }
 
 export interface TextProperties {
@@ -26,18 +35,4 @@ export enum FontSize {
   Large = 'Large',
   XLarge = 'XLarge',
   XxLarge = 'XxLarge',
-}
-
-export enum TextDataType {
-  Tag = 'tag',
-  Text = 'text',
-}
-
-export enum TextMark {
-  Bold = 'Bold',
-  Italic = 'Italic',
-  Underline = 'Underline',
-  Strikethrough = 'Strikethrough',
-  Subscript = 'Subscript',
-  Superscript = 'Superscript',
 }

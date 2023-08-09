@@ -1,4 +1,4 @@
-import { AstElement } from 'html-parse-stringify';
+import { AstElement, AstElementType } from 'html-parse-stringify';
 import { generateImageBlock } from './image';
 import { generateListBlock } from './list';
 import { generateParagraphBlock } from './paragraph';
@@ -37,7 +37,7 @@ import {
   TableBlockHorizontalAlignType,
   TableBorderStyleType,
 } from '../models/blocks/table';
-import { TextMark, TextDataType } from '../models/blocks/text';
+import { TextMark } from '../models/blocks/text';
 import { ContentBlock } from '../models/blocks/content-block';
 
 type TablePaddingPropertyHolder = {
@@ -351,12 +351,12 @@ const generateCellProperties = (
       });
   }
   if (
-    cellBlockData.type === TextDataType.Tag &&
+    cellBlockData.type === AstElementType.Tag &&
     cellBlockData.name === Tag.HeaderCell
   ) {
     cellType = TableBlockCellType.HeaderCell;
   } else if (
-    cellBlockData.type === TextDataType.Tag &&
+    cellBlockData.type === AstElementType.Tag &&
     cellBlockData.name === Tag.DataCell
   ) {
     cellType = TableBlockCellType.Cell;

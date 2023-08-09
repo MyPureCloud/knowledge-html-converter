@@ -1,4 +1,4 @@
-import { AstElement } from 'html-parse-stringify';
+import { AstElement, AstElementType } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
 import { ContentBlock, ContentBlockType } from '../models/blocks/content-block';
 import {
@@ -7,7 +7,6 @@ import {
   TextProperties,
   Text,
   TextBlock,
-  TextDataType,
 } from '../models/blocks/text';
 import { generateHyperlinkBlock } from './hyperlink';
 import { convertRgbToHex, generateImageBlock } from './image';
@@ -20,35 +19,35 @@ export const generateTextBlocks = (
   textProperties?: TextProperties,
 ): ContentBlock[] => {
   const arr: ContentBlock[] = [];
-  if (textData.type === TextDataType.Text) {
+  if (textData.type === AstElementType.Text) {
     if (textData.content) {
       arr.push(assignAttributes(textData.content, textProperties, attributes));
     }
   } else if (
-    textData.type === TextDataType.Tag &&
+    textData.type === AstElementType.Tag &&
     textData.name === Tag.LineBreak
   ) {
     arr.push(assignAttributes('\n'));
   } else if (
-    textData.type === TextDataType.Tag &&
+    textData.type === AstElementType.Tag &&
     textData.name === Tag.Image
   ) {
     arr.push(
       generateImageBlock(textData, { ...properties, ...textProperties }),
     );
   } else if (
-    textData.type === TextDataType.Tag &&
+    textData.type === AstElementType.Tag &&
     textData.name === Tag.Anchor
   ) {
     arr.push(generateHyperlinkBlock(textData, attributes));
   } else if (
-    textData.type === TextDataType.Tag &&
+    textData.type === AstElementType.Tag &&
     textData.name === Tag.Video
   ) {
     arr.push(generateVideoBlock(textData));
   } else {
     if (
-      textData.type === TextDataType.Tag &&
+      textData.type === AstElementType.Tag &&
       textData.name === Tag.Span &&
       textData.attrs?.style
     ) {
