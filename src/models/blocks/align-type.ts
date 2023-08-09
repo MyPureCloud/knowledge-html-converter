@@ -15,5 +15,7 @@ const alignTypesByHtmlTextAlign: Record<string, AlignType> = {
 export const cssTextAlignToAlignType = (
   textAlign: string,
 ): AlignType | undefined => {
-  return alignTypesByHtmlTextAlign[textAlign];
+  return textAlign
+    ? alignTypesByHtmlTextAlign[textAlign.toLowerCase()]
+    : undefined;
 };

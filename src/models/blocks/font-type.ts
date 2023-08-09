@@ -20,5 +20,5 @@ const fontTypesByHtmlTag: Record<string, FontType> = {
 };
 
 export const htmlTagToFontType = (tag: string): FontType | undefined => {
-  return fontTypesByHtmlTag[tag];
+  return tag ? fontTypesByHtmlTag[tag.toLowerCase()] : undefined;
 };

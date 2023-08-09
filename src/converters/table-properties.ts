@@ -2,9 +2,15 @@ import { AstElement } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
 import { BlockType } from '../models/blocks/block';
 import {
+  TableBlockHorizontalAlignType,
+  TableBlockVerticalAlignType,
+  TableBorderStyleType,
   TableCaptionBlock,
   TableCaptionContentBlock,
   TableRowType,
+  cssBorderStyleToTableBorderStyleType,
+  cssTextAlignToTableBlockHorizontalAlignType,
+  cssVerticalAlignToTableBlockVerticalAlignType,
 } from '../models/blocks/table';
 import { TextMark } from '../models/blocks/text';
 import { convertRgbToHex, generateImageBlock } from './image';
@@ -85,16 +91,11 @@ export const getBorderColor = (
 
 export const getBorderStyle = (
   jsonObject: Record<string, string>,
-): string | undefined => {
-  let borderStyle: string | undefined;
-  if (
-    Object.prototype.hasOwnProperty.call(jsonObject, StyleAttribute.BorderStyle)
-  ) {
-    borderStyle =
-      jsonObject[StyleAttribute.BorderStyle].charAt(0).toUpperCase() +
-      jsonObject[StyleAttribute.BorderStyle].slice(1);
-  }
-  return borderStyle;
+): TableBorderStyleType | undefined => {
+  const borderStyle = jsonObject[StyleAttribute.BorderStyle];
+  return borderStyle
+    ? cssBorderStyleToTableBorderStyleType(borderStyle)
+    : undefined;
 };
 
 export const getBorderProperties = (
@@ -117,7 +118,7 @@ export const getBorderProperties = (
       );
     }
     // border style
-    borderStyle = result[1].charAt(0).toUpperCase() + result[1].slice(1);
+    borderStyle = cssBorderStyleToTableBorderStyleType(result[1]);
 
     // border color
     borderColor = result[2].startsWith('#')
@@ -160,20 +161,20 @@ export const getAlignment = (
 
 export const getHorizontalAlign = (
   jsonObject: Record<string, string>,
-): string | undefined => {
-  return getHorizontalAndVerticalAlignProperty(
-    jsonObject,
-    StyleAttribute.Align,
-  );
+): TableBlockHorizontalAlignType | undefined => {
+  const textAlign = jsonObject[StyleAttribute.Align];
+  return textAlign
+    ? cssTextAlignToTableBlockHorizontalAlignType(textAlign)
+    : undefined;
 };
 
 export const getVerticalAlign = (
   jsonObject: Record<string, string>,
-): string | undefined => {
-  return getHorizontalAndVerticalAlignProperty(
-    jsonObject,
-    StyleAttribute.VerticalAlign,
-  );
+): TableBlockVerticalAlignType | undefined => {
+  const verticalAlign = jsonObject[StyleAttribute.VerticalAlign];
+  return verticalAlign
+    ? cssVerticalAlignToTableBlockVerticalAlignType(verticalAlign)
+    : undefined;
 };
 
 export const getBorderWidth = (
@@ -309,19 +310,6 @@ const getHeightAndWidthProperty = (
         Number(jsonObject[propertyName].replace(/\s*%\s*/g, '')),
       );
     }
-  }
-  return property;
-};
-
-const getHorizontalAndVerticalAlignProperty = (
-  jsonObject: Record<string, string>,
-  propertyName: string,
-): string | undefined => {
-  let property: string | undefined;
-  if (Object.prototype.hasOwnProperty.call(jsonObject, propertyName)) {
-    property =
-      jsonObject[propertyName].charAt(0).toUpperCase() +
-      jsonObject[propertyName].slice(1);
   }
   return property;
 };

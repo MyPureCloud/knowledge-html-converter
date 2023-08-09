@@ -66,7 +66,9 @@ const orderedTypesByCssListStyleType: Record<string, OrderedType> = {
 export const cssListStyleTypeToOrderedType = (
   listStyleType: string,
 ): OrderedType | undefined => {
-  return orderedTypesByCssListStyleType[listStyleType];
+  return listStyleType
+    ? orderedTypesByCssListStyleType[listStyleType.toLowerCase()]
+    : undefined;
 };
 
 export enum UnorderedType {
@@ -86,5 +88,7 @@ const unorderedTypesByCssListStyleType: Record<string, UnorderedType> = {
 export const cssListStyleTypeToUnorderedType = (
   listStyleType: string,
 ): UnorderedType | undefined => {
-  return unorderedTypesByCssListStyleType[listStyleType];
+  return listStyleType
+    ? unorderedTypesByCssListStyleType[listStyleType.toLowerCase()]
+    : undefined;
 };

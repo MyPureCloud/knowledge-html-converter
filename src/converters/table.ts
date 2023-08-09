@@ -34,6 +34,8 @@ import {
   TableBlockCellType,
   htmlScopeToTableBlockScopeType,
   TableBlockScopeType,
+  TableBlockHorizontalAlignType,
+  TableBorderStyleType,
 } from '../models/blocks/table';
 import { TextMark, TextDataType } from '../models/blocks/text';
 import { ContentBlock } from '../models/blocks/content-block';
@@ -284,18 +286,16 @@ const generateRowProperties = (
   type: string,
 ): TableRowProperties | undefined => {
   let rowProperties: TableRowProperties | undefined;
-  let alignment;
-  let height;
-  let borderStyle;
-  let borderColor;
-  let backgroundColor;
-  let jsonObject = {};
+  let alignment: TableBlockHorizontalAlignType | undefined;
+  let height: number | undefined;
+  let borderStyle: TableBorderStyleType | undefined;
+  let borderColor: string | undefined;
+  let backgroundColor: string | undefined;
 
   const rowType = getRowType(type);
 
   if (blockData.attrs && blockData.attrs.style) {
-    jsonObject = getTablePropertiesJSON(blockData);
-
+    const jsonObject = getTablePropertiesJSON(blockData);
     backgroundColor = getBackgroundColor(jsonObject);
     borderColor = getBorderColor(jsonObject);
     borderStyle = getBorderStyle(jsonObject);
