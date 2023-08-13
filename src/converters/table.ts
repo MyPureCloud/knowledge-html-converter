@@ -170,7 +170,7 @@ const generateCellBlock = (cell: AstElement): TableCellContentBlock[] => {
     blockData.children?.forEach((child) => {
       const textMark = htmlTagToTextMark(blockData.name);
       if (textMark) {
-        textBlocks = generateTextBlocks(child, [textMark]);
+        textBlocks = generateTextBlocks(child, { textMarks: [textMark] });
       }
     });
     if (blockData.type === 'text') {

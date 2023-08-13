@@ -11,9 +11,10 @@ export const generateHyperlinkBlock = (
   const hyperlinkFormattings = marks;
   let displayText = '';
 
-  const hyperlink = anchorElement.attrs?.href || anchorElement.attrs?.title;
+  const hyperlink: string | undefined =
+    anchorElement.attrs?.href || anchorElement.attrs?.title;
   anchorElement.children?.forEach((child) => {
-    textBlocks.push(...generateTextBlocks(child, [], { hyperlink }));
+    textBlocks.push(...generateTextBlocks(child, { hyperlink }));
   });
   const textBlock = textBlocks[0];
   if (hyperlink && textBlock && textBlock.type === ContentBlockType.Text) {

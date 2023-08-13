@@ -13,16 +13,20 @@ import { generateHyperlinkBlock } from './hyperlink';
 import { convertRgbToHex, generateImageBlock } from './image';
 import { generateVideoBlock } from './video';
 
+type TextBlockOptions = {
+  textMarks?: TextMark[];
+  hyperlink?: string;
+  textProperties?: TextProperties;
+};
+
 export const generateTextBlocks = (
   textData: AstElement,
-  textMarks: TextMark[] = [],
-  properties = {},
-  textProperties?: TextProperties,
+  options: TextBlockOptions = {},
 ): ContentBlock[] => {
   const arr: ContentBlock[] = [];
   if (textData.type === AstElementType.Text) {
     if (textData.content) {
-      arr.push(assignAttributes(textData.content, textProperties, textMarks));
+      arr.push(assignAttributes(textData.content, options));
     }
   } else if (
     textData.type === AstElementType.Tag &&
@@ -34,45 +38,48 @@ export const generateTextBlocks = (
     textData.name === Tag.Image
   ) {
     arr.push(
-      generateImageBlock(textData, { ...properties, ...textProperties }),
+      generateImageBlock(textData, {
+        hyperlink: options.hyperlink,
+        ...options.textProperties,
+      }),
     );
   } else if (
     textData.type === AstElementType.Tag &&
     textData.name === Tag.Anchor
   ) {
-    arr.push(generateHyperlinkBlock(textData, textMarks));
+    arr.push(generateHyperlinkBlock(textData, options.textMarks));
   } else if (
     textData.type === AstElementType.Tag &&
     textData.name === Tag.Video
   ) {
     arr.push(generateVideoBlock(textData));
   } else {
+    const textMarks = options.textMarks ? [...options.textMarks] : [];
+    const textMark = htmlTagToTextMark(textData.name);
+    if (textMark) {
+      textMarks.push(textMark);
+    }
+    const textProperties: TextProperties = options.textProperties
+      ? { ...options.textProperties }
+      : {};
     if (
       textData.type === AstElementType.Tag &&
       textData.name === Tag.Span &&
       textData.attrs?.style
     ) {
-      textProperties = Object.assign(
-        textProperties ? textProperties : {},
+      Object.assign(
+        textProperties,
         generateTextProperties(textData.attrs.style),
       );
     }
     textData.children?.forEach((child) => {
-      const textMark = htmlTagToTextMark(textData.name);
-      if (textMark) {
-        arr.push(
-          ...generateTextBlocks(
-            child,
-            [...textMarks, textMark],
-            properties,
-            textProperties,
-          ),
-        );
-      } else {
-        arr.push(
-          ...generateTextBlocks(child, textMarks, properties, textProperties),
-        );
-      }
+      arr.push(
+        ...generateTextBlocks(child, {
+          ...options,
+          textMarks,
+          textProperties,
+        }),
+      );
     });
   }
   return arr;
@@ -144,18 +151,20 @@ export const getFontSizeName = (
 
 const assignAttributes = (
   text: string,
-  properties: TextProperties | null = null,
-  textMarks: TextMark[] = [],
+  options: TextBlockOptions = {},
 ): TextBlock => {
   const textBlock: Text = {
     text: '',
   };
   textBlock.text = text;
-  if (properties) {
-    textBlock.properties = properties;
+  if (
+    options.textProperties &&
+    Object.getOwnPropertyNames(options.textProperties).length
+  ) {
+    textBlock.properties = options.textProperties;
   }
-  if (textMarks.length) {
-    textBlock.marks = [...new Set(textMarks)];
+  if (options.textMarks && options.textMarks.length) {
+    textBlock.marks = [...new Set(options.textMarks)];
   }
 
   const textBlocks: TextBlock = {

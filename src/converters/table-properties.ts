@@ -213,8 +213,9 @@ export const getCaption = (captionData: AstElement): TableCaptionBlock => {
 
     if (htmlTagToTextMark(child.name)) {
       const captionTextMark = htmlTagToTextMark(captionData.name);
-      const captionTextMarks = captionTextMark ? [captionTextMark] : [];
-      textBlocks = generateTextBlocks(child, captionTextMarks);
+      textBlocks = generateTextBlocks(child, {
+        textMarks: captionTextMark ? [captionTextMark] : [],
+      });
     }
 
     if (child.type === 'text') {
