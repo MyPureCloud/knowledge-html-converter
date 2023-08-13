@@ -37,7 +37,7 @@ import {
   TableBlockHorizontalAlignType,
   TableBorderStyleType,
 } from '../models/blocks/table';
-import { TextMark } from '../models/blocks/text';
+import { htmlTagToTextMark } from '../models/blocks/text';
 import { ContentBlock } from '../models/blocks/content-block';
 
 type TablePaddingPropertyHolder = {
@@ -167,17 +167,10 @@ const generateCellBlock = (cell: AstElement): TableCellContentBlock[] => {
   children?.forEach((blockData) => {
     let block: TableCellContentBlock | undefined;
     let textBlocks: ContentBlock[] | undefined;
-    const textFormatMap: Record<string, TextMark> = {
-      strong: TextMark.Bold,
-      em: TextMark.Italic,
-      u: TextMark.Underline,
-      s: TextMark.Strikethrough,
-      sub: TextMark.Subscript,
-      sup: TextMark.Superscript,
-    };
     blockData.children?.forEach((child) => {
-      if (textFormatMap[blockData.name]) {
-        textBlocks = generateTextBlocks(child, [textFormatMap[blockData.name]]);
+      const textMark = htmlTagToTextMark(blockData.name);
+      if (textMark) {
+        textBlocks = generateTextBlocks(child, [textMark]);
       }
     });
     if (blockData.type === 'text') {

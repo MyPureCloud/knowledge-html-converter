@@ -7,6 +7,7 @@ import {
   TextProperties,
   Text,
   TextBlock,
+  htmlTagToTextMark,
 } from '../models/blocks/text';
 import { generateHyperlinkBlock } from './hyperlink';
 import { convertRgbToHex, generateImageBlock } from './image';
@@ -14,14 +15,14 @@ import { generateVideoBlock } from './video';
 
 export const generateTextBlocks = (
   textData: AstElement,
-  attributes: TextMark[] = [],
+  textMarks: TextMark[] = [],
   properties = {},
   textProperties?: TextProperties,
 ): ContentBlock[] => {
   const arr: ContentBlock[] = [];
   if (textData.type === AstElementType.Text) {
     if (textData.content) {
-      arr.push(assignAttributes(textData.content, textProperties, attributes));
+      arr.push(assignAttributes(textData.content, textProperties, textMarks));
     }
   } else if (
     textData.type === AstElementType.Tag &&
@@ -39,7 +40,7 @@ export const generateTextBlocks = (
     textData.type === AstElementType.Tag &&
     textData.name === Tag.Anchor
   ) {
-    arr.push(generateHyperlinkBlock(textData, attributes));
+    arr.push(generateHyperlinkBlock(textData, textMarks));
   } else if (
     textData.type === AstElementType.Tag &&
     textData.name === Tag.Video
@@ -56,28 +57,20 @@ export const generateTextBlocks = (
         generateTextProperties(textData.attrs.style),
       );
     }
-    const textFormatMap: Record<string, TextMark> = {
-      strong: TextMark.Bold,
-      em: TextMark.Italic,
-      u: TextMark.Underline,
-      s: TextMark.Strikethrough,
-      sub: TextMark.Subscript,
-      sup: TextMark.Superscript,
-    };
     textData.children?.forEach((child) => {
-      const attribute = textFormatMap[textData.name] as TextMark | undefined;
-      if (attribute) {
+      const textMark = htmlTagToTextMark(textData.name);
+      if (textMark) {
         arr.push(
           ...generateTextBlocks(
             child,
-            [...attributes, attribute],
+            [...textMarks, textMark],
             properties,
             textProperties,
           ),
         );
       } else {
         arr.push(
-          ...generateTextBlocks(child, attributes, properties, textProperties),
+          ...generateTextBlocks(child, textMarks, properties, textProperties),
         );
       }
     });
@@ -152,7 +145,7 @@ export const getFontSizeName = (
 const assignAttributes = (
   text: string,
   properties: TextProperties | null = null,
-  attributes: TextMark[] = [],
+  textMarks: TextMark[] = [],
 ): TextBlock => {
   const textBlock: Text = {
     text: '',
@@ -161,13 +154,8 @@ const assignAttributes = (
   if (properties) {
     textBlock.properties = properties;
   }
-  if (attributes.length) {
-    textBlock.marks = [];
-    attributes.forEach((attr) => {
-      if (attr !== undefined) {
-        textBlock.marks!.push(attr);
-      }
-    });
+  if (textMarks.length) {
+    textBlock.marks = [...new Set(textMarks)];
   }
 
   const textBlocks: TextBlock = {

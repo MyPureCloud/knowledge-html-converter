@@ -21,6 +21,19 @@ export enum TextMark {
   Superscript = 'Superscript',
 }
 
+const textMarksByHtmlTag: Record<string, TextMark> = {
+  strong: TextMark.Bold,
+  em: TextMark.Italic,
+  u: TextMark.Underline,
+  s: TextMark.Strikethrough,
+  sub: TextMark.Subscript,
+  sup: TextMark.Superscript,
+};
+
+export const htmlTagToTextMark = (tag: string): TextMark | undefined => {
+  return tag ? textMarksByHtmlTag[tag.toLowerCase()] : undefined;
+};
+
 export interface TextProperties {
   fontSize?: FontSize;
   textColor?: string;
