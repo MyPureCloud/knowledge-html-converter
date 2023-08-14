@@ -1,14 +1,14 @@
-import { AstElement } from 'html-parse-stringify';
+import { DomNode } from 'html-parse-stringify';
 import { StyleAttribute } from '../models/html';
 import { BlockType } from '../models/blocks/block';
 import { AlignType } from '../models/blocks/align-type';
 import { ImageBlock, ImageProperties } from '../models/blocks/image';
 
 export const generateImageBlock = (
-  blockData: AstElement,
+  imageElement: DomNode,
   imageProperties: ImageProperties = {},
 ): ImageBlock => {
-  let imgUrl = blockData.attrs?.src || '';
+  let imgUrl = imageElement.attrs?.src || '';
   imgUrl = imgUrl
     .replace(/&amp;/g, '&')
     .replace(/&gt;/g, '>')
@@ -18,7 +18,7 @@ export const generateImageBlock = (
     ? imageProperties.hyperlink
     : null;
   const backgroundColor = imageProperties?.backgroundColor;
-  let properties = getImageProperties(blockData);
+  let properties = getImageProperties(imageElement);
   if (backgroundColor) {
     properties = { ...properties, ...{ backgroundColor } };
   }
@@ -51,14 +51,14 @@ export const convertRgbToHex = (rgb: string): string | undefined => {
 };
 
 const getImageProperties = (
-  blockData: AstElement,
+  imageElement: DomNode,
 ): ImageProperties | undefined => {
   let imageProperties: ImageProperties | undefined;
-  if (blockData.attrs) {
+  if (imageElement.attrs) {
     let align: AlignType | undefined;
     let backgroundColor: string | undefined;
-    if (blockData.attrs.style) {
-      blockData.attrs.style
+    if (imageElement.attrs.style) {
+      imageElement.attrs.style
         .split(/\s*;\s*/) //split with extra spaces around the semi colon
         .map((chunk) => chunk.split(/\s*:\s*/)) //split key:value with colon
         .map((keyValue) => {

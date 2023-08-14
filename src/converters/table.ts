@@ -1,4 +1,4 @@
-import { AstElement, AstElementType } from 'html-parse-stringify';
+import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { generateImageBlock } from './image';
 import { generateListBlock } from './list';
 import { generateParagraphBlock } from './paragraph';
@@ -14,8 +14,7 @@ import {
   getHeight,
   getHorizontalAlign,
   getPadding,
-  getRowType,
-  getTablePropertiesJSON,
+  getStyleKeyValues,
   getVerticalAlign,
   getWidth,
 } from './table-properties';
@@ -36,6 +35,7 @@ import {
   TableBlockScopeType,
   TableBlockHorizontalAlignType,
   TableBorderStyleType,
+  TableRowType,
 } from '../models/blocks/table';
 import { htmlTagToTextMark } from '../models/blocks/text';
 import { ContentBlock } from '../models/blocks/content-block';
@@ -44,30 +44,30 @@ type TablePaddingPropertyHolder = {
   value?: number;
 };
 
-export const generateTableBlock = (blockData: AstElement): TableBlock => {
+export const generateTableBlock = (tableElement: DomNode): TableBlock => {
   const tableBlock: TableBlock = {
     type: BlockType.Table,
     table: {
       rows: [],
     },
   };
-  const tableProperties = generateTableProperties(blockData);
+  const tableProperties = generateTableProperties(tableElement);
   let colgroupIndex;
   let caption;
-  let childrenInDifferentTags: AstElement;
+  let childrenInDifferentTags: DomNode;
   const tablePaddingProperty: TablePaddingPropertyHolder = {};
   if (tableProperties) {
     tableBlock.table.properties = tableProperties;
   }
-  blockData.children?.forEach((child, index) => {
+  tableElement.children?.forEach((child, index) => {
     switch (child.name) {
       case 'tbody':
-        if (blockData.children![index]) {
-          (blockData.children![index]?.children ?? []).forEach((row) => {
+        if (child.children) {
+          child.children.forEach((rowElement) => {
             tableBlock.table.rows.push(
               generateRowBlock(
-                row,
-                'tbody',
+                rowElement,
+                TableRowType.Body,
                 childrenInDifferentTags,
                 tablePaddingProperty,
               ),
@@ -76,12 +76,12 @@ export const generateTableBlock = (blockData: AstElement): TableBlock => {
         }
         break;
       case 'thead':
-        if (blockData.children![index]) {
-          (blockData.children![index]?.children ?? []).forEach((row) => {
+        if (child.children) {
+          child.children.forEach((rowElement) => {
             tableBlock.table.rows.push(
               generateRowBlock(
-                row,
-                'thead',
+                rowElement,
+                TableRowType.Header,
                 childrenInDifferentTags,
                 tablePaddingProperty,
               ),
@@ -90,12 +90,12 @@ export const generateTableBlock = (blockData: AstElement): TableBlock => {
         }
         break;
       case 'tfoot':
-        if (blockData.children![index]) {
-          (blockData.children![index]?.children ?? []).forEach((row) => {
+        if (child.children) {
+          child.children.forEach((rowElement) => {
             tableBlock.table.rows.push(
               generateRowBlock(
-                row,
-                'tfoot',
+                rowElement,
+                TableRowType.Footer,
                 childrenInDifferentTags,
                 tablePaddingProperty,
               ),
@@ -105,14 +105,12 @@ export const generateTableBlock = (blockData: AstElement): TableBlock => {
         break;
       case 'colgroup':
         colgroupIndex = index;
-        childrenInDifferentTags = blockData.children![colgroupIndex];
+        childrenInDifferentTags = tableElement.children![colgroupIndex];
         break;
       case 'caption':
-        if (blockData.children![index]) {
-          caption = getCaption(blockData.children![index]);
-          if (caption) {
-            tableBlock.table.properties!.caption = caption;
-          }
+        caption = getCaption(child);
+        if (caption) {
+          tableBlock.table.properties!.caption = caption;
         }
         break;
     }
@@ -127,23 +125,25 @@ export const generateTableBlock = (blockData: AstElement): TableBlock => {
 };
 
 const generateRowBlock = (
-  row: AstElement,
-  rowType: string,
-  childrenInDifferentTags: AstElement,
+  rowElement: DomNode,
+  rowType: TableRowType,
+  childrenInDifferentTags: DomNode,
   tablePaddingProperty: TablePaddingPropertyHolder,
 ): TableRowBlock => {
   const rowBlock: TableRowBlock = {
     cells: [],
   };
-  const cells = row.children;
-  cells?.forEach((cell, index) => {
+  const cellElements = rowElement.children?.filter(
+    (child) => child.type === DomNodeType.Tag,
+  );
+  cellElements?.forEach((cellElement, index) => {
     const cellBlock: TableCellBlock = {
       blocks: [],
     };
-    const blocksInCell = generateCellBlock(cell);
+    const blocksInCell = generateCellBlock(cellElement);
     const colGroup = childrenInDifferentTags?.children![index];
     const cellProperties = generateCellProperties(
-      cell,
+      cellElement,
       colGroup,
       tablePaddingProperty,
     );
@@ -153,30 +153,27 @@ const generateRowBlock = (
     }
     rowBlock.cells.push(cellBlock);
   });
-  const rowProperties = generateRowProperties(row, rowType);
-  if (rowProperties) {
-    rowBlock.properties = rowProperties;
-  }
+  rowBlock.properties = generateRowProperties(rowElement, rowType);
   return rowBlock;
 };
 
-const generateCellBlock = (cell: AstElement): TableCellContentBlock[] => {
+const generateCellBlock = (domNode: DomNode): TableCellContentBlock[] => {
   const blocks: TableCellContentBlock[] = [];
 
-  const children = cell.children;
-  children?.forEach((blockData) => {
+  const children = domNode.children;
+  children?.forEach((child) => {
     let block: TableCellContentBlock | undefined;
     let textBlocks: ContentBlock[] | undefined;
-    blockData.children?.forEach((child) => {
-      const textMark = htmlTagToTextMark(blockData.name);
+    child.children?.forEach((child) => {
+      const textMark = htmlTagToTextMark(child.name);
       if (textMark) {
         textBlocks = generateTextBlocks(child, { textMarks: [textMark] });
       }
     });
-    if (blockData.type === 'text') {
-      textBlocks = generateTextBlocks(blockData);
+    if (child.type === 'text') {
+      textBlocks = generateTextBlocks(child);
     } else {
-      switch (blockData.name) {
+      switch (child.name) {
         case Tag.Paragraph:
         case Tag.Heading1:
         case Tag.Heading2:
@@ -185,27 +182,27 @@ const generateCellBlock = (cell: AstElement): TableCellContentBlock[] => {
         case Tag.Heading5:
         case Tag.Heading6:
         case Tag.Preformatted:
-          block = generateParagraphBlock(blockData);
+          block = generateParagraphBlock(child);
           break;
         case Tag.OrderedList:
-          block = generateListBlock(blockData, BlockType.OrderedList);
+          block = generateListBlock(child, BlockType.OrderedList);
           break;
         case Tag.UnorderedList:
-          block = generateListBlock(blockData, BlockType.UnorderedList);
+          block = generateListBlock(child, BlockType.UnorderedList);
           break;
         case Tag.Image:
-          block = generateImageBlock(blockData);
+          block = generateImageBlock(child);
           break;
-        case Tag.Video:
-          block = generateVideoBlock(blockData);
+        case Tag.IFrame:
+          block = generateVideoBlock(child);
           break;
         case Tag.Table:
-          block = generateTableBlock(blockData);
+          block = generateTableBlock(child);
           break;
         case Tag.Span:
         case Tag.LineBreak:
         case Tag.Anchor:
-          textBlocks = generateTextBlocks(blockData);
+          textBlocks = generateTextBlocks(child);
           break;
       }
     }
@@ -219,7 +216,7 @@ const generateCellBlock = (cell: AstElement): TableCellContentBlock[] => {
   return blocks;
 };
 
-const generateTableProperties = (blockData: AstElement): TableProperties => {
+const generateTableProperties = (tableElement: DomNode): TableProperties => {
   let tableProperties: TableProperties | undefined;
   let borderWidth;
   let cellSpacing;
@@ -229,23 +226,26 @@ const generateTableProperties = (blockData: AstElement): TableProperties => {
   let borderStyle;
   let borderColor;
   let backgroundColor;
-  let jsonObject = {};
 
-  if (blockData.attrs && blockData.attrs?.style) {
-    jsonObject = getTablePropertiesJSON(blockData);
+  if (tableElement.attrs && tableElement.attrs?.style) {
+    const styleKeyValues = getStyleKeyValues(tableElement);
 
-    borderWidth = getBorderWidth(jsonObject);
-    cellSpacing = getBorderSpacing(jsonObject);
-    width = getWidth(jsonObject);
-    height = getHeight(jsonObject);
-    alignment = getAlignment(jsonObject);
-    borderStyle = getBorderStyle(jsonObject);
-    borderColor = getBorderColor(jsonObject);
-    backgroundColor = getBackgroundColor(jsonObject);
+    borderWidth = getBorderWidth(styleKeyValues);
+    cellSpacing = getBorderSpacing(styleKeyValues);
+    width = getWidth(styleKeyValues);
+    height = getHeight(styleKeyValues);
+    alignment = getAlignment(styleKeyValues);
+    borderStyle = getBorderStyle(styleKeyValues);
+    borderColor = getBorderColor(styleKeyValues);
+    backgroundColor = getBackgroundColor(styleKeyValues);
     if (
-      Object.prototype.hasOwnProperty.call(jsonObject, StyleAttribute.Border)
+      Object.prototype.hasOwnProperty.call(
+        styleKeyValues,
+        StyleAttribute.Border,
+      )
     ) {
-      [borderWidth, borderStyle, borderColor] = getBorderProperties(jsonObject);
+      [borderWidth, borderStyle, borderColor] =
+        getBorderProperties(styleKeyValues);
     }
   }
 
@@ -275,51 +275,37 @@ const generateTableProperties = (blockData: AstElement): TableProperties => {
 };
 
 const generateRowProperties = (
-  blockData: AstElement,
-  type: string,
-): TableRowProperties | undefined => {
-  let rowProperties: TableRowProperties | undefined;
+  rowElement: DomNode,
+  rowType: TableRowType,
+): TableRowProperties => {
   let alignment: TableBlockHorizontalAlignType | undefined;
   let height: number | undefined;
   let borderStyle: TableBorderStyleType | undefined;
   let borderColor: string | undefined;
   let backgroundColor: string | undefined;
 
-  const rowType = getRowType(type);
-
-  if (blockData.attrs && blockData.attrs.style) {
-    const jsonObject = getTablePropertiesJSON(blockData);
-    backgroundColor = getBackgroundColor(jsonObject);
-    borderColor = getBorderColor(jsonObject);
-    borderStyle = getBorderStyle(jsonObject);
-    alignment = getHorizontalAlign(jsonObject);
-    height = getHeight(jsonObject);
+  if (rowElement.attrs && rowElement.attrs.style) {
+    const styleKeyValues = getStyleKeyValues(rowElement);
+    backgroundColor = getBackgroundColor(styleKeyValues);
+    borderColor = getBorderColor(styleKeyValues);
+    borderStyle = getBorderStyle(styleKeyValues);
+    alignment = getHorizontalAlign(styleKeyValues);
+    height = getHeight(styleKeyValues);
   }
 
-  if (
-    alignment ||
-    backgroundColor ||
-    borderColor ||
-    borderStyle ||
-    height ||
-    rowType
-  ) {
-    rowProperties = Object.assign(
-      {},
-      alignment && { alignment },
-      backgroundColor && { backgroundColor },
-      borderColor && { borderColor },
-      borderStyle && { borderStyle },
-      height && { height },
-      rowType && { rowType },
-    );
-  }
-  return rowProperties;
+  return Object.assign(
+    { rowType },
+    alignment && { alignment },
+    backgroundColor && { backgroundColor },
+    borderColor && { borderColor },
+    borderStyle && { borderStyle },
+    height && { height },
+  );
 };
 
 const generateCellProperties = (
-  cellBlockData: AstElement,
-  colGroup: AstElement,
+  cellElement: DomNode,
+  colGroup: DomNode,
   tablePaddingProperty: TablePaddingPropertyHolder,
 ): TableCellProperties | undefined => {
   let cellProperties: TableCellProperties | undefined;
@@ -344,29 +330,29 @@ const generateCellProperties = (
       });
   }
   if (
-    cellBlockData.type === AstElementType.Tag &&
-    cellBlockData.name === Tag.HeaderCell
+    cellElement.type === DomNodeType.Tag &&
+    cellElement.name === Tag.HeaderCell
   ) {
     cellType = TableBlockCellType.HeaderCell;
   } else if (
-    cellBlockData.type === AstElementType.Tag &&
-    cellBlockData.name === Tag.DataCell
+    cellElement.type === DomNodeType.Tag &&
+    cellElement.name === Tag.DataCell
   ) {
     cellType = TableBlockCellType.Cell;
   }
 
-  if (cellBlockData.attrs && cellBlockData.attrs.scope) {
-    scope = htmlScopeToTableBlockScopeType(cellBlockData.attrs.scope);
+  if (cellElement.attrs && cellElement.attrs.scope) {
+    scope = htmlScopeToTableBlockScopeType(cellElement.attrs.scope);
   }
-  if (cellBlockData.attrs && cellBlockData.attrs.colspan !== 'None') {
-    colSpan = Number(cellBlockData.attrs.colspan);
+  if (cellElement.attrs && cellElement.attrs.colspan !== 'None') {
+    colSpan = Number(cellElement.attrs.colspan);
   }
-  if (cellBlockData.attrs && cellBlockData.attrs.rowspan !== 'None') {
-    rowSpan = Number(cellBlockData.attrs.rowspan);
+  if (cellElement.attrs && cellElement.attrs.rowspan !== 'None') {
+    rowSpan = Number(cellElement.attrs.rowspan);
   }
 
-  if (cellBlockData.attrs && cellBlockData.attrs.style) {
-    cellStyleJson = getTablePropertiesJSON(cellBlockData);
+  if (cellElement.attrs && cellElement.attrs.style) {
+    cellStyleJson = getStyleKeyValues(cellElement);
   }
   tablePaddingProperty.value = getPadding(cellStyleJson);
   const horizontalAlign = getHorizontalAlign(cellStyleJson);

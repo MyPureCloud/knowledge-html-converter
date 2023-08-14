@@ -18,7 +18,7 @@ export enum Tag {
   Superscript = 'sup',
   LineBreak = 'br',
   Image = 'img',
-  Video = 'iframe',
+  IFrame = 'iframe',
   Anchor = 'a',
   Span = 'span',
   Table = 'table',

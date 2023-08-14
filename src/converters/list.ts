@@ -1,4 +1,4 @@
-import { AstElement } from 'html-parse-stringify';
+import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
 import {
   AlignType,
@@ -22,7 +22,7 @@ import { generateTextBlocks, getFontSizeName } from './text';
 import { FontSize } from '../models/blocks/text';
 
 export const generateListBlock = (
-  list: AstElement,
+  listElement: DomNode,
   listType: BlockType,
 ): ListBlock => {
   const listBlock: ListBlock = {
@@ -34,17 +34,25 @@ export const generateListBlock = (
   if (listType === BlockType.OrderedList) {
     listBlock.type = BlockType.OrderedList;
   }
-  const properties = generateListProperties(list.attrs?.style, listBlock.type);
+  const properties = generateListProperties(
+    listElement.attrs?.style,
+    listBlock.type,
+  );
   if (properties) {
     listBlock.list.properties = properties;
   }
 
-  list.children?.forEach((listItem) => {
-    const listItemBlock = generateListItemBlock(listItem, listBlock.type);
-    if (listItemBlock.blocks.length) {
-      listBlock.list.blocks.push(listItemBlock);
-    }
-  });
+  listElement.children
+    ?.filter((child) => child.type === DomNodeType.Tag)
+    .forEach((listItemElement) => {
+      const listItemBlock = generateListItemBlock(
+        listItemElement,
+        listBlock.type,
+      );
+      if (listItemBlock.blocks.length) {
+        listBlock.list.blocks.push(listItemBlock);
+      }
+    });
   return listBlock;
 };
 
@@ -113,7 +121,7 @@ const generateListProperties = (
 };
 
 const generateListItemBlock = (
-  listItemData: AstElement,
+  listItemElement: DomNode,
   listType: BlockType.OrderedList | BlockType.UnorderedList,
 ): ListItemBlock => {
   const listItemBlock: ListItemBlock = {
@@ -121,14 +129,14 @@ const generateListItemBlock = (
     blocks: [],
   };
 
-  if (listItemData.attrs?.style) {
+  if (listItemElement.attrs?.style) {
     listItemBlock.properties = generateListProperties(
-      listItemData.attrs?.style,
+      listItemElement.attrs?.style,
       listType,
     );
   }
 
-  listItemData?.children?.forEach((child: AstElement) => {
+  listItemElement?.children?.forEach((child: DomNode) => {
     const childNameLowerCase = child?.name?.toLowerCase();
     if (childNameLowerCase === Tag.OrderedList) {
       listItemBlock.blocks.push(

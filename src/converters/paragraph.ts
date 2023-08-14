@@ -1,4 +1,4 @@
-import { AstElement } from 'html-parse-stringify';
+import { DomNode } from 'html-parse-stringify';
 import { StyleAttribute } from '../models/html';
 import {
   AlignType,
@@ -12,25 +12,23 @@ import {
   ParagraphProperties,
 } from '../models/blocks/paragraph';
 
-export const generateParagraphBlock = (
-  blockData: AstElement,
-): ParagraphBlock => {
+export const generateParagraphBlock = (domElement: DomNode): ParagraphBlock => {
   const paragraphBlock: ParagraphBlock = {
     type: BlockType.Paragraph,
     paragraph: {
       blocks: [],
     },
   };
-  const children = blockData.children;
-  const fontType = htmlTagToFontType(blockData.name);
-  const properties = generateProperties(blockData.attrs);
+  const children = domElement.children;
+  const fontType = htmlTagToFontType(domElement.name);
+  const properties = generateProperties(domElement.attrs);
   if (properties) {
     paragraphBlock.paragraph.properties = { ...properties, fontType };
   } else {
     paragraphBlock.paragraph.properties = { fontType };
   }
 
-  children?.forEach((child: AstElement) => {
+  children?.forEach((child: DomNode) => {
     paragraphBlock.paragraph.blocks.push(...generateTextBlocks(child));
   });
   return paragraphBlock;

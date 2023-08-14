@@ -1,10 +1,10 @@
-import { AstElement } from 'html-parse-stringify';
+import { DomNode } from 'html-parse-stringify';
 import { TextMark, TextBlock } from '../models/blocks/text';
 import { generateTextBlocks } from './text';
 import { ContentBlock, ContentBlockType } from '../models/blocks/content-block';
 
 export const generateHyperlinkBlock = (
-  anchorElement: AstElement,
+  anchorElement: DomNode,
   marks: TextMark[] = [],
 ): TextBlock => {
   const textBlocks: ContentBlock[] = [];

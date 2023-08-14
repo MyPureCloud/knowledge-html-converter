@@ -1,4 +1,4 @@
-import { AstElement, AstElementType } from 'html-parse-stringify';
+import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
 import { ContentBlock, ContentBlockType } from '../models/blocks/content-block';
 import {
@@ -20,42 +20,33 @@ type TextBlockOptions = {
 };
 
 export const generateTextBlocks = (
-  textData: AstElement,
+  domNode: DomNode,
   options: TextBlockOptions = {},
 ): ContentBlock[] => {
   const arr: ContentBlock[] = [];
-  if (textData.type === AstElementType.Text) {
-    if (textData.content) {
-      arr.push(assignAttributes(textData.content, options));
+  if (domNode.type === DomNodeType.Text) {
+    if (domNode.content) {
+      arr.push(assignAttributes(domNode.content, options));
     }
   } else if (
-    textData.type === AstElementType.Tag &&
-    textData.name === Tag.LineBreak
+    domNode.type === DomNodeType.Tag &&
+    domNode.name === Tag.LineBreak
   ) {
     arr.push(assignAttributes('\n'));
-  } else if (
-    textData.type === AstElementType.Tag &&
-    textData.name === Tag.Image
-  ) {
+  } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Image) {
     arr.push(
-      generateImageBlock(textData, {
+      generateImageBlock(domNode, {
         hyperlink: options.hyperlink,
         ...options.textProperties,
       }),
     );
-  } else if (
-    textData.type === AstElementType.Tag &&
-    textData.name === Tag.Anchor
-  ) {
-    arr.push(generateHyperlinkBlock(textData, options.textMarks));
-  } else if (
-    textData.type === AstElementType.Tag &&
-    textData.name === Tag.Video
-  ) {
-    arr.push(generateVideoBlock(textData));
+  } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Anchor) {
+    arr.push(generateHyperlinkBlock(domNode, options.textMarks));
+  } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.IFrame) {
+    arr.push(generateVideoBlock(domNode));
   } else {
     const textMarks = options.textMarks ? [...options.textMarks] : [];
-    const textMark = htmlTagToTextMark(textData.name);
+    const textMark = htmlTagToTextMark(domNode.name);
     if (textMark) {
       textMarks.push(textMark);
     }
@@ -63,16 +54,16 @@ export const generateTextBlocks = (
       ? { ...options.textProperties }
       : {};
     if (
-      textData.type === AstElementType.Tag &&
-      textData.name === Tag.Span &&
-      textData.attrs?.style
+      domNode.type === DomNodeType.Tag &&
+      domNode.name === Tag.Span &&
+      domNode.attrs?.style
     ) {
       Object.assign(
         textProperties,
-        generateTextProperties(textData.attrs.style),
+        generateTextProperties(domNode.attrs.style),
       );
     }
-    textData.children?.forEach((child) => {
+    domNode.children?.forEach((child) => {
       arr.push(
         ...generateTextBlocks(child, {
           ...options,
