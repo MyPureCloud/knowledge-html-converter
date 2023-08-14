@@ -12,17 +12,17 @@ export const convertHtmlToBlocks = (html: string): Block[] => {
   if (!html) {
     return [];
   }
-  const sanitizedHtml = sanitizeHtml(html);
-  const parsedHtml = parse(sanitizedHtml);
-  return convertParsedHtmlToBlocks(parsedHtml);
+  html = sanitizeHtml(html);
+  const elements = parse(html);
+  return convertParsedHtmlToBlocks(elements);
 };
 
-const convertParsedHtmlToBlocks = (parsedHtml: AstElement[]): Block[] => {
+const convertParsedHtmlToBlocks = (elements: AstElement[]): Block[] => {
   const blocks: Block[] = [];
 
-  parsedHtml.forEach((blockData: AstElement) => {
+  elements.forEach((element: AstElement) => {
     let block: Block | undefined;
-    switch (blockData.name) {
+    switch (element.name) {
       case Tag.Paragraph:
       case Tag.Heading1:
       case Tag.Heading2:
@@ -31,29 +31,27 @@ const convertParsedHtmlToBlocks = (parsedHtml: AstElement[]): Block[] => {
       case Tag.Heading5:
       case Tag.Heading6:
       case Tag.Preformatted:
-        block = generateParagraphBlock(blockData);
+        block = generateParagraphBlock(element);
         break;
       case Tag.OrderedList:
-        block = generateListBlock(blockData, BlockType.OrderedList);
+        block = generateListBlock(element, BlockType.OrderedList);
         break;
       case Tag.UnorderedList:
-        block = generateListBlock(blockData, BlockType.UnorderedList);
+        block = generateListBlock(element, BlockType.UnorderedList);
         break;
       case Tag.Image:
-        block = generateImageBlock(blockData);
+        block = generateImageBlock(element);
         break;
       case Tag.Video:
-        block = generateVideoBlock(blockData);
+        block = generateVideoBlock(element);
         break;
       case Tag.Table:
-        block = generateTableBlock(blockData);
+        block = generateTableBlock(element);
         break;
     }
-
     if (block) {
       blocks.push(block);
     }
   });
-
   return blocks;
 };

@@ -12,7 +12,7 @@ import {
   cssTextAlignToTableBlockHorizontalAlignType,
   cssVerticalAlignToTableBlockVerticalAlignType,
 } from '../models/blocks/table';
-import { TextMark } from '../models/blocks/text';
+import { htmlTagToTextMark } from '../models/blocks/text';
 import { convertRgbToHex, generateImageBlock } from './image';
 import { generateListBlock } from './list';
 import { generateParagraphBlock } from './paragraph';
@@ -207,20 +207,15 @@ export const getCaption = (captionData: AstElement): TableCaptionBlock => {
   };
   const blocks: TableCaptionContentBlock[] = [];
 
-  const textFormatMap: Record<string, TextMark> = {
-    strong: TextMark.Bold,
-    em: TextMark.Italic,
-    u: TextMark.Underline,
-    s: TextMark.Strikethrough,
-    sub: TextMark.Subscript,
-    sup: TextMark.Superscript,
-  };
   captionData.children?.forEach((child) => {
     let block: TableCaptionContentBlock | undefined;
     let textBlocks: ContentBlock[] | undefined;
 
-    if (textFormatMap[child.name]) {
-      textBlocks = generateTextBlocks(child, [textFormatMap[captionData.name]]);
+    if (htmlTagToTextMark(child.name)) {
+      const captionTextMark = htmlTagToTextMark(captionData.name);
+      textBlocks = generateTextBlocks(child, {
+        textMarks: captionTextMark ? [captionTextMark] : [],
+      });
     }
 
     if (child.type === 'text') {
