@@ -61,53 +61,59 @@ export const generateTableBlock = (tableElement: DomNode): TableBlock => {
   }
   tableElement.children?.forEach((child, index) => {
     switch (child.name) {
-      case 'tbody':
+      case Tag.TableBody:
         if (child.children) {
-          child.children.forEach((rowElement) => {
-            tableBlock.table.rows.push(
-              generateRowBlock(
-                rowElement,
-                TableRowType.Body,
-                childrenInDifferentTags,
-                tablePaddingProperty,
-              ),
-            );
-          });
+          child.children
+            .filter((node) => node.type === DomNodeType.Tag)
+            .forEach((rowElement) => {
+              tableBlock.table.rows.push(
+                generateRowBlock(
+                  rowElement,
+                  TableRowType.Body,
+                  childrenInDifferentTags,
+                  tablePaddingProperty,
+                ),
+              );
+            });
         }
         break;
-      case 'thead':
+      case Tag.TableHead:
         if (child.children) {
-          child.children.forEach((rowElement) => {
-            tableBlock.table.rows.push(
-              generateRowBlock(
-                rowElement,
-                TableRowType.Header,
-                childrenInDifferentTags,
-                tablePaddingProperty,
-              ),
-            );
-          });
+          child.children
+            .filter((node) => node.type === DomNodeType.Tag)
+            .forEach((rowElement) => {
+              tableBlock.table.rows.push(
+                generateRowBlock(
+                  rowElement,
+                  TableRowType.Header,
+                  childrenInDifferentTags,
+                  tablePaddingProperty,
+                ),
+              );
+            });
         }
         break;
-      case 'tfoot':
+      case Tag.TableFooter:
         if (child.children) {
-          child.children.forEach((rowElement) => {
-            tableBlock.table.rows.push(
-              generateRowBlock(
-                rowElement,
-                TableRowType.Footer,
-                childrenInDifferentTags,
-                tablePaddingProperty,
-              ),
-            );
-          });
+          child.children
+            .filter((node) => node.type === DomNodeType.Tag)
+            .forEach((rowElement) => {
+              tableBlock.table.rows.push(
+                generateRowBlock(
+                  rowElement,
+                  TableRowType.Footer,
+                  childrenInDifferentTags,
+                  tablePaddingProperty,
+                ),
+              );
+            });
         }
         break;
-      case 'colgroup':
+      case Tag.ColumnGroup:
         colgroupIndex = index;
         childrenInDifferentTags = tableElement.children![colgroupIndex];
         break;
-      case 'caption':
+      case Tag.Caption:
         caption = getCaption(child);
         if (caption) {
           tableBlock.table.properties!.caption = caption;
@@ -164,10 +170,10 @@ const generateCellBlock = (domNode: DomNode): TableCellContentBlock[] => {
   children?.forEach((child) => {
     let block: TableCellContentBlock | undefined;
     let textBlocks: ContentBlock[] | undefined;
-    child.children?.forEach((child) => {
+    child.children?.forEach((grandChild) => {
       const textMark = htmlTagToTextMark(child.name);
       if (textMark) {
-        textBlocks = generateTextBlocks(child, { textMarks: [textMark] });
+        textBlocks = generateTextBlocks(grandChild, { textMarks: [textMark] });
       }
     });
     if (child.type === 'text') {
