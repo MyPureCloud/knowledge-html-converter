@@ -41,12 +41,14 @@ describe('convert-html-to-blocks', function () {
   });
 
   describe('table', function () {
-    it('simple', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks from html
-    it('properties', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with properties in html
+    it('simple', test);
+    it('properties', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks from html
+    it('properties2', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with properties in html
     it('merged-cells', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with merged cells html
     it('nested-table', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with nested table html
     it('caption-paragraph', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with paragraph in caption block
     it('video', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with video html
+    it('text-format', test);
   });
 
   describe('text', function () {

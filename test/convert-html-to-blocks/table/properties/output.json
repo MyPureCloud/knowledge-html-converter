@@ -10,15 +10,13 @@
                 {
                   "type": "Text",
                   "text": {
-                    "text": "Id"
+                    "text": "id"
                   }
                 }
               ],
               "properties": {
                 "cellType": "Cell",
-                "height": 1.3999,
-                "borderWidth": 0.125,
-                "borderColor": "#e03e2d"
+                "width": 36.469632
               }
             },
             {
@@ -26,21 +24,18 @@
                 {
                   "type": "Text",
                   "text": {
-                    "text": "Name"
+                    "text": "name"
                   }
                 }
               ],
               "properties": {
                 "cellType": "Cell",
-                "height": 1.3999,
-                "borderWidth": 0.125,
-                "borderColor": "#e03e2d"
+                "width": 36.469632
               }
             }
           ],
           "properties": {
-            "rowType": "Header",
-            "height": 1.3999
+            "rowType": "Body"
           }
         },
         {
@@ -56,9 +51,7 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "height": 1.3999,
-                "borderWidth": 0.125,
-                "borderColor": "#e03e2d"
+                "width": 36.469632
               }
             },
             {
@@ -66,83 +59,23 @@
                 {
                   "type": "Text",
                   "text": {
-                    "text": "Name1"
+                    "text": "test"
                   }
                 }
               ],
               "properties": {
                 "cellType": "Cell",
-                "height": 1.3999,
-                "borderWidth": 0.125,
-                "borderColor": "#e03e2d"
+                "width": 36.469632
               }
             }
           ],
           "properties": {
-            "rowType": "Body",
-            "height": 1.3999
-          }
-        },
-        {
-          "cells": [
-            {
-              "blocks": [
-                {
-                  "type": "Text",
-                  "text": {
-                    "text": "2"
-                  }
-                }
-              ],
-              "properties": {
-                "cellType": "Cell",
-                "height": 1.3999,
-                "borderWidth": 0.125,
-                "borderColor": "#e03e2d"
-              }
-            },
-            {
-              "blocks": [
-                {
-                  "type": "Text",
-                  "text": {
-                    "text": "Name2"
-                  }
-                }
-              ],
-              "properties": {
-                "cellType": "Cell",
-                "height": 1.3999,
-                "borderWidth": 0.125,
-                "borderColor": "#e03e2d"
-              }
-            }
-          ],
-          "properties": {
-            "rowType": "Footer",
-            "alignment": "Center",
-            "height": 1.3999
+            "rowType": "Body"
           }
         }
       ],
       "properties": {
-        "width": 75.0315,
-        "height": 4.1997,
-        "cellPadding": 0.625,
-        "borderWidth": 0.125,
-        "borderStyle": "Double",
-        "borderColor": "#e03e2d",
-        "backgroundColor": "#fbeeb8",
-        "caption": {
-          "blocks": [
-            {
-              "type": "Text",
-              "text": {
-                "text": "Caption Details"
-              }
-            }
-          ]
-        }
+        "width": 73.03066
       }
     }
   }

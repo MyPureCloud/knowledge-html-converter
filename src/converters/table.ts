@@ -116,7 +116,10 @@ export const generateTableBlock = (tableElement: DomNode): TableBlock => {
       case Tag.Caption:
         caption = getCaption(child);
         if (caption) {
-          tableBlock.table.properties!.caption = caption;
+          if (!tableBlock.table.properties) {
+            tableBlock.table.properties = {};
+          }
+          tableBlock.table.properties.caption = caption;
         }
         break;
     }
@@ -170,13 +173,7 @@ const generateCellBlock = (domNode: DomNode): TableCellContentBlock[] => {
   children?.forEach((child) => {
     let block: TableCellContentBlock | undefined;
     let textBlocks: ContentBlock[] | undefined;
-    child.children?.forEach((grandChild) => {
-      const textMark = htmlTagToTextMark(child.name);
-      if (textMark) {
-        textBlocks = generateTextBlocks(grandChild, { textMarks: [textMark] });
-      }
-    });
-    if (child.type === 'text') {
+    if (child.type === 'text' || htmlTagToTextMark(child.name)) {
       textBlocks = generateTextBlocks(child);
     } else {
       switch (child.name) {
@@ -222,7 +219,9 @@ const generateCellBlock = (domNode: DomNode): TableCellContentBlock[] => {
   return blocks;
 };
 
-const generateTableProperties = (tableElement: DomNode): TableProperties => {
+const generateTableProperties = (
+  tableElement: DomNode,
+): TableProperties | undefined => {
   let tableProperties: TableProperties | undefined;
   let borderWidth;
   let cellSpacing;
@@ -277,7 +276,7 @@ const generateTableProperties = (tableElement: DomNode): TableProperties => {
       width && { width },
     );
   }
-  return tableProperties || {};
+  return tableProperties;
 };
 
 const generateRowProperties = (

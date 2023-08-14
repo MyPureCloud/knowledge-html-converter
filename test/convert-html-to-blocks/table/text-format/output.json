@@ -1,0 +1,97 @@
+[
+  {
+    "type": "Table",
+    "table": {
+      "rows": [
+        {
+          "cells": [
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "marks": ["Bold"],
+                    "text": "strong "
+                  }
+                },
+                {
+                  "type": "Text",
+                  "text": {
+                    "marks": ["Bold", "Underline"],
+                    "text": "strong underlined"
+                  }
+                },
+                {
+                  "type": "Text",
+                  "text": {
+                    "marks": ["Bold"],
+                    "text": " still strong"
+                  }
+                },
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": " "
+                  }
+                },
+                {
+                  "type": "Text",
+                  "text": {
+                    "marks": ["Underline"],
+                    "text": "underlined"
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell"
+              }
+            }
+          ],
+          "properties": {
+            "rowType": "Body"
+          }
+        }
+      ],
+      "properties": {
+        "caption": {
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "marks": ["Bold"],
+                "text": "strong "
+              }
+            },
+            {
+              "type": "Text",
+              "text": {
+                "marks": ["Bold", "Underline"],
+                "text": "strong underlined"
+              }
+            },
+            {
+              "type": "Text",
+              "text": {
+                "marks": ["Bold"],
+                "text": " still strong"
+              }
+            },
+            {
+              "type": "Text",
+              "text": {
+                "text": " "
+              }
+            },
+            {
+              "type": "Text",
+              "text": {
+                "marks": ["Underline"],
+                "text": "underlined"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+]

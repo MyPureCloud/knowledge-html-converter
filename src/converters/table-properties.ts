@@ -223,14 +223,7 @@ export const getCaption = (captionElement: DomNode): TableCaptionBlock => {
     let block: TableCaptionContentBlock | undefined;
     let textBlocks: ContentBlock[] | undefined;
 
-    if (htmlTagToTextMark(child.name)) {
-      const captionTextMark = htmlTagToTextMark(captionElement.name);
-      textBlocks = generateTextBlocks(child, {
-        textMarks: captionTextMark ? [captionTextMark] : [],
-      });
-    }
-
-    if (child.type === 'text') {
+    if (child.type === 'text' || htmlTagToTextMark(child.name)) {
       textBlocks = generateTextBlocks(child);
     } else {
       switch (child.name) {
