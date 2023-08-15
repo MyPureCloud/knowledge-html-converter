@@ -1,20 +1,28 @@
-import { AstElement } from 'html-parse-stringify';
-import { TextMark, TextBlock } from '../models/blocks/text';
-import { generateTextBlocks } from './text';
+import { DomNode } from 'html-parse-stringify';
+import { TextBlock } from '../models/blocks/text';
+import {
+  TextBlockOptions,
+  generateTextBlocks,
+  shrinkTextNodeWhiteSpaces,
+} from './text';
 import { ContentBlock, ContentBlockType } from '../models/blocks/content-block';
 
 export const generateHyperlinkBlock = (
-  anchorElement: AstElement,
-  marks: TextMark[] = [],
+  anchorElement: DomNode,
+  options: TextBlockOptions = {},
 ): TextBlock => {
   const textBlocks: ContentBlock[] = [];
-  const hyperlinkFormattings = marks;
+  const hyperlinkFormattings = options.textMarks || [];
   let displayText = '';
 
   const hyperlink: string | undefined =
     anchorElement.attrs?.href || anchorElement.attrs?.title;
-  anchorElement.children?.forEach((child) => {
-    textBlocks.push(...generateTextBlocks(child, { hyperlink }));
+  let children = anchorElement.children;
+  if (!options.isPreformatted) {
+    children = shrinkTextNodeWhiteSpaces(children);
+  }
+  children?.forEach((child) => {
+    textBlocks.push(...generateTextBlocks(child, { ...options, hyperlink }));
   });
   const textBlock = textBlocks[0];
   if (hyperlink && textBlock && textBlock.type === ContentBlockType.Text) {

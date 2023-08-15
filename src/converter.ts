@@ -1,4 +1,4 @@
-import { parse, AstElement } from 'html-parse-stringify';
+import { parse, DomNode } from 'html-parse-stringify';
 import { sanitizeHtml } from './sanitizer';
 import { Tag } from './models/html';
 import { Block, BlockType } from './models/blocks/block';
@@ -13,16 +13,16 @@ export const convertHtmlToBlocks = (html: string): Block[] => {
     return [];
   }
   html = sanitizeHtml(html);
-  const elements = parse(html);
-  return convertParsedHtmlToBlocks(elements);
+  const domNodes = parse(html);
+  return convertParsedHtmlToBlocks(domNodes);
 };
 
-const convertParsedHtmlToBlocks = (elements: AstElement[]): Block[] => {
+const convertParsedHtmlToBlocks = (domNodes: DomNode[]): Block[] => {
   const blocks: Block[] = [];
 
-  elements.forEach((element: AstElement) => {
+  domNodes.forEach((domNode: DomNode) => {
     let block: Block | undefined;
-    switch (element.name) {
+    switch (domNode.name) {
       case Tag.Paragraph:
       case Tag.Heading1:
       case Tag.Heading2:
@@ -31,22 +31,22 @@ const convertParsedHtmlToBlocks = (elements: AstElement[]): Block[] => {
       case Tag.Heading5:
       case Tag.Heading6:
       case Tag.Preformatted:
-        block = generateParagraphBlock(element);
+        block = generateParagraphBlock(domNode);
         break;
       case Tag.OrderedList:
-        block = generateListBlock(element, BlockType.OrderedList);
+        block = generateListBlock(domNode, BlockType.OrderedList);
         break;
       case Tag.UnorderedList:
-        block = generateListBlock(element, BlockType.UnorderedList);
+        block = generateListBlock(domNode, BlockType.UnorderedList);
         break;
       case Tag.Image:
-        block = generateImageBlock(element);
+        block = generateImageBlock(domNode);
         break;
-      case Tag.Video:
-        block = generateVideoBlock(element);
+      case Tag.IFrame:
+        block = generateVideoBlock(domNode);
         break;
       case Tag.Table:
-        block = generateTableBlock(element);
+        block = generateTableBlock(domNode);
         break;
     }
     if (block) {

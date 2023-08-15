@@ -1,37 +1,47 @@
-import { AstElement } from 'html-parse-stringify';
+import { DomNode } from 'html-parse-stringify';
 import { StyleAttribute } from '../models/html';
 import {
   AlignType,
   cssTextAlignToAlignType,
 } from '../models/blocks/align-type';
 import { BlockType } from '../models/blocks/block';
-import { htmlTagToFontType } from '../models/blocks/font-type';
-import { generateTextBlocks } from './text';
+import { FontType, htmlTagToFontType } from '../models/blocks/font-type';
+import {
+  generateTextBlocks,
+  shrinkTextNodeWhiteSpaces,
+  trimEdgeTextNodes,
+} from './text';
 import {
   ParagraphBlock,
   ParagraphProperties,
 } from '../models/blocks/paragraph';
 
-export const generateParagraphBlock = (
-  blockData: AstElement,
-): ParagraphBlock => {
+export const generateParagraphBlock = (domElement: DomNode): ParagraphBlock => {
   const paragraphBlock: ParagraphBlock = {
     type: BlockType.Paragraph,
     paragraph: {
       blocks: [],
     },
   };
-  const children = blockData.children;
-  const fontType = htmlTagToFontType(blockData.name);
-  const properties = generateProperties(blockData.attrs);
+  let children = domElement.children;
+  const fontType = htmlTagToFontType(domElement.name);
+  const properties = generateProperties(domElement.attrs);
   if (properties) {
     paragraphBlock.paragraph.properties = { ...properties, fontType };
   } else {
     paragraphBlock.paragraph.properties = { fontType };
   }
 
-  children?.forEach((child: AstElement) => {
-    paragraphBlock.paragraph.blocks.push(...generateTextBlocks(child));
+  const isPreformatted = fontType === FontType.Preformatted;
+  if (!isPreformatted) {
+    children = shrinkTextNodeWhiteSpaces(
+      trimEdgeTextNodes(domElement.children),
+    );
+  }
+  children?.forEach((child: DomNode) => {
+    paragraphBlock.paragraph.blocks.push(
+      ...generateTextBlocks(child, { isPreformatted }),
+    );
   });
   return paragraphBlock;
 };

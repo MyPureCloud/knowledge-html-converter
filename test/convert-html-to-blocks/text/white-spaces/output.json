@@ -1,0 +1,94 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "White spaces in"
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " formatting",
+            "marks": ["Bold"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " tags ",
+            "marks": ["Italic"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "should shrink. "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " In links, too. ",
+            "hyperlink": "https://example.com"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "\n  Except when in"
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "\n    preformatted",
+            "marks": ["Bold"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "   \n        tags\n    ",
+            "marks": ["Italic"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": ", there they shouldn't.\n  "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "\n    Not \n    even in    links\n  ",
+            "hyperlink": "https://example.com"
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Preformatted"
+      }
+    }
+  }
+]

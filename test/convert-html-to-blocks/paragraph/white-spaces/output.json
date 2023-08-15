@@ -1,0 +1,146 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Paragraph with new lines and extra spaces"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "capital paragraph tag"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Heading 1"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Heading1"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Heading 2"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Heading2"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Heading 3"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Heading3"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Heading 4"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Heading4"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Heading 5"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Heading5"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Heading 6"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Heading6"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "\n  Preformatted    text\n     should keep white space\n     \n     characters\n"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Preformatted"
+      }
+    }
+  }
+]

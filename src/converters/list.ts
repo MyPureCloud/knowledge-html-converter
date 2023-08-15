@@ -1,11 +1,11 @@
-import { AstElement } from 'html-parse-stringify';
+import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
 import {
   AlignType,
   cssTextAlignToAlignType,
 } from '../models/blocks/align-type';
 import { BlockType } from '../models/blocks/block';
-import { htmlTagToFontType } from '../models/blocks/font-type';
+import { FontType, htmlTagToFontType } from '../models/blocks/font-type';
 import { convertRgbToHex } from './image';
 import {
   ListBlock,
@@ -18,11 +18,18 @@ import {
   cssListStyleTypeToOrderedType,
   cssListStyleTypeToUnorderedType,
 } from '../models/blocks/list';
-import { generateTextBlocks, getFontSizeName } from './text';
+import {
+  generateTextBlocks,
+  getFontSizeName,
+  removeBlankEdgeTextBlocks,
+  shrinkTextNodeWhiteSpaces,
+  trimEdgeTextNodes,
+} from './text';
 import { FontSize } from '../models/blocks/text';
+import { ContentBlock } from '../models/blocks/content-block';
 
 export const generateListBlock = (
-  list: AstElement,
+  listElement: DomNode,
   listType: BlockType,
 ): ListBlock => {
   const listBlock: ListBlock = {
@@ -34,17 +41,25 @@ export const generateListBlock = (
   if (listType === BlockType.OrderedList) {
     listBlock.type = BlockType.OrderedList;
   }
-  const properties = generateListProperties(list.attrs?.style, listBlock.type);
+  const properties = generateListProperties(
+    listElement.attrs?.style,
+    listBlock.type,
+  );
   if (properties) {
     listBlock.list.properties = properties;
   }
 
-  list.children?.forEach((listItem) => {
-    const listItemBlock = generateListItemBlock(listItem, listBlock.type);
-    if (listItemBlock.blocks.length) {
-      listBlock.list.blocks.push(listItemBlock);
-    }
-  });
+  listElement.children
+    ?.filter((child) => child.type === DomNodeType.Tag)
+    .forEach((listItemElement) => {
+      const listItemBlock = generateListItemBlock(
+        listItemElement,
+        listBlock.type,
+      );
+      if (listItemBlock.blocks.length) {
+        listBlock.list.blocks.push(listItemBlock);
+      }
+    });
   return listBlock;
 };
 
@@ -113,7 +128,7 @@ const generateListProperties = (
 };
 
 const generateListItemBlock = (
-  listItemData: AstElement,
+  listItemElement: DomNode,
   listType: BlockType.OrderedList | BlockType.UnorderedList,
 ): ListItemBlock => {
   const listItemBlock: ListItemBlock = {
@@ -121,38 +136,54 @@ const generateListItemBlock = (
     blocks: [],
   };
 
-  if (listItemData.attrs?.style) {
+  if (listItemElement.attrs?.style) {
     listItemBlock.properties = generateListProperties(
-      listItemData.attrs?.style,
+      listItemElement.attrs?.style,
       listType,
     );
   }
+  const fontType = getFontType(listItemElement);
+  if (fontType) {
+    listItemBlock.properties = listItemBlock.properties || {};
+    listItemBlock.properties.fontType = fontType;
+  }
+  const isPreformatted = fontType === FontType.Preformatted;
+  let children = listItemElement.children;
+  if (!isPreformatted) {
+    children = shrinkTextNodeWhiteSpaces(trimEdgeTextNodes(children));
+  }
 
-  listItemData?.children?.forEach((child: AstElement) => {
-    const childNameLowerCase = child?.name?.toLowerCase();
-    if (childNameLowerCase === Tag.OrderedList) {
+  children?.forEach((child: DomNode) => {
+    if (child.name === Tag.OrderedList) {
       listItemBlock.blocks.push(
         generateListBlock(child, BlockType.OrderedList),
       );
-    } else if (childNameLowerCase === Tag.UnorderedList) {
+    } else if (child.name === Tag.UnorderedList) {
       listItemBlock.blocks.push(
         generateListBlock(child, BlockType.UnorderedList),
       );
-    } else if (htmlTagToFontType(childNameLowerCase)) {
-      const fontType = htmlTagToFontType(childNameLowerCase);
-
-      if (listItemBlock.properties) {
-        listItemBlock.properties.fontType = fontType;
-      } else {
-        listItemBlock.properties = { fontType };
-      }
-      if (child.children?.length) {
-        listItemBlock.blocks.push(...generateTextBlocks(child.children[0]));
-      }
     } else {
-      listItemBlock.blocks.push(...generateTextBlocks(child));
+      listItemBlock.blocks.push(
+        ...generateTextBlocks(child, { isPreformatted }),
+      );
     }
   });
 
+  if (!isPreformatted) {
+    removeBlankEdgeTextBlocks(listItemBlock.blocks as ContentBlock[]);
+  }
+
   return listItemBlock;
+};
+
+const getFontType = (listItemElement: DomNode): FontType | undefined => {
+  const children = listItemElement.children || [];
+  for (let i = 0; i < children.length; i++) {
+    if (children[i].type === DomNodeType.Tag) {
+      const fontType = htmlTagToFontType(children[i].name);
+      if (fontType) {
+        return fontType;
+      }
+    }
+  }
 };

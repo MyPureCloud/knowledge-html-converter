@@ -1,4 +1,4 @@
-import { AstElement, AstElementType } from 'html-parse-stringify';
+import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
 import { ContentBlock, ContentBlockType } from '../models/blocks/content-block';
 import {
@@ -13,49 +13,41 @@ import { generateHyperlinkBlock } from './hyperlink';
 import { convertRgbToHex, generateImageBlock } from './image';
 import { generateVideoBlock } from './video';
 
-type TextBlockOptions = {
+export interface TextBlockOptions {
   textMarks?: TextMark[];
   hyperlink?: string;
   textProperties?: TextProperties;
-};
+  isPreformatted?: boolean;
+}
 
 export const generateTextBlocks = (
-  textData: AstElement,
+  domNode: DomNode,
   options: TextBlockOptions = {},
 ): ContentBlock[] => {
   const arr: ContentBlock[] = [];
-  if (textData.type === AstElementType.Text) {
-    if (textData.content) {
-      arr.push(assignAttributes(textData.content, options));
+  if (domNode.type === DomNodeType.Text) {
+    if (domNode.content) {
+      arr.push(assignAttributes(domNode.content, options));
     }
   } else if (
-    textData.type === AstElementType.Tag &&
-    textData.name === Tag.LineBreak
+    domNode.type === DomNodeType.Tag &&
+    domNode.name === Tag.LineBreak
   ) {
     arr.push(assignAttributes('\n'));
-  } else if (
-    textData.type === AstElementType.Tag &&
-    textData.name === Tag.Image
-  ) {
+  } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Image) {
     arr.push(
-      generateImageBlock(textData, {
+      generateImageBlock(domNode, {
         hyperlink: options.hyperlink,
         ...options.textProperties,
       }),
     );
-  } else if (
-    textData.type === AstElementType.Tag &&
-    textData.name === Tag.Anchor
-  ) {
-    arr.push(generateHyperlinkBlock(textData, options.textMarks));
-  } else if (
-    textData.type === AstElementType.Tag &&
-    textData.name === Tag.Video
-  ) {
-    arr.push(generateVideoBlock(textData));
+  } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Anchor) {
+    arr.push(generateHyperlinkBlock(domNode, options));
+  } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.IFrame) {
+    arr.push(generateVideoBlock(domNode));
   } else {
     const textMarks = options.textMarks ? [...options.textMarks] : [];
-    const textMark = htmlTagToTextMark(textData.name);
+    const textMark = htmlTagToTextMark(domNode.name);
     if (textMark) {
       textMarks.push(textMark);
     }
@@ -63,16 +55,20 @@ export const generateTextBlocks = (
       ? { ...options.textProperties }
       : {};
     if (
-      textData.type === AstElementType.Tag &&
-      textData.name === Tag.Span &&
-      textData.attrs?.style
+      domNode.type === DomNodeType.Tag &&
+      domNode.name === Tag.Span &&
+      domNode.attrs?.style
     ) {
       Object.assign(
         textProperties,
-        generateTextProperties(textData.attrs.style),
+        generateTextProperties(domNode.attrs.style),
       );
     }
-    textData.children?.forEach((child) => {
+    let children = domNode.children;
+    if (!options.isPreformatted) {
+      children = shrinkTextNodeWhiteSpaces(children);
+    }
+    children?.forEach((child) => {
       arr.push(
         ...generateTextBlocks(child, {
           ...options,
@@ -174,3 +170,97 @@ const assignAttributes = (
 
   return textBlocks;
 };
+
+const blankRegex = /^\s*$/;
+const leadingWhiteSpaceRegex = /^\s+/;
+const trailingWhiteSpaceRegex = /\s+$/;
+
+/**
+ * Removes leading and trailing blank text nodes,
+ * then removes leading white spaces from the first text node
+ * and trailing white spaces from the last text node.
+ */
+export const trimEdgeTextNodes = (domNodes: DomNode[] = []): DomNode[] => {
+  const nodes = [...domNodes];
+  removeBlankEdgeTextNodes(nodes);
+  removeEdgeWhiteSpaces(nodes);
+  return nodes;
+};
+
+const removeBlankEdgeTextNodes = (nodes: DomNode[]): void => {
+  while (nodes[0] && isBlankTextNode(nodes[0])) {
+    nodes.shift();
+  }
+  while (nodes.length && isBlankTextNode(nodes[nodes.length - 1])) {
+    nodes.pop();
+  }
+};
+
+const removeEdgeWhiteSpaces = (nodes: DomNode[]): void => {
+  if (nodes.length) {
+    if (
+      nodes[0].type === DomNodeType.Text &&
+      leadingWhiteSpaceRegex.test(nodes[0].content!)
+    ) {
+      nodes[0] = {
+        ...nodes[0],
+        content: nodes[0].content!.replace(leadingWhiteSpaceRegex, ''),
+      };
+    }
+    if (
+      nodes[nodes.length - 1] &&
+      nodes[nodes.length - 1].type === DomNodeType.Text &&
+      trailingWhiteSpaceRegex.test(nodes[nodes.length - 1].content!)
+    ) {
+      nodes[nodes.length - 1] = {
+        ...nodes[nodes.length - 1],
+        content: nodes[nodes.length - 1].content!.replace(
+          trailingWhiteSpaceRegex,
+          '',
+        ),
+      };
+    }
+  }
+};
+
+const isBlankTextNode = (node: DomNode): boolean =>
+  node.type === DomNodeType.Text &&
+  (!node.content || blankRegex.test(node.content));
+
+/**
+ * Replaces consecutive white space characters with a single space character.
+ */
+export const shrinkTextNodeWhiteSpaces = (
+  domNodes: DomNode[] = [],
+): DomNode[] => {
+  const nodes = [...domNodes];
+  for (let i = 0; i < nodes.length; i++) {
+    if (nodes[i].type === DomNodeType.Text && /\s+/.test(nodes[i].content!)) {
+      nodes[i] = {
+        ...nodes[i],
+        content: nodes[i].content!.replace(/\s+/g, ' '),
+      };
+    }
+  }
+  return nodes;
+};
+
+/**
+ * Removes leading and trailing blank textblocks.
+ */
+export const removeBlankEdgeTextBlocks = (
+  blocks: ContentBlock[] = [],
+): void => {
+  while (blocks[0] && isBlankTextBlock(blocks[0] as TextBlock)) {
+    blocks.shift();
+  }
+  while (
+    blocks.length &&
+    isBlankTextBlock(blocks[blocks.length - 1] as TextBlock)
+  ) {
+    blocks.pop();
+  }
+};
+
+const isBlankTextBlock = (textBlock: TextBlock): boolean =>
+  textBlock.text && blankRegex.test(textBlock.text.text);

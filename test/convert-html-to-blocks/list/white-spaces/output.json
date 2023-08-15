@@ -1,0 +1,100 @@
+[
+  {
+    "type": "UnorderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": " Should shrink white spaces ",
+                "marks": ["Bold"]
+              }
+            }
+          ],
+          "properties": {
+            "fontType": "Paragraph"
+          }
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": " inside ",
+                "marks": ["Italic"]
+              }
+            }
+          ],
+          "properties": {
+            "fontType": "Heading1"
+          }
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": "list",
+                "marks": ["Underline"]
+              }
+            },
+            {
+              "type": "Text",
+              "text": { "text": " " }
+            },
+            {
+              "type": "Text",
+              "text": {
+                "text": "item",
+                "marks": ["Bold"]
+              }
+            },
+            {
+              "type": "Text",
+              "text": { "text": " tags " }
+            }
+          ],
+          "properties": {
+            "fontType": "Heading2"
+          }
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": { "text": "\n    " }
+            },
+            {
+              "type": "Text",
+              "text": { "text": "but   " }
+            },
+            {
+              "type": "Text",
+              "text": {
+                "text": "not",
+                "marks": ["Bold", "Italic", "Underline"]
+              }
+            },
+            {
+              "type": "Text",
+              "text": { "text": "    if\n      it's\n      preformatted\n    " }
+            },
+            {
+              "type": "Text",
+              "text": { "text": " " }
+            }
+          ],
+          "properties": {
+            "fontType": "Preformatted"
+          }
+        }
+      ]
+    }
+  }
+]

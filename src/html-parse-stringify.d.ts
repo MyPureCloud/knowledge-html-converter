@@ -1,16 +1,16 @@
 declare module 'html-parse-stringify' {
-  export function parse(html: string): AstElement[];
+  export function parse(html: string): DomNode[];
 
-  export interface AstElement {
-    type: AstElementType;
+  export interface DomNode {
+    type: DomNodeType;
     content?: string;
     voidElement?: boolean;
     name: string;
     attrs?: Record<string, string>;
-    children?: AstElement[];
+    children?: DomNode[];
   }
 
-  export const enum AstElementType {
+  export const enum DomNodeType {
     Tag = 'tag',
     Text = 'text',
     Component = 'component',
