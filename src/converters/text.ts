@@ -13,11 +13,12 @@ import { generateHyperlinkBlock } from './hyperlink';
 import { convertRgbToHex, generateImageBlock } from './image';
 import { generateVideoBlock } from './video';
 
-type TextBlockOptions = {
+export interface TextBlockOptions {
   textMarks?: TextMark[];
   hyperlink?: string;
   textProperties?: TextProperties;
-};
+  isPreformatted?: boolean;
+}
 
 export const generateTextBlocks = (
   domNode: DomNode,
@@ -41,7 +42,7 @@ export const generateTextBlocks = (
       }),
     );
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Anchor) {
-    arr.push(generateHyperlinkBlock(domNode, options.textMarks));
+    arr.push(generateHyperlinkBlock(domNode, options));
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.IFrame) {
     arr.push(generateVideoBlock(domNode));
   } else {
@@ -63,7 +64,11 @@ export const generateTextBlocks = (
         generateTextProperties(domNode.attrs.style),
       );
     }
-    domNode.children?.forEach((child) => {
+    let children = domNode.children;
+    if (!options.isPreformatted) {
+      children = shrinkTextNodeWhiteSpaces(children);
+    }
+    children?.forEach((child) => {
       arr.push(
         ...generateTextBlocks(child, {
           ...options,
@@ -228,7 +233,9 @@ const isBlank = (node: DomNode): boolean =>
 /**
  * Replaces consecutive white space characters with a single space character.
  */
-export const shrinkTextNodeWhiteSpaces = (domNodes: DomNode[]): DomNode[] => {
+export const shrinkTextNodeWhiteSpaces = (
+  domNodes: DomNode[] = [],
+): DomNode[] => {
   const nodes = [...domNodes];
   for (let i = 0; i < nodes.length; i++) {
     if (nodes[i].type === DomNodeType.Text && /\s+/.test(nodes[i].content!)) {

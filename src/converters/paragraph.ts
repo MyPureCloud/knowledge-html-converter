@@ -25,11 +25,6 @@ export const generateParagraphBlock = (domElement: DomNode): ParagraphBlock => {
   };
   let children = domElement.children;
   const fontType = htmlTagToFontType(domElement.name);
-  if (fontType !== FontType.Preformatted) {
-    children = shrinkTextNodeWhiteSpaces(
-      trimEdgeTextNodes(domElement.children),
-    );
-  }
   const properties = generateProperties(domElement.attrs);
   if (properties) {
     paragraphBlock.paragraph.properties = { ...properties, fontType };
@@ -37,8 +32,16 @@ export const generateParagraphBlock = (domElement: DomNode): ParagraphBlock => {
     paragraphBlock.paragraph.properties = { fontType };
   }
 
+  const isPreformatted = fontType === FontType.Preformatted;
+  if (!isPreformatted) {
+    children = shrinkTextNodeWhiteSpaces(
+      trimEdgeTextNodes(domElement.children),
+    );
+  }
   children?.forEach((child: DomNode) => {
-    paragraphBlock.paragraph.blocks.push(...generateTextBlocks(child));
+    paragraphBlock.paragraph.blocks.push(
+      ...generateTextBlocks(child, { isPreformatted }),
+    );
   });
   return paragraphBlock;
 };

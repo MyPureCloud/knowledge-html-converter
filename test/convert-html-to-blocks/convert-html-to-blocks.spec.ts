@@ -52,6 +52,7 @@ describe('convert-html-to-blocks', function () {
     it('properties', test); // knowledge-administration-ui / text-block-utils.spec.ts / should generate text blocks with properties from html
     it('empty', test);
     it('plain-text', test);
+    it('white-spaces', test);
   });
 
   describe('video', function () {
