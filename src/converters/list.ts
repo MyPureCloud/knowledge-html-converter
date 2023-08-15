@@ -5,7 +5,7 @@ import {
   cssTextAlignToAlignType,
 } from '../models/blocks/align-type';
 import { BlockType } from '../models/blocks/block';
-import { htmlTagToFontType } from '../models/blocks/font-type';
+import { FontType, htmlTagToFontType } from '../models/blocks/font-type';
 import { convertRgbToHex } from './image';
 import {
   ListBlock,
@@ -135,32 +135,41 @@ const generateListItemBlock = (
       listType,
     );
   }
+  const fontType = getFontType(listItemElement);
+  if (fontType) {
+    listItemBlock.properties = listItemBlock.properties || {};
+    listItemBlock.properties.fontType = fontType;
+  }
 
-  listItemElement?.children?.forEach((child: DomNode) => {
-    const childNameLowerCase = child?.name?.toLowerCase();
-    if (childNameLowerCase === Tag.OrderedList) {
+  listItemElement.children?.forEach((child: DomNode) => {
+    if (child.name === Tag.OrderedList) {
       listItemBlock.blocks.push(
         generateListBlock(child, BlockType.OrderedList),
       );
-    } else if (childNameLowerCase === Tag.UnorderedList) {
+    } else if (child.name === Tag.UnorderedList) {
       listItemBlock.blocks.push(
         generateListBlock(child, BlockType.UnorderedList),
       );
-    } else if (htmlTagToFontType(childNameLowerCase)) {
-      const fontType = htmlTagToFontType(childNameLowerCase);
-
-      if (listItemBlock.properties) {
-        listItemBlock.properties.fontType = fontType;
-      } else {
-        listItemBlock.properties = { fontType };
-      }
-      if (child.children?.length) {
-        listItemBlock.blocks.push(...generateTextBlocks(child.children[0]));
-      }
     } else {
-      listItemBlock.blocks.push(...generateTextBlocks(child));
+      listItemBlock.blocks.push(
+        ...generateTextBlocks(child, {
+          isPreformatted: fontType === FontType.Preformatted,
+        }),
+      );
     }
   });
 
   return listItemBlock;
+};
+
+const getFontType = (listItemElement: DomNode): FontType | undefined => {
+  const children = listItemElement.children || [];
+  for (let i = 0; i < children.length; i++) {
+    if (children[i].type === DomNodeType.Tag) {
+      const fontType = htmlTagToFontType(children[i].name);
+      if (fontType) {
+        return fontType;
+      }
+    }
+  }
 };

@@ -22,6 +22,7 @@ describe('convert-html-to-blocks', function () {
     it('video', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate list blocks from html
     it('nested-lists', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate nested list blocks with properties from mock html
     it('list-style-types', test);
+    it('paragraph', test);
   });
 
   describe('paragraph', function () {

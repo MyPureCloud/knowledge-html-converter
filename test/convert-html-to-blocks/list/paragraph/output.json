@@ -1,0 +1,49 @@
+[
+  {
+    "type": "UnorderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [
+            { "type": "Text", "text": { "text": "a", "marks": ["Bold"] } }
+          ],
+          "properties": {
+            "fontType": "Paragraph"
+          }
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            { "type": "Text", "text": { "text": "b", "marks": ["Italic"] } }
+          ],
+          "properties": {
+            "fontType": "Heading1"
+          }
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            { "type": "Text", "text": { "text": "c", "marks": ["Underline"] } },
+            { "type": "Text", "text": { "text": "cc", "marks": ["Bold"] } }
+          ],
+          "properties": {
+            "fontType": "Heading2"
+          }
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": { "text": "d", "marks": ["Bold", "Italic", "Underline"] }
+            }
+          ],
+          "properties": {
+            "fontType": "Preformatted"
+          }
+        }
+      ]
+    }
+  }
+]
