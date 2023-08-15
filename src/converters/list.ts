@@ -18,8 +18,15 @@ import {
   cssListStyleTypeToOrderedType,
   cssListStyleTypeToUnorderedType,
 } from '../models/blocks/list';
-import { generateTextBlocks, getFontSizeName } from './text';
+import {
+  generateTextBlocks,
+  getFontSizeName,
+  removeBlankEdgeTextBlocks,
+  shrinkTextNodeWhiteSpaces,
+  trimEdgeTextNodes,
+} from './text';
 import { FontSize } from '../models/blocks/text';
+import { ContentBlock } from '../models/blocks/content-block';
 
 export const generateListBlock = (
   listElement: DomNode,
@@ -140,8 +147,13 @@ const generateListItemBlock = (
     listItemBlock.properties = listItemBlock.properties || {};
     listItemBlock.properties.fontType = fontType;
   }
+  const isPreformatted = fontType === FontType.Preformatted;
+  let children = listItemElement.children;
+  if (!isPreformatted) {
+    children = shrinkTextNodeWhiteSpaces(trimEdgeTextNodes(children));
+  }
 
-  listItemElement.children?.forEach((child: DomNode) => {
+  children?.forEach((child: DomNode) => {
     if (child.name === Tag.OrderedList) {
       listItemBlock.blocks.push(
         generateListBlock(child, BlockType.OrderedList),
@@ -152,12 +164,14 @@ const generateListItemBlock = (
       );
     } else {
       listItemBlock.blocks.push(
-        ...generateTextBlocks(child, {
-          isPreformatted: fontType === FontType.Preformatted,
-        }),
+        ...generateTextBlocks(child, { isPreformatted }),
       );
     }
   });
+
+  if (!isPreformatted) {
+    removeBlankEdgeTextBlocks(listItemBlock.blocks as ContentBlock[]);
+  }
 
   return listItemBlock;
 };

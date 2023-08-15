@@ -188,14 +188,10 @@ export const trimEdgeTextNodes = (domNodes: DomNode[] = []): DomNode[] => {
 };
 
 const removeBlankEdgeTextNodes = (nodes: DomNode[]): void => {
-  while (nodes[0] && nodes[0].type === DomNodeType.Text && isBlank(nodes[0])) {
+  while (nodes[0] && isBlankTextNode(nodes[0])) {
     nodes.shift();
   }
-  while (
-    nodes.length &&
-    nodes[nodes.length - 1].type === DomNodeType.Text &&
-    isBlank(nodes[nodes.length - 1])
-  ) {
+  while (nodes.length && isBlankTextNode(nodes[nodes.length - 1])) {
     nodes.pop();
   }
 };
@@ -227,8 +223,9 @@ const removeEdgeWhiteSpaces = (nodes: DomNode[]): void => {
   }
 };
 
-const isBlank = (node: DomNode): boolean =>
-  !node.content || blankRegex.test(node.content);
+const isBlankTextNode = (node: DomNode): boolean =>
+  node.type === DomNodeType.Text &&
+  (!node.content || blankRegex.test(node.content));
 
 /**
  * Replaces consecutive white space characters with a single space character.
@@ -247,3 +244,23 @@ export const shrinkTextNodeWhiteSpaces = (
   }
   return nodes;
 };
+
+/**
+ * Removes leading and trailing blank textblocks.
+ */
+export const removeBlankEdgeTextBlocks = (
+  blocks: ContentBlock[] = [],
+): void => {
+  while (blocks[0] && isBlankTextBlock(blocks[0] as TextBlock)) {
+    blocks.shift();
+  }
+  while (
+    blocks.length &&
+    isBlankTextBlock(blocks[blocks.length - 1] as TextBlock)
+  ) {
+    blocks.pop();
+  }
+};
+
+const isBlankTextBlock = (textBlock: TextBlock): boolean =>
+  textBlock.text && blankRegex.test(textBlock.text.text);

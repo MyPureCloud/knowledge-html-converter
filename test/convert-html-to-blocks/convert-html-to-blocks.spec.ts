@@ -23,6 +23,7 @@ describe('convert-html-to-blocks', function () {
     it('nested-lists', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate nested list blocks with properties from mock html
     it('list-style-types', test);
     it('paragraph', test);
+    it('white-spaces', test);
   });
 
   describe('paragraph', function () {
