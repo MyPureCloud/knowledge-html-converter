@@ -69,7 +69,26 @@
             "rowType": "Body"
           }
         }
-      ]
+      ],
+      "properties": {
+        "caption": {
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": " Strong ",
+                "marks": ["Bold"]
+              }
+            },
+            {
+              "type": "Text",
+              "text": {
+                "text": " caption"
+              }
+            }
+          ]
+        }
+      }
     }
   }
 ]

@@ -15,7 +15,11 @@ import { htmlTagToTextMark } from '../models/blocks/text';
 import { convertRgbToHex, generateImageBlock } from './image';
 import { generateListBlock } from './list';
 import { generateParagraphBlock } from './paragraph';
-import { generateTextBlocks } from './text';
+import {
+  generateTextBlocks,
+  shrinkTextNodeWhiteSpaces,
+  trimEdgeTextNodes,
+} from './text';
 import { generateVideoBlock } from './video';
 import { ContentBlock } from '../models/blocks/content-block';
 
@@ -219,7 +223,11 @@ export const getCaption = (captionElement: DomNode): TableCaptionBlock => {
   };
   const blocks: TableCaptionContentBlock[] = [];
 
-  captionElement.children?.forEach((child) => {
+  const children = shrinkTextNodeWhiteSpaces(
+    trimEdgeTextNodes(captionElement.children),
+  );
+
+  children.forEach((child) => {
     let block: TableCaptionContentBlock | undefined;
     let textBlocks: ContentBlock[] | undefined;
 
