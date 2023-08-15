@@ -6,11 +6,6 @@ import { Context } from 'mocha';
 import { Block } from '../../src/models/blocks/block';
 
 describe('convert-html-to-blocks', function () {
-  describe('basic', function () {
-    it('empty', test);
-    it('invalid-html', test);
-  });
-
   describe('hyperlink', function () {
     it('hyperlink-with-formatting', test); // knowledge-administration-ui / hyperlink-utils.spec.ts / should generate hyperlink text blocks from html
     it('hyperlink-with-image', test); // knowledge-administration-ui / hyperlink-utils.spec.ts / should create an image block with hyperlink property when image is present inside anchor tag
@@ -38,6 +33,7 @@ describe('convert-html-to-blocks', function () {
     it('properties2', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate paragraph block with paragraph level properties with common properties
     it('heading6', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate Heading6 block with properties
     it('heading2', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate paragraph block with heading2
+    it('white-spaces', test);
   });
 
   describe('table', function () {
@@ -54,6 +50,8 @@ describe('convert-html-to-blocks', function () {
 
   describe('text', function () {
     it('properties', test); // knowledge-administration-ui / text-block-utils.spec.ts / should generate text blocks with properties from html
+    it('empty', test);
+    it('plain-text', test);
   });
 
   describe('video', function () {

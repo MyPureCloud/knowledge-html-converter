@@ -234,7 +234,7 @@ export const shrinkTextNodeWhiteSpaces = (domNodes: DomNode[]): DomNode[] => {
     if (nodes[i].type === DomNodeType.Text && /\s+/.test(nodes[i].content!)) {
       nodes[i] = {
         ...nodes[i],
-        content: nodes[i].content!.replace(/\s+/, ' '),
+        content: nodes[i].content!.replace(/\s+/g, ' '),
       };
     }
   }

@@ -1,4 +1,4 @@
-import { DomNode } from 'html-parse-stringify';
+import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
 import { BlockType } from '../models/blocks/block';
 import {
@@ -223,7 +223,7 @@ export const getCaption = (captionElement: DomNode): TableCaptionBlock => {
     let block: TableCaptionContentBlock | undefined;
     let textBlocks: ContentBlock[] | undefined;
 
-    if (child.type === 'text' || htmlTagToTextMark(child.name)) {
+    if (child.type === DomNodeType.Text || htmlTagToTextMark(child.name)) {
       textBlocks = generateTextBlocks(child);
     } else {
       switch (child.name) {

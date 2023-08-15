@@ -5,8 +5,12 @@ import {
   cssTextAlignToAlignType,
 } from '../models/blocks/align-type';
 import { BlockType } from '../models/blocks/block';
-import { htmlTagToFontType } from '../models/blocks/font-type';
-import { generateTextBlocks } from './text';
+import { FontType, htmlTagToFontType } from '../models/blocks/font-type';
+import {
+  generateTextBlocks,
+  shrinkTextNodeWhiteSpaces,
+  trimEdgeTextNodes,
+} from './text';
 import {
   ParagraphBlock,
   ParagraphProperties,
@@ -19,8 +23,13 @@ export const generateParagraphBlock = (domElement: DomNode): ParagraphBlock => {
       blocks: [],
     },
   };
-  const children = domElement.children;
+  let children = domElement.children;
   const fontType = htmlTagToFontType(domElement.name);
+  if (fontType !== FontType.Preformatted) {
+    children = shrinkTextNodeWhiteSpaces(
+      trimEdgeTextNodes(domElement.children),
+    );
+  }
   const properties = generateProperties(domElement.attrs);
   if (properties) {
     paragraphBlock.paragraph.properties = { ...properties, fontType };
