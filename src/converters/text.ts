@@ -165,3 +165,78 @@ const assignAttributes = (
 
   return textBlocks;
 };
+
+const blankRegex = /^\s*$/;
+const leadingWhiteSpaceRegex = /^\s+/;
+const trailingWhiteSpaceRegex = /\s+$/;
+
+/**
+ * Removes leading and trailing blank text nodes,
+ * then removes leading white spaces from the first text node
+ * and trailing white spaces from the last text node.
+ */
+export const trimEdgeTextNodes = (domNodes: DomNode[] = []): DomNode[] => {
+  const nodes = [...domNodes];
+  removeBlankEdgeTextNodes(nodes);
+  removeEdgeWhiteSpaces(nodes);
+  return nodes;
+};
+
+const removeBlankEdgeTextNodes = (nodes: DomNode[]): void => {
+  while (nodes[0] && nodes[0].type === DomNodeType.Text && isBlank(nodes[0])) {
+    nodes.shift();
+  }
+  while (
+    nodes.length &&
+    nodes[nodes.length - 1].type === DomNodeType.Text &&
+    isBlank(nodes[nodes.length - 1])
+  ) {
+    nodes.pop();
+  }
+};
+
+const removeEdgeWhiteSpaces = (nodes: DomNode[]): void => {
+  if (nodes.length) {
+    if (
+      nodes[0].type === DomNodeType.Text &&
+      leadingWhiteSpaceRegex.test(nodes[0].content!)
+    ) {
+      nodes[0] = {
+        ...nodes[0],
+        content: nodes[0].content!.replace(leadingWhiteSpaceRegex, ''),
+      };
+    }
+    if (
+      nodes[nodes.length - 1] &&
+      nodes[nodes.length - 1].type === DomNodeType.Text &&
+      trailingWhiteSpaceRegex.test(nodes[nodes.length - 1].content!)
+    ) {
+      nodes[nodes.length - 1] = {
+        ...nodes[nodes.length - 1],
+        content: nodes[nodes.length - 1].content!.replace(
+          trailingWhiteSpaceRegex,
+          '',
+        ),
+      };
+    }
+  }
+};
+
+const isBlank = (node: DomNode): boolean =>
+  !node.content || blankRegex.test(node.content);
+
+/**
+ * Replaces consecutive white space characters with a single space character.
+ */
+export const shrinkTextNodeWhiteSpaces = (domNodes: DomNode[]): DomNode[] => {
+  const nodes = [...domNodes];
+  for (let i = 0; i < nodes.length; i++) {
+    if (nodes[i].type === DomNodeType.Text && /\s+/.test(nodes[i].content!)) {
+      nodes[i] = {
+        ...nodes[i],
+        content: nodes[i].content!.replace(/\s+/, ' '),
+      };
+    }
+  }
+  return nodes;
+};

@@ -18,7 +18,11 @@ import {
   getVerticalAlign,
   getWidth,
 } from './table-properties';
-import { generateTextBlocks } from './text';
+import {
+  generateTextBlocks,
+  shrinkTextNodeWhiteSpaces,
+  trimEdgeTextNodes,
+} from './text';
 import { generateVideoBlock } from './video';
 import { StyleAttribute, Tag } from '../models/html';
 import { BlockType } from '../models/blocks/block';
@@ -169,11 +173,13 @@ const generateRowBlock = (
 const generateCellBlock = (domNode: DomNode): TableCellContentBlock[] => {
   const blocks: TableCellContentBlock[] = [];
 
-  const children = domNode.children;
-  children?.forEach((child) => {
+  const children = shrinkTextNodeWhiteSpaces(
+    trimEdgeTextNodes(domNode.children),
+  );
+  children.forEach((child) => {
     let block: TableCellContentBlock | undefined;
     let textBlocks: ContentBlock[] | undefined;
-    if (child.type === 'text' || htmlTagToTextMark(child.name)) {
+    if (child.type === DomNodeType.Text || htmlTagToTextMark(child.name)) {
       textBlocks = generateTextBlocks(child);
     } else {
       switch (child.name) {

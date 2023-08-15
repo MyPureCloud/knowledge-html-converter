@@ -49,6 +49,7 @@ describe('convert-html-to-blocks', function () {
     it('caption-paragraph', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with paragraph in caption block
     it('video', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with video html
     it('text-format', test);
+    it('white-spaces', test);
   });
 
   describe('text', function () {
