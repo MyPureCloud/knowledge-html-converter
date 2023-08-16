@@ -14,6 +14,7 @@ export const convertHtmlToBlocks = (html: string): Block[] => {
   }
   html = sanitizeHtml(html);
   const domNodes = parse(html);
+
   return convertParsedHtmlToBlocks(domNodes);
 };
 

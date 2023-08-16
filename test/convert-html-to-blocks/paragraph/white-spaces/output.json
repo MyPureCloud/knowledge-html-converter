@@ -22,22 +22,6 @@
         {
           "type": "Text",
           "text": {
-            "text": "capital paragraph tag"
-          }
-        }
-      ],
-      "properties": {
-        "fontType": "Paragraph"
-      }
-    }
-  },
-  {
-    "type": "Paragraph",
-    "paragraph": {
-      "blocks": [
-        {
-          "type": "Text",
-          "text": {
             "text": "Heading 1"
           }
         }

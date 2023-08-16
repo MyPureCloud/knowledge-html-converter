@@ -77,6 +77,9 @@ export const generateTextBlocks = (
         }),
       );
     });
+    if (!options.isPreformatted) {
+      mergeBlankTextBlocks(arr);
+    }
   }
   return arr;
 };
@@ -263,4 +266,38 @@ export const removeBlankEdgeTextBlocks = (
 };
 
 const isBlankTextBlock = (textBlock: TextBlock): boolean =>
-  textBlock.text && blankRegex.test(textBlock.text.text);
+  textBlock.text &&
+  (!textBlock.text.text || blankRegex.test(textBlock.text.text));
+
+/**
+ * Removes text blocks that are blank and either
+ * the previous text block ends with white space or
+ * the next text block starts with white space.
+ * @param blocks
+ */
+export const mergeBlankTextBlocks = (blocks: ContentBlock[] = []): void => {
+  for (let i = 0; i < blocks.length; i++) {
+    const textBlock = asTextBlock(blocks[i]);
+    if (!textBlock || !isBlankTextBlock(textBlock)) {
+      continue;
+    }
+    const previousTextBlock = i > 0 ? asTextBlock(blocks[i - 1]) : undefined;
+    const nextTextBlock =
+      i < blocks.length - 1 ? asTextBlock(blocks[i + 1]) : undefined;
+    if (
+      (previousTextBlock &&
+        trailingWhiteSpaceRegex.test(previousTextBlock.text.text)) ||
+      (nextTextBlock && leadingWhiteSpaceRegex.test(nextTextBlock.text.text))
+    ) {
+      blocks.splice(i, 1);
+      i--;
+    }
+  }
+};
+
+const asTextBlock = (block: ContentBlock): TextBlock | undefined => {
+  return (block as TextBlock).type === ContentBlockType.Text &&
+    (block as TextBlock).text
+    ? (block as TextBlock)
+    : undefined;
+};
