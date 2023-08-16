@@ -68,10 +68,6 @@
           "blocks": [
             {
               "type": "Text",
-              "text": { "text": "\n    " }
-            },
-            {
-              "type": "Text",
               "text": { "text": "but   " }
             },
             {
@@ -84,10 +80,6 @@
             {
               "type": "Text",
               "text": { "text": "    if\n      it's\n      preformatted\n    " }
-            },
-            {
-              "type": "Text",
-              "text": { "text": " " }
             }
           ],
           "properties": {

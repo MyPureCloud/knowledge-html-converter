@@ -1,0 +1,23 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": " Nested ",
+            "properties": {
+              "backgroundColor": "#a3e886",
+              "textColor": "#6c2106",
+              "fontSize": "Large"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]

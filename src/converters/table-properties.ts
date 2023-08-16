@@ -175,7 +175,7 @@ export const getAlignment = (
 export const getHorizontalAlign = (
   styleKeyValues: Record<string, string>,
 ): TableBlockHorizontalAlignType | undefined => {
-  const textAlign = styleKeyValues[StyleAttribute.Align];
+  const textAlign = styleKeyValues[StyleAttribute.TextAlign];
   return textAlign
     ? cssTextAlignToTableBlockHorizontalAlignType(textAlign)
     : undefined;

@@ -55,6 +55,7 @@ describe('convert-html-to-blocks', function () {
     it('empty', test);
     it('plain-text', test);
     it('white-spaces', test);
+    it('nested-text-tags', test);
   });
 
   describe('video', function () {
