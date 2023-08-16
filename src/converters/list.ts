@@ -168,11 +168,7 @@ const generateListItemBlock = (
       );
     }
   });
-
-  if (!isPreformatted) {
-    removeBlankEdgeTextBlocks(listItemBlock.blocks as ContentBlock[]);
-  }
-
+  removeBlankEdgeTextBlocks(listItemBlock.blocks as ContentBlock[]);
   return listItemBlock;
 };
 
