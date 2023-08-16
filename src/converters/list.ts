@@ -100,7 +100,7 @@ const generateListProperties = (
               ? keyValue[1]
               : convertRgbToHex(keyValue[1]);
           }
-          if (keyValue[0] === StyleAttribute.Align) {
+          if (keyValue[0] === StyleAttribute.TextAlign) {
             align = cssTextAlignToAlignType(keyValue[1]);
           }
         }

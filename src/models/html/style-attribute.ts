@@ -4,8 +4,8 @@ export enum StyleAttribute {
   BackgroundColor = 'background-color',
   TextColor = 'color',
   // Paragraph level
-  Indentation = 'padding-left',
-  Align = 'text-align',
+  PaddingLeft = 'padding-left',
+  TextAlign = 'text-align',
   Float = 'float',
   ListStyleType = 'list-style-type',
   // Table level

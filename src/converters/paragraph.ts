@@ -59,11 +59,11 @@ const generateProperties = (
       .map((chunk) => chunk.split(/\s*:\s*/)) //split key:value with colon
       .map((keyValue) => {
         if (keyValue.length === 2) {
-          if (keyValue[0] === StyleAttribute.Indentation) {
+          if (keyValue[0] === StyleAttribute.PaddingLeft) {
             // remove the em from the value
             indentation = Number(keyValue[1].replace(/\s*em\s*/g, ''));
           }
-          if (keyValue[0] === StyleAttribute.Align) {
+          if (keyValue[0] === StyleAttribute.TextAlign) {
             align = cssTextAlignToAlignType(keyValue[1]);
           }
         }
