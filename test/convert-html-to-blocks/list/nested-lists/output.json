@@ -19,6 +19,12 @@
               }
             },
             {
+              "type": "Text",
+              "text": {
+                "text": " "
+              }
+            },
+            {
               "type": "OrderedList",
               "list": {
                 "blocks": [
@@ -35,7 +41,7 @@
                         "type": "Text",
                         "text": {
                           "text": "with-out",
-                          "hyperlink": "https://google.com/"
+                          "hyperlink": "https://example.com/"
                         }
                       },
                       {
@@ -85,6 +91,12 @@
                   "textColor": "#e03e2d",
                   "backgroundColor": "#f1c40f"
                 }
+              }
+            },
+            {
+              "type": "Text",
+              "text": {
+                "text": " "
               }
             },
             {
