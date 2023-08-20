@@ -2,9 +2,18 @@
   "name": "knowledge-html-converter",
   "version": "0.0.1",
   "description": "Converts html to the json format of genesys knowledge article content.",
+  "author": "Genesys Cloud Services, Inc.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16",
+    "npm": ">=9"
+  },
+  "files": [
+    "dist"
+  ],
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --declaration",
     "test": "mocha",
     "test-jenkins": "mocha --reporter mocha-junit-reporter --reporter-options mochaFile=./reports/test-result.xml",
     "coverage": "nyc npm run test",
@@ -13,12 +22,6 @@
     "prettier-check": "prettier . --check",
     "prettier-write": "prettier . --write",
     "prepare": "husky install"
-  },
-  "author": "Genesys Cloud Services, Inc.",
-  "license": "MIT",
-  "engines": {
-    "node": ">=16",
-    "npm": ">=9"
   },
   "lint-staged": {
     "*.ts": "eslint .",
