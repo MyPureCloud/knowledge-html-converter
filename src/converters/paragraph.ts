@@ -7,6 +7,7 @@ import {
 import { BlockType } from '../models/blocks/block';
 import { FontType, htmlTagToFontType } from '../models/blocks/font-type';
 import {
+  createEmptyTextBlock,
   generateTextBlocks,
   shrinkTextNodeWhiteSpaces,
   trimEdgeTextNodes,
@@ -43,6 +44,9 @@ export const generateParagraphBlock = (domElement: DomNode): ParagraphBlock => {
       ...generateTextBlocks(child, { isPreformatted }),
     );
   });
+  if (!paragraphBlock.paragraph.blocks.length) {
+    paragraphBlock.paragraph.blocks.push(createEmptyTextBlock());
+  }
   return paragraphBlock;
 };
 

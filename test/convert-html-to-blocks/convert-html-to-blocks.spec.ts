@@ -36,6 +36,9 @@ describe('convert-html-to-blocks', function () {
     it('heading6', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate Heading6 block with properties
     it('heading2', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate paragraph block with heading2
     it('white-spaces', test);
+    it('empty', test);
+    it('empty-no-text', test);
+    it('empty-multiple', test);
   });
 
   describe('table', function () {
