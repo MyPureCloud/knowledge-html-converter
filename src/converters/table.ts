@@ -19,6 +19,7 @@ import {
   getWidth,
 } from './table-properties';
 import {
+  createEmptyTextBlock,
   generateTextBlocks,
   shrinkTextNodeWhiteSpaces,
   trimEdgeTextNodes,
@@ -222,6 +223,9 @@ const generateCellBlock = (domNode: DomNode): TableCellContentBlock[] => {
       blocks.push(...textBlocks);
     }
   });
+  if (!blocks.length) {
+    blocks.push(createEmptyTextBlock());
+  }
   return blocks;
 };
 

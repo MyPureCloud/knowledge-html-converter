@@ -51,6 +51,7 @@ describe('convert-html-to-blocks', function () {
     it('video', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with video html
     it('text-format', test);
     it('white-spaces', test);
+    it('empty-cells', test);
   });
 
   describe('text', function () {
