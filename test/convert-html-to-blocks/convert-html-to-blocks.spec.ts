@@ -57,6 +57,7 @@ describe('convert-html-to-blocks', function () {
   describe('text', function () {
     it('properties', test); // knowledge-administration-ui / text-block-utils.spec.ts / should generate text blocks with properties from html
     it('empty', test);
+    it('empty-blank', test);
     it('plain-text', test);
     it('white-spaces', test);
     it('nested-text-tags', test);

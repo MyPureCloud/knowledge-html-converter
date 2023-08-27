@@ -82,3 +82,15 @@ const generateProperties = (
   }
   return paragraphProperties;
 };
+
+export const createEmptyParagraph = (): ParagraphBlock => {
+  return {
+    type: BlockType.Paragraph,
+    paragraph: {
+      blocks: [createEmptyTextBlock()],
+      properties: {
+        fontType: FontType.Paragraph,
+      },
+    },
+  };
+};
