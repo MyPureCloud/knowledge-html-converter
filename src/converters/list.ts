@@ -19,6 +19,7 @@ import {
   cssListStyleTypeToUnorderedType,
 } from '../models/blocks/list';
 import {
+  createEmptyTextBlock,
   generateTextBlocks,
   getFontSizeName,
   removeBlankEdgeTextBlocks,
@@ -31,7 +32,7 @@ import { ContentBlock } from '../models/blocks/content-block';
 export const generateListBlock = (
   listElement: DomNode,
   listType: BlockType,
-): ListBlock => {
+): ListBlock | undefined => {
   const listBlock: ListBlock = {
     type: BlockType.UnorderedList,
     list: {
@@ -56,11 +57,9 @@ export const generateListBlock = (
         listItemElement,
         listBlock.type,
       );
-      if (listItemBlock.blocks.length) {
-        listBlock.list.blocks.push(listItemBlock);
-      }
+      listBlock.list.blocks.push(listItemBlock);
     });
-  return listBlock;
+  return listBlock.list.blocks.length ? listBlock : undefined;
 };
 
 const generateListProperties = (
@@ -155,13 +154,15 @@ const generateListItemBlock = (
 
   children?.forEach((child: DomNode) => {
     if (child.name === Tag.OrderedList) {
-      listItemBlock.blocks.push(
-        generateListBlock(child, BlockType.OrderedList),
-      );
+      const listBlock = generateListBlock(child, BlockType.OrderedList);
+      if (listBlock) {
+        listItemBlock.blocks.push(listBlock);
+      }
     } else if (child.name === Tag.UnorderedList) {
-      listItemBlock.blocks.push(
-        generateListBlock(child, BlockType.UnorderedList),
-      );
+      const listBlock = generateListBlock(child, BlockType.UnorderedList);
+      if (listBlock) {
+        listItemBlock.blocks.push(listBlock);
+      }
     } else {
       listItemBlock.blocks.push(
         ...generateTextBlocks(child, { isPreformatted }),
@@ -169,6 +170,9 @@ const generateListItemBlock = (
     }
   });
   removeBlankEdgeTextBlocks(listItemBlock.blocks as ContentBlock[]);
+  if (!listItemBlock.blocks.length) {
+    listItemBlock.blocks.push(createEmptyTextBlock());
+  }
   return listItemBlock;
 };
 

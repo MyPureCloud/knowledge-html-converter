@@ -253,15 +253,16 @@ export const shrinkTextNodeWhiteSpaces = (
 
 /**
  * Removes leading and trailing blank textblocks.
+ * Keeps one node if all nodes are blank text nodes.
  */
 export const removeBlankEdgeTextBlocks = (
   blocks: ContentBlock[] = [],
 ): void => {
-  while (blocks[0] && isBlankTextBlock(blocks[0] as TextBlock)) {
+  while (blocks.length > 1 && isBlankTextBlock(blocks[0] as TextBlock)) {
     blocks.shift();
   }
   while (
-    blocks.length &&
+    blocks.length > 1 &&
     isBlankTextBlock(blocks[blocks.length - 1] as TextBlock)
   ) {
     blocks.pop();

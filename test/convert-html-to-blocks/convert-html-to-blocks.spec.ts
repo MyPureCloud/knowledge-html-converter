@@ -24,6 +24,8 @@ describe('convert-html-to-blocks', function () {
     it('list-style-types', test);
     it('paragraph', test);
     it('white-spaces', test);
+    it('empty-list-items', test);
+    it('empty-lists', test);
   });
 
   describe('paragraph', function () {
