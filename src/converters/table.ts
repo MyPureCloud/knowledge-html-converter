@@ -49,7 +49,9 @@ type TablePaddingPropertyHolder = {
   value?: number;
 };
 
-export const generateTableBlock = (tableElement: DomNode): TableBlock => {
+export const generateTableBlock = (
+  tableElement: DomNode,
+): TableBlock | undefined => {
   const tableBlock: TableBlock = {
     type: BlockType.Table,
     table: {
@@ -71,14 +73,15 @@ export const generateTableBlock = (tableElement: DomNode): TableBlock => {
           child.children
             .filter((node) => node.type === DomNodeType.Tag)
             .forEach((rowElement) => {
-              tableBlock.table.rows.push(
-                generateRowBlock(
-                  rowElement,
-                  TableRowType.Body,
-                  childrenInDifferentTags,
-                  tablePaddingProperty,
-                ),
+              const rowBlock = generateRowBlock(
+                rowElement,
+                TableRowType.Body,
+                childrenInDifferentTags,
+                tablePaddingProperty,
               );
+              if (rowBlock) {
+                tableBlock.table.rows.push(rowBlock);
+              }
             });
         }
         break;
@@ -87,14 +90,15 @@ export const generateTableBlock = (tableElement: DomNode): TableBlock => {
           child.children
             .filter((node) => node.type === DomNodeType.Tag)
             .forEach((rowElement) => {
-              tableBlock.table.rows.push(
-                generateRowBlock(
-                  rowElement,
-                  TableRowType.Header,
-                  childrenInDifferentTags,
-                  tablePaddingProperty,
-                ),
+              const rowBlock = generateRowBlock(
+                rowElement,
+                TableRowType.Header,
+                childrenInDifferentTags,
+                tablePaddingProperty,
               );
+              if (rowBlock) {
+                tableBlock.table.rows.push(rowBlock);
+              }
             });
         }
         break;
@@ -103,14 +107,15 @@ export const generateTableBlock = (tableElement: DomNode): TableBlock => {
           child.children
             .filter((node) => node.type === DomNodeType.Tag)
             .forEach((rowElement) => {
-              tableBlock.table.rows.push(
-                generateRowBlock(
-                  rowElement,
-                  TableRowType.Footer,
-                  childrenInDifferentTags,
-                  tablePaddingProperty,
-                ),
+              const rowBlock = generateRowBlock(
+                rowElement,
+                TableRowType.Footer,
+                childrenInDifferentTags,
+                tablePaddingProperty,
               );
+              if (rowBlock) {
+                tableBlock.table.rows.push(rowBlock);
+              }
             });
         }
         break;
@@ -135,7 +140,7 @@ export const generateTableBlock = (tableElement: DomNode): TableBlock => {
     }
     tableBlock.table.properties.cellPadding = tablePaddingProperty.value;
   }
-  return tableBlock;
+  return tableBlock.table.rows.length ? tableBlock : undefined;
 };
 
 const generateRowBlock = (
@@ -143,7 +148,7 @@ const generateRowBlock = (
   rowType: TableRowType,
   childrenInDifferentTags: DomNode,
   tablePaddingProperty: TablePaddingPropertyHolder,
-): TableRowBlock => {
+): TableRowBlock | undefined => {
   const rowBlock: TableRowBlock = {
     cells: [],
   };
@@ -168,7 +173,7 @@ const generateRowBlock = (
     rowBlock.cells.push(cellBlock);
   });
   rowBlock.properties = generateRowProperties(rowElement, rowType);
-  return rowBlock;
+  return rowBlock.cells.length ? rowBlock : undefined;
 };
 
 const generateCellBlock = (domNode: DomNode): TableCellContentBlock[] => {
