@@ -15,8 +15,11 @@ export const generateHyperlinkBlock = (
   const hyperlinkFormattings = options.textMarks || [];
   let displayText = '';
 
-  const hyperlink: string | undefined =
+  let hyperlink: string | undefined =
     anchorElement.attrs?.href || anchorElement.attrs?.title;
+  if (hyperlink && hyperlink.startsWith('#')) {
+    hyperlink = undefined;
+  }
   let children = anchorElement.children;
   if (!options.isPreformatted) {
     children = shrinkTextNodeWhiteSpaces(children);
