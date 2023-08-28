@@ -57,6 +57,7 @@ describe('convert-html-to-blocks', function () {
     it('empty-cells', test);
     it('empty-row', test);
     it('empty-tables', test);
+    it('white-space-between-elements', test);
   });
 
   describe('text', function () {
