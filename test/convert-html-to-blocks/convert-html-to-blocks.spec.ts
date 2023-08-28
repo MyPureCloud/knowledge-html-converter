@@ -9,6 +9,7 @@ describe('convert-html-to-blocks', function () {
   describe('hyperlink', function () {
     it('hyperlink-with-formatting', test); // knowledge-administration-ui / hyperlink-utils.spec.ts / should generate hyperlink text blocks from html
     it('hyperlink-with-image', test); // knowledge-administration-ui / hyperlink-utils.spec.ts / should create an image block with hyperlink property when image is present inside anchor tag
+    it('hyperlink-anchor', test);
   });
 
   describe('image', function () {

@@ -1,0 +1,31 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "link to website",
+            "hyperlink": "https://example.com"
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "link to link"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]
