@@ -152,26 +152,26 @@ const assignAttributes = (
   text: string,
   options: TextBlockOptions = {},
 ): TextBlock => {
-  const textBlock: Text = {
+  const txt: Text = {
     text: '',
   };
-  textBlock.text = text;
+  txt.text = text;
   if (
     options.textProperties &&
     Object.getOwnPropertyNames(options.textProperties).length
   ) {
-    textBlock.properties = options.textProperties;
+    txt.properties = options.textProperties;
   }
   if (options.textMarks && options.textMarks.length) {
-    textBlock.marks = [...new Set(options.textMarks)];
+    txt.marks = [...new Set(options.textMarks)];
   }
 
-  const textBlocks: TextBlock = {
+  const textBlock: TextBlock = {
     type: ContentBlockType.Text,
-    text: textBlock,
+    text: txt,
   };
 
-  return textBlocks;
+  return textBlock;
 };
 
 const blankRegex = /^\s*$/;
@@ -182,6 +182,7 @@ const trailingWhiteSpaceRegex = /\s+$/;
  * Removes leading and trailing blank text nodes,
  * then removes leading white spaces from the first text node
  * and trailing white spaces from the last text node.
+ * Keeps one node if all nodes are blank text nodes.
  */
 export const trimEdgeTextNodes = (domNodes: DomNode[] = []): DomNode[] => {
   const nodes = [...domNodes];
@@ -191,10 +192,10 @@ export const trimEdgeTextNodes = (domNodes: DomNode[] = []): DomNode[] => {
 };
 
 const removeBlankEdgeTextNodes = (nodes: DomNode[]): void => {
-  while (nodes[0] && isBlankTextNode(nodes[0])) {
+  while (nodes.length > 1 && isBlankTextNode(nodes[0])) {
     nodes.shift();
   }
-  while (nodes.length && isBlankTextNode(nodes[nodes.length - 1])) {
+  while (nodes.length > 1 && isBlankTextNode(nodes[nodes.length - 1])) {
     nodes.pop();
   }
 };
@@ -203,7 +204,8 @@ const removeEdgeWhiteSpaces = (nodes: DomNode[]): void => {
   if (nodes.length) {
     if (
       nodes[0].type === DomNodeType.Text &&
-      leadingWhiteSpaceRegex.test(nodes[0].content!)
+      leadingWhiteSpaceRegex.test(nodes[0].content!) &&
+      !blankRegex.test(nodes[0].content!)
     ) {
       nodes[0] = {
         ...nodes[0],
@@ -213,7 +215,8 @@ const removeEdgeWhiteSpaces = (nodes: DomNode[]): void => {
     if (
       nodes[nodes.length - 1] &&
       nodes[nodes.length - 1].type === DomNodeType.Text &&
-      trailingWhiteSpaceRegex.test(nodes[nodes.length - 1].content!)
+      trailingWhiteSpaceRegex.test(nodes[nodes.length - 1].content!) &&
+      !blankRegex.test(nodes[nodes.length - 1].content!)
     ) {
       nodes[nodes.length - 1] = {
         ...nodes[nodes.length - 1],
@@ -250,15 +253,16 @@ export const shrinkTextNodeWhiteSpaces = (
 
 /**
  * Removes leading and trailing blank textblocks.
+ * Keeps one node if all nodes are blank text nodes.
  */
 export const removeBlankEdgeTextBlocks = (
   blocks: ContentBlock[] = [],
 ): void => {
-  while (blocks[0] && isBlankTextBlock(blocks[0] as TextBlock)) {
+  while (blocks.length > 1 && isBlankTextBlock(blocks[0] as TextBlock)) {
     blocks.shift();
   }
   while (
-    blocks.length &&
+    blocks.length > 1 &&
     isBlankTextBlock(blocks[blocks.length - 1] as TextBlock)
   ) {
     blocks.pop();
@@ -300,4 +304,13 @@ const asTextBlock = (block: ContentBlock): TextBlock | undefined => {
     (block as TextBlock).text
     ? (block as TextBlock)
     : undefined;
+};
+
+export const createEmptyTextBlock = (): TextBlock => {
+  return {
+    type: ContentBlockType.Text,
+    text: {
+      text: ' ',
+    },
+  };
 };

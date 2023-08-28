@@ -1,0 +1,115 @@
+[
+  {
+    "type": "Table",
+    "table": {
+      "rows": [
+        {
+          "cells": [
+            {
+              "blocks": [
+                {
+                  "type": "Paragraph",
+                  "paragraph": {
+                    "blocks": [
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "paragraph"
+                        }
+                      }
+                    ],
+                    "properties": {
+                      "fontType": "Paragraph"
+                    }
+                  }
+                },
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": " "
+                  }
+                },
+                {
+                  "type": "UnorderedList",
+                  "list": {
+                    "blocks": [
+                      {
+                        "type": "ListItem",
+                        "blocks": [
+                          { "type": "Text", "text": { "text": "list" } }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": " "
+                  }
+                },
+                {
+                  "type": "Table",
+                  "table": {
+                    "rows": [
+                      {
+                        "cells": [
+                          {
+                            "blocks": [
+                              {
+                                "type": "Text",
+                                "text": {
+                                  "text": "inner table"
+                                }
+                              }
+                            ],
+                            "properties": {
+                              "cellType": "Cell"
+                            }
+                          }
+                        ],
+                        "properties": {
+                          "rowType": "Body"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": " text "
+                  }
+                },
+                {
+                  "type": "Image",
+                  "image": {
+                    "url": "https://example.com/image"
+                  }
+                },
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": " "
+                  }
+                },
+                {
+                  "type": "Video",
+                  "video": {
+                    "url": "https://example.com/video"
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell"
+              }
+            }
+          ],
+          "properties": {
+            "rowType": "Body"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "type": "Table",
+    "table": {
+      "rows": [
+        {
+          "cells": [
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": " "
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell"
+              }
+            },
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": " "
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell"
+              }
+            },
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": " "
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell"
+              }
+            },
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": " "
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell"
+              }
+            }
+          ],
+          "properties": {
+            "rowType": "Body"
+          }
+        }
+      ]
+    }
+  }
+]

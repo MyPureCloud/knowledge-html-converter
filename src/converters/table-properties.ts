@@ -217,11 +217,12 @@ export const getWidth = (
   return getHeightAndWidthProperty(styleKeyValues, StyleAttribute.Width);
 };
 
-export const getCaption = (captionElement: DomNode): TableCaptionBlock => {
+export const getCaption = (
+  captionElement: DomNode,
+): TableCaptionBlock | undefined => {
   const captionBlock: TableCaptionBlock = {
     blocks: [],
   };
-  const blocks: TableCaptionContentBlock[] = [];
 
   const children = shrinkTextNodeWhiteSpaces(
     trimEdgeTextNodes(captionElement.children),
@@ -265,16 +266,13 @@ export const getCaption = (captionElement: DomNode): TableCaptionBlock => {
       }
     }
     if (block) {
-      blocks.push(block);
+      captionBlock.blocks.push(block);
     }
     if (textBlocks) {
-      blocks.push(...textBlocks);
-    }
-    if (blocks) {
-      captionBlock.blocks = blocks;
+      captionBlock.blocks.push(...textBlocks);
     }
   });
-  return captionBlock;
+  return captionBlock.blocks.length ? captionBlock : undefined;
 };
 
 export const convertPixelsToEM = (value: number): number => {

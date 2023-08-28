@@ -2,17 +2,17 @@ import { parse, DomNode } from 'html-parse-stringify';
 import { sanitizeHtml } from './sanitizer';
 import { Tag } from './models/html';
 import { Block, BlockType } from './models/blocks/block';
-import { generateParagraphBlock } from './converters/paragraph';
+import {
+  createEmptyParagraph,
+  generateParagraphBlock,
+} from './converters/paragraph';
 import { generateListBlock } from './converters/list';
 import { generateVideoBlock } from './converters/video';
 import { generateImageBlock } from './converters/image';
 import { generateTableBlock } from './converters/table';
 
 export const convertHtmlToBlocks = (html: string): Block[] => {
-  if (!html) {
-    return [];
-  }
-  html = sanitizeHtml(html);
+  html = sanitizeHtml(html || '');
   const domNodes = parse(html);
   return convertParsedHtmlToBlocks(domNodes);
 };
@@ -53,5 +53,8 @@ const convertParsedHtmlToBlocks = (domNodes: DomNode[]): Block[] => {
       blocks.push(block);
     }
   });
+  if (!blocks.length) {
+    blocks.push(createEmptyParagraph());
+  }
   return blocks;
 };

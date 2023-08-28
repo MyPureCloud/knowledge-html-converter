@@ -24,6 +24,8 @@ describe('convert-html-to-blocks', function () {
     it('list-style-types', test);
     it('paragraph', test);
     it('white-spaces', test);
+    it('empty-list-items', test);
+    it('empty-lists', test);
   });
 
   describe('paragraph', function () {
@@ -36,6 +38,9 @@ describe('convert-html-to-blocks', function () {
     it('heading6', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate Heading6 block with properties
     it('heading2', test); // knowledge-administration-ui / paragraph-block-utils.spec.ts / should generate paragraph block with heading2
     it('white-spaces', test);
+    it('empty', test);
+    it('empty-no-text', test);
+    it('empty-multiple', test);
   });
 
   describe('table', function () {
@@ -48,11 +53,17 @@ describe('convert-html-to-blocks', function () {
     it('video', test); // knowledge-administration-ui / table-block-utils.spec.ts / should generate table blocks with video html
     it('text-format', test);
     it('white-spaces', test);
+    it('empty-captions', test);
+    it('empty-cells', test);
+    it('empty-row', test);
+    it('empty-tables', test);
+    it('white-space-between-elements', test);
   });
 
   describe('text', function () {
     it('properties', test); // knowledge-administration-ui / text-block-utils.spec.ts / should generate text blocks with properties from html
     it('empty', test);
+    it('empty-blank', test);
     it('plain-text', test);
     it('white-spaces', test);
     it('nested-text-tags', test);
