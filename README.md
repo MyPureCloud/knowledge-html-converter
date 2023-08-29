@@ -1,33 +1,96 @@
-# README
+# knowledge-html-converter
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Converts html to the knowledge document variation content json format used by the Genesys Knowledge API: https://developer.genesys.cloud/devapps/api-explorer#post-api-v2-knowledge-knowledgebases--knowledgeBaseId--documents--documentId--variations
 
-Extracting the code that converts html to the knowledge article content json structure from https://bitbucket.org/inindca/knowledge-administration-ui/, so that it can be published and reused for importing articles from external knowledge sources.
+## Installation
 
-To do: add proper documentation.
+`npm install knowledge-html-converter`
 
-### What is this repository for?
+## Usage
 
-- Quick summary
-- Version
-- [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+```
+import { convertHtmlToBlocks } from 'knowledge-html-converter';
 
-### How do I get set up?
+const documentBodyBlocks = convertHtmlToBlocks('<html><body><p>Document content</p></body></html>');
+```
 
-- Summary of set up
-- Configuration
-- Dependencies
-- Database configuration
-- How to run tests
-- Deployment instructions
+or
 
-### Contribution guidelines
+```
+const knowledgeHtmlConverter = require('knowledge-html-converter');
 
-- Writing tests
-- Code review
-- Other guidelines
+const documentBodyBlocks = knowledgeHtmlConverter.convertHtmlToBlocks('<html><body><p>Document content</p></body></html>');
+```
 
-### Who do I talk to?
+The value of `documentBodyBlocks` will be:
 
-- Repo owner or admin
-- Other community or team contact
+```
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Document content"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]
+```
+
+The json array returned by `convertHtmlToBlocks` can be used as the value of the `body.blocks` property in document variation create and update requests. For example:
+
+```
+fetch('https://api.mypurecloud.com/api/v2/knowledge/knowledgeBases/<kb-id>/documents/<doc-id>/variations/<variation-id>', {
+  method: 'PATCH',
+  headers: new Headers({
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <token>',
+  }),
+  body: JSON.stringify({
+    body: {
+      blocks: [
+        {
+          "type": "Paragraph",
+          "paragraph": {
+            "blocks": [
+              {
+                "type": "Text",
+                "text": {
+                  "text": "Document content"
+                }
+              }
+            ],
+            "properties": {
+              "fontType": "Paragraph"
+            }
+          }
+        }
+      ]
+    }
+  }),
+});
+```
+
+## Developer setup
+
+Node v16, npm v8.
+
+### Tests
+
+`npm test`
+
+Filtering test cases: tests use [Mocha](https://mochajs.org/), `describe` or `it` can be suffixed with `.only`. For example: `describe.only('suite name', ...);` or `it.only('test name', ...);`
+
+Test coverage:
+
+`npm run coverage`
+
+The coverage report can be found at `coverage/index.html`.

@@ -11,6 +11,11 @@ import { generateVideoBlock } from './converters/video';
 import { generateImageBlock } from './converters/image';
 import { generateTableBlock } from './converters/table';
 
+/**
+ * Converts html to document body blocks.
+ * @param html html string, such as '\<p\>Document content\</p\>'
+ * @returns document body blocks
+ */
 export const convertHtmlToBlocks = (html: string): Block[] => {
   html = sanitizeHtml(html || '');
   const domNodes = parse(html);
