@@ -1,7 +1,10 @@
 import { parse, DomNode } from 'html-parse-stringify';
 import { sanitizeHtml } from './sanitizer';
 import { Tag } from './models/html';
-import { Block, BlockType } from './models/blocks/block';
+import {
+  DocumentBodyBlock,
+  DocumentBodyBlockType,
+} from './models/blocks/document-body-block';
 import {
   createEmptyParagraph,
   generateParagraphBlock,
@@ -16,17 +19,19 @@ import { generateTableBlock } from './converters/table';
  * @param html html string, such as '\<p\>Document content\</p\>'
  * @returns document body blocks
  */
-export const convertHtmlToBlocks = (html: string): Block[] => {
+export const convertHtmlToBlocks = (html: string): DocumentBodyBlock[] => {
   html = sanitizeHtml(html || '');
   const domNodes = parse(html);
   return convertParsedHtmlToBlocks(domNodes);
 };
 
-const convertParsedHtmlToBlocks = (domNodes: DomNode[]): Block[] => {
-  const blocks: Block[] = [];
+const convertParsedHtmlToBlocks = (
+  domNodes: DomNode[],
+): DocumentBodyBlock[] => {
+  const blocks: DocumentBodyBlock[] = [];
 
   domNodes.forEach((domNode: DomNode) => {
-    let block: Block | undefined;
+    let block: DocumentBodyBlock | undefined;
     switch (domNode.name) {
       case Tag.Paragraph:
       case Tag.Heading1:
@@ -39,10 +44,10 @@ const convertParsedHtmlToBlocks = (domNodes: DomNode[]): Block[] => {
         block = generateParagraphBlock(domNode);
         break;
       case Tag.OrderedList:
-        block = generateListBlock(domNode, BlockType.OrderedList);
+        block = generateListBlock(domNode, DocumentBodyBlockType.OrderedList);
         break;
       case Tag.UnorderedList:
-        block = generateListBlock(domNode, BlockType.UnorderedList);
+        block = generateListBlock(domNode, DocumentBodyBlockType.UnorderedList);
         break;
       case Tag.Image:
         block = generateImageBlock(domNode);

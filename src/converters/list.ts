@@ -1,23 +1,21 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
 import {
-  AlignType,
-  cssTextAlignToAlignType,
-} from '../models/blocks/align-type';
-import { BlockType } from '../models/blocks/block';
-import { FontType, htmlTagToFontType } from '../models/blocks/font-type';
+  DocumentBodyBlockType,
+  DocumentBodyBlockAlignType,
+  DocumentBodyBlockFontSize,
+  DocumentBodyBlockFontType,
+} from '../models/blocks/document-body-block';
 import { convertRgbToHex } from './image';
 import {
-  ListBlock,
-  ListBlockProperties,
-  ListItemBlock,
-  ListItemBlockProperties,
-  ListItemBlockType,
-  OrderedType,
-  UnorderedType,
-  cssListStyleTypeToOrderedType,
-  cssListStyleTypeToUnorderedType,
-} from '../models/blocks/list';
+  DocumentBodyListBlock,
+  DocumentBodyListBlockProperties,
+  DocumentBodyListItemBlock,
+  DocumentBodyListItemProperties,
+  DocumentBodyListItemBlockType,
+  DocumentBodyBlockOrderedType,
+  DocumentBodyBlockUnorderedType,
+} from '../models/blocks/document-body-list-block';
 import {
   createEmptyTextBlock,
   generateTextBlocks,
@@ -26,21 +24,21 @@ import {
   shrinkTextNodeWhiteSpaces,
   trimEdgeTextNodes,
 } from './text';
-import { FontSize } from '../models/blocks/text';
-import { ContentBlock } from '../models/blocks/content-block';
+import { DocumentContentBlock } from '../models/blocks/document-content-block';
+import { cssTextAlignToAlignType, htmlTagToFontType } from './paragraph';
 
 export const generateListBlock = (
   listElement: DomNode,
-  listType: BlockType,
-): ListBlock | undefined => {
-  const listBlock: ListBlock = {
-    type: BlockType.UnorderedList,
+  listType: DocumentBodyBlockType,
+): DocumentBodyListBlock | undefined => {
+  const listBlock: DocumentBodyListBlock = {
+    type: DocumentBodyBlockType.UnorderedList,
     list: {
       blocks: [],
     },
   };
-  if (listType === BlockType.OrderedList) {
-    listBlock.type = BlockType.OrderedList;
+  if (listType === DocumentBodyBlockType.OrderedList) {
+    listBlock.type = DocumentBodyBlockType.OrderedList;
   }
   const properties = generateListProperties(
     listElement.attrs?.style,
@@ -64,23 +62,25 @@ export const generateListBlock = (
 
 const generateListProperties = (
   styles: string | undefined,
-  listType: BlockType.OrderedList | BlockType.UnorderedList,
-): ListBlockProperties | ListItemBlockProperties => {
+  listType:
+    | DocumentBodyBlockType.OrderedList
+    | DocumentBodyBlockType.UnorderedList,
+): DocumentBodyListBlockProperties | DocumentBodyListItemProperties => {
   let properties;
   if (styles) {
-    let orderedType: OrderedType | undefined;
-    let unorderedType: UnorderedType | undefined;
-    let fontSize: FontSize | undefined;
+    let orderedType: DocumentBodyBlockOrderedType | undefined;
+    let unorderedType: DocumentBodyBlockUnorderedType | undefined;
+    let fontSize: DocumentBodyBlockFontSize | undefined;
     let textColor: string | undefined;
     let backgroundColor: string | undefined;
-    let align: AlignType | undefined;
+    let align: DocumentBodyBlockAlignType | undefined;
     styles
       .split(/\s*;\s*/) //split with extra spaces around the semi colon
       .map((chunk) => chunk.split(/\s*:\s*/)) //split key:value with colon
       .map((keyValue) => {
         if (keyValue.length === 2) {
           if (keyValue[0] === StyleAttribute.ListStyleType) {
-            if (listType === BlockType.OrderedList) {
+            if (listType === DocumentBodyBlockType.OrderedList) {
               orderedType = cssListStyleTypeToOrderedType(keyValue[1]);
             } else {
               unorderedType = cssListStyleTypeToUnorderedType(keyValue[1]);
@@ -128,10 +128,12 @@ const generateListProperties = (
 
 const generateListItemBlock = (
   listItemElement: DomNode,
-  listType: BlockType.OrderedList | BlockType.UnorderedList,
-): ListItemBlock => {
-  const listItemBlock: ListItemBlock = {
-    type: ListItemBlockType.ListItem,
+  listType:
+    | DocumentBodyBlockType.OrderedList
+    | DocumentBodyBlockType.UnorderedList,
+): DocumentBodyListItemBlock => {
+  const listItemBlock: DocumentBodyListItemBlock = {
+    type: DocumentBodyListItemBlockType.ListItem,
     blocks: [],
   };
 
@@ -146,7 +148,7 @@ const generateListItemBlock = (
     listItemBlock.properties = listItemBlock.properties || {};
     listItemBlock.properties.fontType = fontType;
   }
-  const isPreformatted = fontType === FontType.Preformatted;
+  const isPreformatted = fontType === DocumentBodyBlockFontType.Preformatted;
   let children = listItemElement.children;
   if (!isPreformatted) {
     children = shrinkTextNodeWhiteSpaces(trimEdgeTextNodes(children));
@@ -154,12 +156,18 @@ const generateListItemBlock = (
 
   children?.forEach((child: DomNode) => {
     if (child.name === Tag.OrderedList) {
-      const listBlock = generateListBlock(child, BlockType.OrderedList);
+      const listBlock = generateListBlock(
+        child,
+        DocumentBodyBlockType.OrderedList,
+      );
       if (listBlock) {
         listItemBlock.blocks.push(listBlock);
       }
     } else if (child.name === Tag.UnorderedList) {
-      const listBlock = generateListBlock(child, BlockType.UnorderedList);
+      const listBlock = generateListBlock(
+        child,
+        DocumentBodyBlockType.UnorderedList,
+      );
       if (listBlock) {
         listItemBlock.blocks.push(listBlock);
       }
@@ -169,14 +177,16 @@ const generateListItemBlock = (
       );
     }
   });
-  removeBlankEdgeTextBlocks(listItemBlock.blocks as ContentBlock[]);
+  removeBlankEdgeTextBlocks(listItemBlock.blocks as DocumentContentBlock[]);
   if (!listItemBlock.blocks.length) {
     listItemBlock.blocks.push(createEmptyTextBlock());
   }
   return listItemBlock;
 };
 
-const getFontType = (listItemElement: DomNode): FontType | undefined => {
+const getFontType = (
+  listItemElement: DomNode,
+): DocumentBodyBlockFontType | undefined => {
   const children = listItemElement.children || [];
   for (let i = 0; i < children.length; i++) {
     if (children[i].type === DomNodeType.Tag) {
@@ -186,4 +196,42 @@ const getFontType = (listItemElement: DomNode): FontType | undefined => {
       }
     }
   }
+};
+
+const orderedTypesByCssListStyleType: Record<
+  string,
+  DocumentBodyBlockOrderedType
+> = {
+  'lower-alpha': DocumentBodyBlockOrderedType.LowerAlpha,
+  'lower-greek': DocumentBodyBlockOrderedType.LowerGreek,
+  'lower-roman': DocumentBodyBlockOrderedType.LowerRoman,
+  'upper-alpha': DocumentBodyBlockOrderedType.UpperAlpha,
+  'upper-roman': DocumentBodyBlockOrderedType.UpperRoman,
+  none: DocumentBodyBlockOrderedType.None,
+};
+
+const cssListStyleTypeToOrderedType = (
+  listStyleType: string,
+): DocumentBodyBlockOrderedType | undefined => {
+  return listStyleType
+    ? orderedTypesByCssListStyleType[listStyleType.toLowerCase()]
+    : undefined;
+};
+
+const unorderedTypesByCssListStyleType: Record<
+  string,
+  DocumentBodyBlockUnorderedType
+> = {
+  normal: DocumentBodyBlockUnorderedType.Normal, // TODO 'normal' is not a list-style-type value
+  square: DocumentBodyBlockUnorderedType.Square,
+  circle: DocumentBodyBlockUnorderedType.Circle,
+  none: DocumentBodyBlockUnorderedType.None,
+};
+
+const cssListStyleTypeToUnorderedType = (
+  listStyleType: string,
+): DocumentBodyBlockUnorderedType | undefined => {
+  return listStyleType
+    ? unorderedTypesByCssListStyleType[listStyleType.toLowerCase()]
+    : undefined;
 };

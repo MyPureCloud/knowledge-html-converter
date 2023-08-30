@@ -1,27 +1,24 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
-import { BlockType } from '../models/blocks/block';
+import { DocumentBodyBlockType } from '../models/blocks/document-body-block';
 import {
-  TableBlockHorizontalAlignType,
-  TableBlockVerticalAlignType,
-  TableBorderStyleType,
-  TableCaptionBlock,
-  TableCaptionContentBlock,
-  cssBorderStyleToTableBorderStyleType,
-  cssTextAlignToTableBlockHorizontalAlignType,
-  cssVerticalAlignToTableBlockVerticalAlignType,
-} from '../models/blocks/table';
-import { htmlTagToTextMark } from '../models/blocks/text';
+  DocumentBodyTableBlockHorizontalAlignType,
+  DocumentBodyTableBlockVerticalAlignType,
+  DocumentBodyTableBorderStyleType,
+  DocumentBodyTableCaptionBlock,
+  DocumentBodyTableCaptionItem,
+} from '../models/blocks/document-body-table-block';
 import { convertRgbToHex, generateImageBlock } from './image';
 import { generateListBlock } from './list';
 import { generateParagraphBlock } from './paragraph';
 import {
   generateTextBlocks,
+  htmlTagToTextMark,
   shrinkTextNodeWhiteSpaces,
   trimEdgeTextNodes,
 } from './text';
 import { generateVideoBlock } from './video';
-import { ContentBlock } from '../models/blocks/content-block';
+import { DocumentContentBlock } from '../models/blocks/document-content-block';
 
 const emPattern = /^\d+(?:\.\d+)?em$/;
 const pxPattern = /^\d+(?:\.\d+)?px$/;
@@ -99,7 +96,7 @@ export const getBorderColor = (
 
 export const getBorderStyle = (
   styleKeyValues: Record<string, string>,
-): TableBorderStyleType | undefined => {
+): DocumentBodyTableBorderStyleType | undefined => {
   const borderStyle = styleKeyValues[StyleAttribute.BorderStyle];
   return borderStyle
     ? cssBorderStyleToTableBorderStyleType(borderStyle)
@@ -174,7 +171,7 @@ export const getAlignment = (
 
 export const getHorizontalAlign = (
   styleKeyValues: Record<string, string>,
-): TableBlockHorizontalAlignType | undefined => {
+): DocumentBodyTableBlockHorizontalAlignType | undefined => {
   const textAlign = styleKeyValues[StyleAttribute.TextAlign];
   return textAlign
     ? cssTextAlignToTableBlockHorizontalAlignType(textAlign)
@@ -183,7 +180,7 @@ export const getHorizontalAlign = (
 
 export const getVerticalAlign = (
   styleKeyValues: Record<string, string>,
-): TableBlockVerticalAlignType | undefined => {
+): DocumentBodyTableBlockVerticalAlignType | undefined => {
   const verticalAlign = styleKeyValues[StyleAttribute.VerticalAlign];
   return verticalAlign
     ? cssVerticalAlignToTableBlockVerticalAlignType(verticalAlign)
@@ -219,8 +216,8 @@ export const getWidth = (
 
 export const getCaption = (
   captionElement: DomNode,
-): TableCaptionBlock | undefined => {
-  const captionBlock: TableCaptionBlock = {
+): DocumentBodyTableCaptionBlock | undefined => {
+  const captionBlock: DocumentBodyTableCaptionBlock = {
     blocks: [],
   };
 
@@ -229,8 +226,8 @@ export const getCaption = (
   );
 
   children.forEach((child) => {
-    let block: TableCaptionContentBlock | undefined;
-    let textBlocks: ContentBlock[] | undefined;
+    let block: DocumentBodyTableCaptionItem | undefined;
+    let textBlocks: DocumentContentBlock[] | undefined;
 
     if (child.type === DomNodeType.Text || htmlTagToTextMark(child.name)) {
       textBlocks = generateTextBlocks(child);
@@ -247,10 +244,10 @@ export const getCaption = (
           block = generateParagraphBlock(child);
           break;
         case Tag.OrderedList:
-          block = generateListBlock(child, BlockType.OrderedList);
+          block = generateListBlock(child, DocumentBodyBlockType.OrderedList);
           break;
         case Tag.UnorderedList:
-          block = generateListBlock(child, BlockType.UnorderedList);
+          block = generateListBlock(child, DocumentBodyBlockType.UnorderedList);
           break;
         case Tag.Image:
           block = generateImageBlock(child);
@@ -306,4 +303,64 @@ const getHeightAndWidthProperty = (
     }
   }
   return value;
+};
+
+const tableBlockHorizontalAlignTypesByCssTextAlign: Record<
+  string,
+  DocumentBodyTableBlockHorizontalAlignType
+> = {
+  center: DocumentBodyTableBlockHorizontalAlignType.Center,
+  left: DocumentBodyTableBlockHorizontalAlignType.Left,
+  right: DocumentBodyTableBlockHorizontalAlignType.Right,
+};
+
+const cssTextAlignToTableBlockHorizontalAlignType = (
+  textAlign: string,
+): DocumentBodyTableBlockHorizontalAlignType | undefined => {
+  return textAlign
+    ? tableBlockHorizontalAlignTypesByCssTextAlign[textAlign.toLowerCase()]
+    : undefined;
+};
+
+const tableBlockVerticalAlignTypesByCssVerticalAlign: Record<
+  string,
+  DocumentBodyTableBlockVerticalAlignType
+> = {
+  top: DocumentBodyTableBlockVerticalAlignType.Top,
+  middle: DocumentBodyTableBlockVerticalAlignType.Middle,
+  bottom: DocumentBodyTableBlockVerticalAlignType.Bottom,
+};
+
+const cssVerticalAlignToTableBlockVerticalAlignType = (
+  verticalAlign: string,
+): DocumentBodyTableBlockVerticalAlignType | undefined => {
+  return verticalAlign
+    ? tableBlockVerticalAlignTypesByCssVerticalAlign[
+        verticalAlign.toLowerCase()
+      ]
+    : undefined;
+};
+
+const tableBorderStyleTypesByCssBorderStyle: Record<
+  string,
+  DocumentBodyTableBorderStyleType
+> = {
+  solid: DocumentBodyTableBorderStyleType.Solid,
+  dotted: DocumentBodyTableBorderStyleType.Dotted,
+  dashed: DocumentBodyTableBorderStyleType.Dashed,
+  double: DocumentBodyTableBorderStyleType.Double,
+  groove: DocumentBodyTableBorderStyleType.Groove,
+  ridge: DocumentBodyTableBorderStyleType.Ridge,
+  inset: DocumentBodyTableBorderStyleType.Inset,
+  outset: DocumentBodyTableBorderStyleType.Outset,
+  hidden: DocumentBodyTableBorderStyleType.Hidden,
+  none: DocumentBodyTableBorderStyleType.None,
+};
+
+const cssBorderStyleToTableBorderStyleType = (
+  borderStyle: string,
+): DocumentBodyTableBorderStyleType | undefined => {
+  return borderStyle
+    ? tableBorderStyleTypesByCssBorderStyle[borderStyle.toLowerCase()]
+    : undefined;
 };

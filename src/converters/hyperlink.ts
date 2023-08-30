@@ -1,17 +1,20 @@
 import { DomNode } from 'html-parse-stringify';
-import { TextBlock } from '../models/blocks/text';
+import { DocumentTextBlock } from '../models/blocks/document-text-block';
 import {
   TextBlockOptions,
   generateTextBlocks,
   shrinkTextNodeWhiteSpaces,
 } from './text';
-import { ContentBlock, ContentBlockType } from '../models/blocks/content-block';
+import {
+  DocumentContentBlock,
+  DocumentContentBlockType,
+} from '../models/blocks/document-content-block';
 
 export const generateHyperlinkBlock = (
   anchorElement: DomNode,
   options: TextBlockOptions = {},
-): TextBlock => {
-  const textBlocks: ContentBlock[] = [];
+): DocumentTextBlock => {
+  const textBlocks: DocumentContentBlock[] = [];
   const hyperlinkFormattings = options.textMarks || [];
   let displayText = '';
 
@@ -28,9 +31,13 @@ export const generateHyperlinkBlock = (
     textBlocks.push(...generateTextBlocks(child, { ...options, hyperlink }));
   });
   const textBlock = textBlocks[0];
-  if (hyperlink && textBlock && textBlock.type === ContentBlockType.Text) {
+  if (
+    hyperlink &&
+    textBlock &&
+    textBlock.type === DocumentContentBlockType.Text
+  ) {
     textBlocks.forEach((textContent) => {
-      if (textContent.type === ContentBlockType.Text) {
+      if (textContent.type === DocumentContentBlockType.Text) {
         displayText += textContent.text.text;
         if (textContent.text.marks) {
           hyperlinkFormattings.push(...textContent.text.marks);
@@ -43,5 +50,5 @@ export const generateHyperlinkBlock = (
       textBlock.text.marks = Array.from(new Set(hyperlinkFormattings));
     }
   }
-  return textBlock as TextBlock;
+  return textBlock as DocumentTextBlock;
 };

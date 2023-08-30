@@ -1,13 +1,18 @@
 import { DomNode } from 'html-parse-stringify';
 import { StyleAttribute } from '../models/html';
-import { BlockType } from '../models/blocks/block';
-import { AlignType } from '../models/blocks/align-type';
-import { ImageBlock, ImageProperties } from '../models/blocks/image';
+import {
+  DocumentBodyBlockType,
+  DocumentBodyBlockAlignType,
+} from '../models/blocks/document-body-block';
+import {
+  DocumentBodyImageBlock,
+  DocumentBodyImageProperties,
+} from '../models/blocks/document-body-image-block';
 
 export const generateImageBlock = (
   imageElement: DomNode,
-  imageProperties: ImageProperties = {},
-): ImageBlock => {
+  imageProperties: DocumentBodyImageProperties = {},
+): DocumentBodyImageBlock => {
   let imgUrl = imageElement.attrs?.src || '';
   imgUrl = imgUrl
     .replace(/&amp;/g, '&')
@@ -23,7 +28,7 @@ export const generateImageBlock = (
     properties = { ...properties, ...{ backgroundColor } };
   }
   return {
-    type: BlockType.Image,
+    type: DocumentBodyBlockType.Image,
     image: Object.assign(
       {},
       { url: imgUrl },
@@ -52,10 +57,10 @@ export const convertRgbToHex = (rgb: string): string | undefined => {
 
 const getImageProperties = (
   imageElement: DomNode,
-): ImageProperties | undefined => {
-  let imageProperties: ImageProperties | undefined;
+): DocumentBodyImageProperties | undefined => {
+  let imageProperties: DocumentBodyImageProperties | undefined;
   if (imageElement.attrs) {
-    let align: AlignType | undefined;
+    let align: DocumentBodyBlockAlignType | undefined;
     let backgroundColor: string | undefined;
     if (imageElement.attrs.style) {
       imageElement.attrs.style
@@ -67,20 +72,20 @@ const getImageProperties = (
               keyValue[0] === StyleAttribute.Float &&
               keyValue[1].toLocaleLowerCase() === 'left'
             ) {
-              align = AlignType.Left;
+              align = DocumentBodyBlockAlignType.Left;
               return;
             } else if (
               keyValue[0] === StyleAttribute.Float &&
               keyValue[1].toLocaleLowerCase() === 'right'
             ) {
-              align = AlignType.Right;
+              align = DocumentBodyBlockAlignType.Right;
               return;
             } else if (
               keyValue[0] === 'display' &&
               keyValue[1].toLocaleLowerCase() === 'block'
             ) {
               // For center tiny mce adds style as "display: block; margin-left: auto; margin-right: auto;"
-              align = AlignType.Center;
+              align = DocumentBodyBlockAlignType.Center;
               return;
             }
           }

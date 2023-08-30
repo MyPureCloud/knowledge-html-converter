@@ -1,30 +1,32 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
-import { ContentBlock, ContentBlockType } from '../models/blocks/content-block';
 import {
-  TextMark,
-  FontSize,
-  TextProperties,
-  Text,
-  TextBlock,
-  htmlTagToTextMark,
-} from '../models/blocks/text';
+  DocumentContentBlock,
+  DocumentContentBlockType,
+} from '../models/blocks/document-content-block';
+import { DocumentBodyBlockFontSize } from '../models/blocks/document-body-block';
+import {
+  DocumentTextMark,
+  DocumentTextProperties,
+  DocumentText,
+  DocumentTextBlock,
+} from '../models/blocks/document-text-block';
 import { generateHyperlinkBlock } from './hyperlink';
 import { convertRgbToHex, generateImageBlock } from './image';
 import { generateVideoBlock } from './video';
 
 export interface TextBlockOptions {
-  textMarks?: TextMark[];
+  textMarks?: DocumentTextMark[];
   hyperlink?: string;
-  textProperties?: TextProperties;
+  textProperties?: DocumentTextProperties;
   isPreformatted?: boolean;
 }
 
 export const generateTextBlocks = (
   domNode: DomNode,
   options: TextBlockOptions = {},
-): ContentBlock[] => {
-  const arr: ContentBlock[] = [];
+): DocumentContentBlock[] => {
+  const arr: DocumentContentBlock[] = [];
   if (domNode.type === DomNodeType.Text) {
     if (domNode.content) {
       arr.push(assignAttributes(domNode.content, options));
@@ -51,7 +53,7 @@ export const generateTextBlocks = (
     if (textMark) {
       textMarks.push(textMark);
     }
-    const textProperties: TextProperties = options.textProperties
+    const textProperties: DocumentTextProperties = options.textProperties
       ? { ...options.textProperties }
       : {};
     if (
@@ -84,13 +86,28 @@ export const generateTextBlocks = (
   return arr;
 };
 
+const textMarksByHtmlTag: Record<string, DocumentTextMark> = {
+  strong: DocumentTextMark.Bold,
+  em: DocumentTextMark.Italic,
+  u: DocumentTextMark.Underline,
+  s: DocumentTextMark.Strikethrough,
+  sub: DocumentTextMark.Subscript,
+  sup: DocumentTextMark.Superscript,
+};
+
+export const htmlTagToTextMark = (
+  tag: string,
+): DocumentTextMark | undefined => {
+  return tag ? textMarksByHtmlTag[tag.toLowerCase()] : undefined;
+};
+
 export const generateTextProperties = (
   styles: string,
-): TextProperties | undefined => {
-  let textProperties: TextProperties | undefined;
+): DocumentTextProperties | undefined => {
+  let textProperties: DocumentTextProperties | undefined;
   if (styles) {
     let backgroundColor: string | undefined;
-    let fontSize: FontSize | undefined;
+    let fontSize: DocumentBodyBlockFontSize | undefined;
     let textColor: string | undefined;
     styles
       .split(/\s*;\s*/) //split with extra spaces around the semi colon
@@ -126,23 +143,23 @@ export const generateTextProperties = (
 
 export const getFontSizeName = (
   htmlFontSizeValue: string,
-): FontSize | undefined => {
+): DocumentBodyBlockFontSize | undefined => {
   // TODO make this more robust
   switch (htmlFontSizeValue) {
     case '9px':
-      return FontSize.XxSmall;
+      return DocumentBodyBlockFontSize.XxSmall;
     case '10px':
-      return FontSize.XSmall;
+      return DocumentBodyBlockFontSize.XSmall;
     case '13.333px':
-      return FontSize.Small;
+      return DocumentBodyBlockFontSize.Small;
     case '16px':
-      return FontSize.Medium;
+      return DocumentBodyBlockFontSize.Medium;
     case '18px':
-      return FontSize.Large;
+      return DocumentBodyBlockFontSize.Large;
     case '24px':
-      return FontSize.XLarge;
+      return DocumentBodyBlockFontSize.XLarge;
     case '32px':
-      return FontSize.XxLarge;
+      return DocumentBodyBlockFontSize.XxLarge;
     default:
       return undefined;
   }
@@ -151,8 +168,8 @@ export const getFontSizeName = (
 const assignAttributes = (
   text: string,
   options: TextBlockOptions = {},
-): TextBlock => {
-  const txt: Text = {
+): DocumentTextBlock => {
+  const txt: DocumentText = {
     text: '',
   };
   txt.text = text;
@@ -166,8 +183,8 @@ const assignAttributes = (
     txt.marks = [...new Set(options.textMarks)];
   }
 
-  const textBlock: TextBlock = {
-    type: ContentBlockType.Text,
+  const textBlock: DocumentTextBlock = {
+    type: DocumentContentBlockType.Text,
     text: txt,
   };
 
@@ -256,20 +273,23 @@ export const shrinkTextNodeWhiteSpaces = (
  * Keeps one node if all nodes are blank text nodes.
  */
 export const removeBlankEdgeTextBlocks = (
-  blocks: ContentBlock[] = [],
+  blocks: DocumentContentBlock[] = [],
 ): void => {
-  while (blocks.length > 1 && isBlankTextBlock(blocks[0] as TextBlock)) {
+  while (
+    blocks.length > 1 &&
+    isBlankTextBlock(blocks[0] as DocumentTextBlock)
+  ) {
     blocks.shift();
   }
   while (
     blocks.length > 1 &&
-    isBlankTextBlock(blocks[blocks.length - 1] as TextBlock)
+    isBlankTextBlock(blocks[blocks.length - 1] as DocumentTextBlock)
   ) {
     blocks.pop();
   }
 };
 
-const isBlankTextBlock = (textBlock: TextBlock): boolean =>
+const isBlankTextBlock = (textBlock: DocumentTextBlock): boolean =>
   textBlock.text &&
   (!textBlock.text.text || blankRegex.test(textBlock.text.text));
 
@@ -279,7 +299,9 @@ const isBlankTextBlock = (textBlock: TextBlock): boolean =>
  * the next text block starts with white space.
  * @param blocks
  */
-export const mergeBlankTextBlocks = (blocks: ContentBlock[] = []): void => {
+export const mergeBlankTextBlocks = (
+  blocks: DocumentContentBlock[] = [],
+): void => {
   for (let i = 0; i < blocks.length; i++) {
     const textBlock = asTextBlock(blocks[i]);
     if (!textBlock || !isBlankTextBlock(textBlock)) {
@@ -299,16 +321,18 @@ export const mergeBlankTextBlocks = (blocks: ContentBlock[] = []): void => {
   }
 };
 
-const asTextBlock = (block: ContentBlock): TextBlock | undefined => {
-  return (block as TextBlock).type === ContentBlockType.Text &&
-    (block as TextBlock).text
-    ? (block as TextBlock)
+const asTextBlock = (
+  block: DocumentContentBlock,
+): DocumentTextBlock | undefined => {
+  return (block as DocumentTextBlock).type === DocumentContentBlockType.Text &&
+    (block as DocumentTextBlock).text
+    ? (block as DocumentTextBlock)
     : undefined;
 };
 
-export const createEmptyTextBlock = (): TextBlock => {
+export const createEmptyTextBlock = (): DocumentTextBlock => {
   return {
-    type: ContentBlockType.Text,
+    type: DocumentContentBlockType.Text,
     text: {
       text: ' ',
     },

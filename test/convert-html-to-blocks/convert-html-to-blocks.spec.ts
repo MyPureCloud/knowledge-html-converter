@@ -3,7 +3,7 @@ import { join } from 'path';
 import { convertHtmlToBlocks } from '../../src';
 import { expect } from 'chai';
 import { Context } from 'mocha';
-import { Block } from '../../src/models/blocks/block';
+import { DocumentBodyBlock } from '../../src/models/blocks/document-body-block';
 
 describe('convert-html-to-blocks', function () {
   describe('hyperlink', function () {
@@ -115,7 +115,7 @@ describe('convert-html-to-blocks', function () {
 
   function addActualAndExpectedJsonsToErrorMessage(
     error: Error,
-    actualJson: Block[],
+    actualJson: DocumentBodyBlock[],
     expectedJson: unknown,
   ): void {
     error.message =

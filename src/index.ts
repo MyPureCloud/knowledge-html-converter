@@ -1,43 +1,55 @@
 export { convertHtmlToBlocks } from './converter';
 
-export { Block, BlockType } from './models/blocks/block';
-export { ParagraphBlock, ParagraphProperties } from './models/blocks/paragraph';
-export { ImageBlock, ImageProperties } from './models/blocks/image';
-export { VideoBlock } from './models/blocks/video';
 export {
-  ListBlock,
-  ListBlockProperties,
-  ListItemBlock,
-  ListItemBlockType,
-  ListItemBlockProperties,
-  ListItemContentBlock,
-  OrderedType,
-  UnorderedType,
-} from './models/blocks/list';
+  DocumentBodyBlock,
+  DocumentBodyBlockType,
+  DocumentBodyBlockAlignType,
+  DocumentBodyBlockFontSize,
+  DocumentBodyBlockFontType,
+} from './models/blocks/document-body-block';
 export {
-  TableBlock,
-  TableRowBlock,
-  TableCellBlock,
-  TableCellContentBlock,
-  TableProperties,
-  TableCaptionBlock,
-  TableCaptionContentBlock,
-  TableRowProperties,
-  TableCellProperties,
-  TableRowType,
-  TableBlockCellType,
-  TableBlockScopeType,
-  TableBlockHorizontalAlignType,
-  TableBlockVerticalAlignType,
-  TableBorderStyleType,
-} from './models/blocks/table';
-export { ContentBlock, ContentBlockType } from './models/blocks/content-block';
+  DocumentBodyParagraphBlock,
+  DocumentBodyParagraphProperties,
+} from './models/blocks/document-body-paragraph-block';
 export {
-  TextBlock,
-  Text,
-  TextMark,
-  TextProperties,
-} from './models/blocks/text';
-export { AlignType } from './models/blocks/align-type';
-export { FontSize } from './models/blocks/text';
-export { FontType } from './models/blocks/font-type';
+  DocumentBodyImageBlock,
+  DocumentBodyImageProperties,
+} from './models/blocks/document-body-image-block';
+export { DocumentBodyVideoBlock } from './models/blocks/document-body-video-block';
+export {
+  DocumentBodyListBlock,
+  DocumentBodyListBlockProperties,
+  DocumentBodyListItemBlock,
+  DocumentBodyListItemBlockType,
+  DocumentBodyListItemProperties,
+  DocumentListContentBlock,
+  DocumentBodyBlockOrderedType,
+  DocumentBodyBlockUnorderedType,
+} from './models/blocks/document-body-list-block';
+export {
+  DocumentBodyTableBlock,
+  DocumentBodyTableRowBlock,
+  DocumentBodyTableCellBlock,
+  DocumentTableContentBlock,
+  DocumentBodyTableProperties,
+  DocumentBodyTableCaptionBlock,
+  DocumentBodyTableCaptionItem,
+  DocumentBodyTableRowBlockProperties as TableRowProperties,
+  DocumentBodyTableCellBlockProperties,
+  DocumentBodyTableBlockRowType,
+  DocumentBodyTableBlockCellType,
+  DocumentBodyTableBlockScopeType,
+  DocumentBodyTableBlockHorizontalAlignType,
+  DocumentBodyTableBlockVerticalAlignType,
+  DocumentBodyTableBorderStyleType,
+} from './models/blocks/document-body-table-block';
+export {
+  DocumentContentBlock,
+  DocumentContentBlockType,
+} from './models/blocks/document-content-block';
+export {
+  DocumentTextBlock,
+  DocumentText,
+  DocumentTextMark,
+  DocumentTextProperties,
+} from './models/blocks/document-text-block';

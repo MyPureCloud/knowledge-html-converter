@@ -1,11 +1,10 @@
 import { DomNode } from 'html-parse-stringify';
 import { StyleAttribute } from '../models/html';
 import {
-  AlignType,
-  cssTextAlignToAlignType,
-} from '../models/blocks/align-type';
-import { BlockType } from '../models/blocks/block';
-import { FontType, htmlTagToFontType } from '../models/blocks/font-type';
+  DocumentBodyBlockAlignType,
+  DocumentBodyBlockFontType,
+} from '../models/blocks/document-body-block';
+import { DocumentBodyBlockType } from '../models/blocks/document-body-block';
 import {
   createEmptyTextBlock,
   generateTextBlocks,
@@ -13,13 +12,15 @@ import {
   trimEdgeTextNodes,
 } from './text';
 import {
-  ParagraphBlock,
-  ParagraphProperties,
-} from '../models/blocks/paragraph';
+  DocumentBodyParagraphBlock,
+  DocumentBodyParagraphProperties,
+} from '../models/blocks/document-body-paragraph-block';
 
-export const generateParagraphBlock = (domElement: DomNode): ParagraphBlock => {
-  const paragraphBlock: ParagraphBlock = {
-    type: BlockType.Paragraph,
+export const generateParagraphBlock = (
+  domElement: DomNode,
+): DocumentBodyParagraphBlock => {
+  const paragraphBlock: DocumentBodyParagraphBlock = {
+    type: DocumentBodyBlockType.Paragraph,
     paragraph: {
       blocks: [],
     },
@@ -33,7 +34,7 @@ export const generateParagraphBlock = (domElement: DomNode): ParagraphBlock => {
     paragraphBlock.paragraph.properties = { fontType };
   }
 
-  const isPreformatted = fontType === FontType.Preformatted;
+  const isPreformatted = fontType === DocumentBodyBlockFontType.Preformatted;
   if (!isPreformatted) {
     children = shrinkTextNodeWhiteSpaces(
       trimEdgeTextNodes(domElement.children),
@@ -52,10 +53,10 @@ export const generateParagraphBlock = (domElement: DomNode): ParagraphBlock => {
 
 const generateProperties = (
   attrs: Record<string, string> | undefined,
-): ParagraphProperties | undefined => {
-  let paragraphProperties: ParagraphProperties | undefined;
+): DocumentBodyParagraphProperties | undefined => {
+  let paragraphProperties: DocumentBodyParagraphProperties | undefined;
   let indentation: number | undefined;
-  let align: AlignType | undefined;
+  let align: DocumentBodyBlockAlignType | undefined;
   const styles: string | undefined = attrs?.style;
   if (styles) {
     styles
@@ -83,14 +84,46 @@ const generateProperties = (
   return paragraphProperties;
 };
 
-export const createEmptyParagraph = (): ParagraphBlock => {
+export const createEmptyParagraph = (): DocumentBodyParagraphBlock => {
   return {
-    type: BlockType.Paragraph,
+    type: DocumentBodyBlockType.Paragraph,
     paragraph: {
       blocks: [createEmptyTextBlock()],
       properties: {
-        fontType: FontType.Paragraph,
+        fontType: DocumentBodyBlockFontType.Paragraph,
       },
     },
   };
+};
+
+const alignTypesByHtmlTextAlign: Record<string, DocumentBodyBlockAlignType> = {
+  center: DocumentBodyBlockAlignType.Center,
+  left: DocumentBodyBlockAlignType.Left,
+  right: DocumentBodyBlockAlignType.Right,
+  justify: DocumentBodyBlockAlignType.Justify,
+};
+
+export const cssTextAlignToAlignType = (
+  textAlign: string,
+): DocumentBodyBlockAlignType | undefined => {
+  return textAlign
+    ? alignTypesByHtmlTextAlign[textAlign.toLowerCase()]
+    : undefined;
+};
+
+const fontTypesByHtmlTag: Record<string, DocumentBodyBlockFontType> = {
+  h1: DocumentBodyBlockFontType.Heading1,
+  h2: DocumentBodyBlockFontType.Heading2,
+  h3: DocumentBodyBlockFontType.Heading3,
+  h4: DocumentBodyBlockFontType.Heading4,
+  h5: DocumentBodyBlockFontType.Heading5,
+  h6: DocumentBodyBlockFontType.Heading6,
+  p: DocumentBodyBlockFontType.Paragraph,
+  pre: DocumentBodyBlockFontType.Preformatted,
+};
+
+export const htmlTagToFontType = (
+  tag: string,
+): DocumentBodyBlockFontType | undefined => {
+  return tag ? fontTypesByHtmlTag[tag.toLowerCase()] : undefined;
 };
