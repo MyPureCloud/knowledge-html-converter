@@ -75,9 +75,21 @@ describe('convert-html-to-blocks', function () {
   });
 
   /**
-   * Tests convertHtmlToBlocks with
-   * input:  test/convert-html-to-blocks/${...test.titlePath()}/input.html
-   * output: test/convert-html-to-blocks/${...test.titlePath()}/output.json
+   * Invokes convertHtmlToBlocks with the content of an input.html file and compares the result with the content of an output.json file.
+   * input.html and the expected output.json files are looked up in the directory specified by the titlePath of the test case.
+   *
+   * input:  test/${...test.titlePath()}/input.html
+   *
+   * output: test/${...test.titlePath()}/output.json
+   *
+   * `test.titlePath()` is an array of the title arguments that were passed to `describe` and `it` calls.
+   * For example in the test case
+   * `describe('convert-html-to-blocks', function () { describe('text', function () { it('properties', test); }); });`,
+   * `test.titlePath()` will be ['convert-html-to-blocks, 'text', 'properties'], so the below files will be used:
+   *
+   * input:   test/convert-html-to-blocks/text/properties/input.html
+   *
+   * output:  test/convert-html-to-blocks/text/properties/output.json
    */
   async function test(this: Context): Promise<void> {
     const dirName = join('test', ...this.test!.titlePath());
