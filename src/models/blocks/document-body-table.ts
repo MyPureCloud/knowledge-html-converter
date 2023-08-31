@@ -29,15 +29,14 @@ export interface DocumentTableContentBlock {
   table?: DocumentBodyTable;
 }
 
-export enum DocumentTableContentBlockType {
-  Paragraph = 'Paragraph',
-  Text = 'Text',
-  Image = 'Image',
-  Video = 'Video',
-  OrderedList = 'OrderedList',
-  UnorderedList = 'UnorderedList',
-  Table = 'Table',
-}
+export type DocumentTableContentBlockType =
+  | 'Paragraph'
+  | 'Text'
+  | 'Image'
+  | 'Video'
+  | 'OrderedList'
+  | 'UnorderedList'
+  | 'Table';
 
 export interface DocumentBodyTableProperties {
   width?: number;
@@ -65,14 +64,13 @@ export interface DocumentBodyTableCaptionItem {
   list?: DocumentBodyList;
 }
 
-export enum DocumentBodyTableCaptionItemType {
-  Text = 'Text',
-  Paragraph = 'Paragraph',
-  Image = 'Image',
-  Video = 'Video',
-  OrderedList = 'OrderedList',
-  UnorderedList = 'UnorderedList',
-}
+export type DocumentBodyTableCaptionItemType =
+  | 'Text'
+  | 'Paragraph'
+  | 'Image'
+  | 'Video'
+  | 'OrderedList'
+  | 'UnorderedList';
 
 export interface DocumentBodyTableRowBlockProperties {
   rowType?: DocumentBodyTableBlockRowType;

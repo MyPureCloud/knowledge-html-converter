@@ -4,10 +4,7 @@ import {
   generateTextBlocks,
   shrinkTextNodeWhiteSpaces,
 } from './text';
-import {
-  DocumentContentBlock,
-  DocumentContentBlockType,
-} from '../models/blocks/document-body-paragraph';
+import { DocumentContentBlock } from '../models/blocks/document-body-paragraph';
 
 export const generateHyperlinkBlock = (
   anchorElement: DomNode,
@@ -30,13 +27,9 @@ export const generateHyperlinkBlock = (
     textBlocks.push(...generateTextBlocks(child, { ...options, hyperlink }));
   });
   const textBlock = textBlocks[0];
-  if (
-    hyperlink &&
-    textBlock &&
-    textBlock.type === DocumentContentBlockType.Text
-  ) {
+  if (hyperlink && textBlock && textBlock.type === 'Text') {
     textBlocks.forEach((textContent) => {
-      if (textContent.type === DocumentContentBlockType.Text) {
+      if (textContent.type === 'Text') {
         displayText += textContent.text!.text;
         if (textContent.text!.marks) {
           hyperlinkFormattings.push(...textContent.text!.marks);

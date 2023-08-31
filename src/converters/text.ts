@@ -1,9 +1,6 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
-import {
-  DocumentContentBlock,
-  DocumentContentBlockType,
-} from '../models/blocks/document-body-paragraph';
+import { DocumentContentBlock } from '../models/blocks/document-body-paragraph';
 import { DocumentBodyBlockFontSize } from '../models/blocks/document-body-block';
 import {
   DocumentTextMarks,
@@ -30,7 +27,7 @@ export const generateTextBlocks = (
   if (domNode.type === DomNodeType.Text) {
     if (domNode.content) {
       arr.push({
-        type: DocumentContentBlockType.Text,
+        type: 'Text',
         text: generateDocumentText(domNode.content, options),
       });
     }
@@ -39,19 +36,19 @@ export const generateTextBlocks = (
     domNode.name === Tag.LineBreak
   ) {
     arr.push({
-      type: DocumentContentBlockType.Text,
+      type: 'Text',
       text: generateDocumentText('\n'),
     });
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Image) {
     arr.push({
-      type: DocumentContentBlockType.Image,
+      type: 'Image',
       image: generateImage(domNode, options.textProperties, options.hyperlink),
     });
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Anchor) {
     arr.push(generateHyperlinkBlock(domNode, options));
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.IFrame) {
     arr.push({
-      type: DocumentContentBlockType.Video,
+      type: 'Video',
       video: generateVideo(domNode),
     });
   } else {

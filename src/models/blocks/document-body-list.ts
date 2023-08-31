@@ -18,9 +18,7 @@ export interface DocumentBodyListBlock {
   properties?: DocumentBodyListItemProperties;
 }
 
-export enum DocumentBodyListBlockType {
-  ListItem = 'ListItem',
-}
+export type DocumentBodyListBlockType = 'ListItem';
 
 export interface DocumentListContentBlock {
   type: DocumentListContentBlockType;
@@ -30,13 +28,12 @@ export interface DocumentListContentBlock {
   video?: DocumentBodyVideo;
 }
 
-export enum DocumentListContentBlockType {
-  Text = 'Text',
-  Image = 'Image',
-  OrderedList = 'OrderedList',
-  UnorderedList = 'UnorderedList',
-  Video = 'Video',
-}
+export type DocumentListContentBlockType =
+  | 'Text'
+  | 'Image'
+  | 'OrderedList'
+  | 'UnorderedList'
+  | 'Video';
 
 export interface DocumentBodyListBlockProperties {
   unorderedType?: DocumentBodyBlockUnorderedType;

@@ -1,10 +1,7 @@
 import { parse, DomNode } from 'html-parse-stringify';
 import { sanitizeHtml } from './sanitizer';
 import { Tag } from './models/html';
-import {
-  DocumentBodyBlock,
-  DocumentBodyBlockType,
-} from './models/blocks/document-body-block';
+import { DocumentBodyBlock } from './models/blocks/document-body-block';
 import {
   generateEmptyParagraph,
   generateParagraph,
@@ -44,10 +41,10 @@ const convertParsedHtmlToBlocks = (
         block = generateParagraphBlock(domNode);
         break;
       case Tag.OrderedList:
-        block = generateListBlock(domNode, DocumentBodyBlockType.OrderedList);
+        block = generateListBlock(domNode, 'OrderedList');
         break;
       case Tag.UnorderedList:
-        block = generateListBlock(domNode, DocumentBodyBlockType.UnorderedList);
+        block = generateListBlock(domNode, 'UnorderedList');
         break;
       case Tag.Image:
         block = generateImageBlock(domNode);
@@ -72,21 +69,21 @@ const convertParsedHtmlToBlocks = (
 
 const generateParagraphBlock = (domNode: DomNode): DocumentBodyBlock => {
   return {
-    type: DocumentBodyBlockType.Paragraph,
+    type: 'Paragraph',
     paragraph: generateParagraph(domNode),
   };
 };
 
 const generateEmptyParagraphBlock = (): DocumentBodyBlock => {
   return {
-    type: DocumentBodyBlockType.Paragraph,
+    type: 'Paragraph',
     paragraph: generateEmptyParagraph(),
   };
 };
 
 const generateListBlock = (
   domNode: DomNode,
-  type: DocumentBodyBlockType.OrderedList | DocumentBodyBlockType.UnorderedList,
+  type: 'OrderedList' | 'UnorderedList',
 ): DocumentBodyBlock | undefined => {
   const list = generateList(domNode, type);
   return list
@@ -99,14 +96,14 @@ const generateListBlock = (
 
 const generateImageBlock = (domNode: DomNode): DocumentBodyBlock => {
   return {
-    type: DocumentBodyBlockType.Image,
+    type: 'Image',
     image: generateImage(domNode),
   };
 };
 
 const generateVideoBlock = (domNode: DomNode): DocumentBodyBlock => {
   return {
-    type: DocumentBodyBlockType.Video,
+    type: 'Video',
     video: generateVideo(domNode),
   };
 };
@@ -117,7 +114,7 @@ const generateTableBlock = (
   const table = generateTable(domNode);
   return table
     ? {
-        type: DocumentBodyBlockType.Table,
+        type: 'Table',
         table: generateTable(domNode),
       }
     : undefined;

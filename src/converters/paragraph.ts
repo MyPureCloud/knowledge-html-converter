@@ -11,7 +11,6 @@ import {
 } from './text';
 import {
   DocumentContentBlock,
-  DocumentContentBlockType,
   DocumentBodyParagraph,
   DocumentBodyParagraphProperties,
 } from '../models/blocks/document-body-paragraph';
@@ -91,7 +90,7 @@ export const generateEmptyParagraph = (): DocumentBodyParagraph => {
 
 const generateEmptyTextBlock = (): DocumentContentBlock => {
   return {
-    type: DocumentContentBlockType.Text,
+    type: 'Text',
     text: generateEmptyDocumentText(),
   };
 };

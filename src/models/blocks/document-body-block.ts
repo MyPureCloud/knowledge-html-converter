@@ -13,14 +13,13 @@ export interface DocumentBodyBlock {
   table?: DocumentBodyTable;
 }
 
-export enum DocumentBodyBlockType {
-  Paragraph = 'Paragraph',
-  Image = 'Image',
-  Video = 'Video',
-  OrderedList = 'OrderedList',
-  UnorderedList = 'UnorderedList',
-  Table = 'Table',
-}
+export type DocumentBodyBlockType =
+  | 'Paragraph'
+  | 'Image'
+  | 'Video'
+  | 'OrderedList'
+  | 'UnorderedList'
+  | 'Table';
 
 export enum DocumentBodyBlockAlignType {
   Center = 'Center',

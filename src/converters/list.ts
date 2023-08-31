@@ -1,7 +1,6 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
 import {
-  DocumentBodyBlockType,
   DocumentBodyBlockAlignType,
   DocumentBodyBlockFontSize,
   DocumentBodyBlockFontType,
@@ -12,16 +11,10 @@ import {
   DocumentBodyListBlockProperties,
   DocumentBodyListBlock,
   DocumentBodyListItemProperties,
-  DocumentBodyListBlockType,
   DocumentBodyBlockOrderedType,
   DocumentBodyBlockUnorderedType,
-  DocumentListContentBlockType,
   DocumentListContentBlock,
 } from '../models/blocks/document-body-list';
-import {
-  DocumentContentBlock,
-  DocumentContentBlockType,
-} from '../models/blocks/document-body-paragraph';
 import {
   generateTextBlocks,
   getFontSizeName,
@@ -33,9 +26,7 @@ import { cssTextAlignToAlignType, htmlTagToFontType } from './paragraph';
 
 export const generateList = (
   listElement: DomNode,
-  listType:
-    | DocumentBodyBlockType.OrderedList
-    | DocumentBodyBlockType.UnorderedList,
+  listType: 'OrderedList' | 'UnorderedList',
 ): DocumentBodyList | undefined => {
   const list: DocumentBodyList = {
     blocks: [],
@@ -56,9 +47,7 @@ export const generateList = (
 
 const generateListProperties = (
   styles: string | undefined,
-  listType:
-    | DocumentBodyBlockType.OrderedList
-    | DocumentBodyBlockType.UnorderedList,
+  listType: 'OrderedList' | 'UnorderedList',
 ): DocumentBodyListBlockProperties | DocumentBodyListItemProperties => {
   let properties;
   if (styles) {
@@ -74,9 +63,9 @@ const generateListProperties = (
       .map((keyValue) => {
         if (keyValue.length === 2) {
           if (keyValue[0] === StyleAttribute.ListStyleType) {
-            if (listType === DocumentBodyBlockType.OrderedList) {
+            if (listType === 'OrderedList') {
               orderedType = cssListStyleTypeToOrderedType(keyValue[1]);
-            } else if (listType === DocumentBodyBlockType.UnorderedList) {
+            } else if (listType === 'UnorderedList') {
               unorderedType = cssListStyleTypeToUnorderedType(keyValue[1]);
             }
           }
@@ -122,12 +111,10 @@ const generateListProperties = (
 
 const generateListItemBlock = (
   listItemElement: DomNode,
-  listType:
-    | DocumentBodyBlockType.OrderedList
-    | DocumentBodyBlockType.UnorderedList,
+  listType: 'OrderedList' | 'UnorderedList',
 ): DocumentBodyListBlock => {
   const listItemBlock: DocumentBodyListBlock = {
-    type: DocumentBodyListBlockType.ListItem,
+    type: 'ListItem',
     blocks: [],
   };
 
@@ -150,26 +137,24 @@ const generateListItemBlock = (
 
   children?.forEach((child: DomNode) => {
     if (child.name === Tag.OrderedList) {
-      const list = generateList(child, DocumentBodyBlockType.OrderedList);
+      const list = generateList(child, 'OrderedList');
       if (list) {
         listItemBlock.blocks.push({
-          type: DocumentListContentBlockType.OrderedList,
+          type: 'OrderedList',
           list,
         });
       }
     } else if (child.name === Tag.UnorderedList) {
-      const list = generateList(child, DocumentBodyBlockType.UnorderedList);
+      const list = generateList(child, 'UnorderedList');
       if (list) {
         listItemBlock.blocks.push({
-          type: DocumentListContentBlockType.UnorderedList,
+          type: 'UnorderedList',
           list,
         });
       }
     } else {
       listItemBlock.blocks.push(
-        ...generateTextBlocks(child, { isPreformatted }).map(
-          documentContentBlockToDocumentListContentBlock,
-        ),
+        ...generateTextBlocks(child, { isPreformatted }),
       );
     }
   });
@@ -234,33 +219,9 @@ const cssListStyleTypeToUnorderedType = (
 
 const createEmptyTextBlock = (): DocumentListContentBlock => {
   return {
-    type: DocumentListContentBlockType.Text,
+    type: 'Text',
     text: {
       text: ' ',
     },
   };
-};
-
-const documentContentBlockToDocumentListContentBlock = (
-  block: DocumentContentBlock,
-): DocumentListContentBlock => {
-  return {
-    type: documentContentBlockTypeToDocumentListContentBlockType(block.type),
-    text: block.text,
-    image: block.image,
-    video: block.video,
-  };
-};
-
-const documentContentBlockTypeToDocumentListContentBlockType = (
-  type: DocumentContentBlockType,
-): DocumentListContentBlockType => {
-  switch (type) {
-    case DocumentContentBlockType.Text:
-      return DocumentListContentBlockType.Text;
-    case DocumentContentBlockType.Image:
-      return DocumentListContentBlockType.Image;
-    case DocumentContentBlockType.Video:
-      return DocumentListContentBlockType.Video;
-  }
 };

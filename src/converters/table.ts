@@ -26,11 +26,7 @@ import {
 } from './text';
 import { generateVideo } from './video';
 import { StyleAttribute, Tag } from '../models/html';
-import { DocumentBodyBlockType } from '../models/blocks/document-body-block';
-import {
-  DocumentContentBlock,
-  DocumentContentBlockType,
-} from '../models/blocks/document-body-paragraph';
+import { DocumentContentBlock } from '../models/blocks/document-body-paragraph';
 import {
   DocumentBodyTableCellBlock,
   DocumentBodyTableCellBlockProperties,
@@ -44,7 +40,6 @@ import {
   DocumentBodyTableBlockHorizontalAlignType,
   DocumentBodyTableBorderStyleType,
   DocumentBodyTableBlockRowType,
-  DocumentTableContentBlockType,
 } from '../models/blocks/document-body-table';
 
 type TablePaddingPropertyHolder = {
@@ -199,10 +194,10 @@ const generateCellBlock = (domNode: DomNode): DocumentTableContentBlock[] => {
           block = generateParagraphBlock(child);
           break;
         case Tag.OrderedList:
-          block = generateListBlock(child, DocumentBodyBlockType.OrderedList);
+          block = generateListBlock(child, 'OrderedList');
           break;
         case Tag.UnorderedList:
-          block = generateListBlock(child, DocumentBodyBlockType.UnorderedList);
+          block = generateListBlock(child, 'UnorderedList');
           break;
         case Tag.Image:
           block = generateImageBlock(child);
@@ -224,9 +219,7 @@ const generateCellBlock = (domNode: DomNode): DocumentTableContentBlock[] => {
       blocks.push(block);
     }
     if (textBlocks) {
-      blocks.push(
-        ...textBlocks.map(documentContentBlockToDocumentTableContentBlock),
-      );
+      blocks.push(...textBlocks);
     }
   });
   if (!blocks.length) {
@@ -239,80 +232,43 @@ const generateParagraphBlock = (
   domNode: DomNode,
 ): DocumentTableContentBlock => {
   return {
-    type: DocumentTableContentBlockType.Paragraph,
+    type: 'Paragraph',
     paragraph: generateParagraph(domNode),
   };
 };
 
 const generateListBlock = (
   domNode: DomNode,
-  type: DocumentBodyBlockType.OrderedList | DocumentBodyBlockType.UnorderedList,
+  type: 'OrderedList' | 'UnorderedList',
 ): DocumentTableContentBlock | undefined => {
   const list = generateList(domNode, type);
   return list
     ? {
-        type: documentBodyBlockListTypeToDtocumentTableContentBlockListType(
-          type,
-        ),
+        type,
         list,
       }
     : undefined;
 };
 
-const documentBodyBlockListTypeToDtocumentTableContentBlockListType = (
-  type: DocumentBodyBlockType.OrderedList | DocumentBodyBlockType.UnorderedList,
-): DocumentTableContentBlockType => {
-  switch (type) {
-    case DocumentBodyBlockType.OrderedList:
-      return DocumentTableContentBlockType.OrderedList;
-    case DocumentBodyBlockType.UnorderedList:
-      return DocumentTableContentBlockType.UnorderedList;
-  }
-};
-
 const generateImageBlock = (domNode: DomNode): DocumentTableContentBlock => {
   return {
-    type: DocumentTableContentBlockType.Image,
+    type: 'Image',
     image: generateImage(domNode),
   };
 };
 
 const generateVideoBlock = (domNode: DomNode): DocumentTableContentBlock => {
   return {
-    type: DocumentTableContentBlockType.Video,
+    type: 'Video',
     video: generateVideo(domNode),
   };
 };
 
 const generateTableBlock = (domNode: DomNode): DocumentTableContentBlock => {
   return {
-    type: DocumentTableContentBlockType.Table,
+    type: 'Table',
     table: generateTable(domNode),
   };
-};
-
-const documentContentBlockToDocumentTableContentBlock = (
-  block: DocumentContentBlock,
-): DocumentTableContentBlock => {
-  return {
-    type: documentContentBlockTypeToDocumentTableContentBlockType(block.type),
-    text: block.text,
-    image: block.image,
-    video: block.video,
-  };
-};
-
-const documentContentBlockTypeToDocumentTableContentBlockType = (
-  type: DocumentContentBlockType,
-): DocumentTableContentBlockType => {
-  switch (type) {
-    case DocumentContentBlockType.Text:
-      return DocumentTableContentBlockType.Text;
-    case DocumentContentBlockType.Image:
-      return DocumentTableContentBlockType.Image;
-    case DocumentContentBlockType.Video:
-      return DocumentTableContentBlockType.Video;
-  }
 };
 
 const generateTableProperties = (
@@ -522,7 +478,7 @@ const htmlScopeToTableBlockScopeType = (
 
 const createEmptyTextBlock = (): DocumentTableContentBlock => {
   return {
-    type: DocumentTableContentBlockType.Text,
+    type: 'Text',
     text: {
       text: ' ',
     },

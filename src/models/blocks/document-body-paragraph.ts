@@ -19,11 +19,7 @@ export interface DocumentContentBlock {
   video?: DocumentBodyVideo;
 }
 
-export enum DocumentContentBlockType {
-  Text = 'Text',
-  Image = 'Image',
-  Video = 'Video',
-}
+export type DocumentContentBlockType = 'Text' | 'Image' | 'Video';
 
 export interface DocumentBodyParagraphProperties {
   align?: DocumentBodyBlockAlignType;
