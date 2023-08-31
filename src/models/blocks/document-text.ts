@@ -1,19 +1,17 @@
-import { DocumentContentBlockType } from './document-content-block';
 import { DocumentBodyBlockFontSize } from './document-body-block';
 
-export interface DocumentTextBlock {
-  type: DocumentContentBlockType.Text;
-  text: DocumentText;
+export interface TextContentBlock {
+  text?: DocumentText;
 }
 
 export interface DocumentText {
   text: string;
-  marks?: DocumentTextMark[];
+  marks?: DocumentTextMarks[];
   hyperlink?: string;
   properties?: DocumentTextProperties;
 }
 
-export enum DocumentTextMark {
+export enum DocumentTextMarks {
   Bold = 'Bold',
   Italic = 'Italic',
   Underline = 'Underline',

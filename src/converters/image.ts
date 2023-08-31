@@ -1,41 +1,33 @@
 import { DomNode } from 'html-parse-stringify';
 import { StyleAttribute } from '../models/html';
+import { DocumentBodyBlockAlignType } from '../models/blocks/document-body-block';
 import {
-  DocumentBodyBlockType,
-  DocumentBodyBlockAlignType,
-} from '../models/blocks/document-body-block';
-import {
-  DocumentBodyImageBlock,
+  DocumentBodyImage,
   DocumentBodyImageProperties,
-} from '../models/blocks/document-body-image-block';
+} from '../models/blocks/document-body-image';
 
-export const generateImageBlock = (
+export const generateImage = (
   imageElement: DomNode,
   imageProperties: DocumentBodyImageProperties = {},
-): DocumentBodyImageBlock => {
+  hyperlink: string | undefined = undefined,
+): DocumentBodyImage => {
   let imgUrl = imageElement.attrs?.src || '';
   imgUrl = imgUrl
     .replace(/&amp;/g, '&')
     .replace(/&gt;/g, '>')
     .replace(/&lt;/g, '<')
     .replace(/&quot;/g, '"');
-  const hyperlink = imageProperties.hyperlink
-    ? imageProperties.hyperlink
-    : null;
   const backgroundColor = imageProperties?.backgroundColor;
   let properties = getImageProperties(imageElement);
   if (backgroundColor) {
     properties = { ...properties, ...{ backgroundColor } };
   }
-  return {
-    type: DocumentBodyBlockType.Image,
-    image: Object.assign(
-      {},
-      { url: imgUrl },
-      hyperlink && { hyperlink },
-      properties && { properties },
-    ),
-  };
+  return Object.assign(
+    {},
+    { url: imgUrl },
+    hyperlink && { hyperlink },
+    properties && { properties },
+  );
 };
 
 export const convertRgbToHex = (rgb: string): string | undefined => {

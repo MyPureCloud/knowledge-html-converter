@@ -4,34 +4,32 @@ import {
   DocumentBodyBlockAlignType,
   DocumentBodyBlockFontType,
 } from '../models/blocks/document-body-block';
-import { DocumentBodyBlockType } from '../models/blocks/document-body-block';
 import {
-  createEmptyTextBlock,
   generateTextBlocks,
   shrinkTextNodeWhiteSpaces,
   trimEdgeTextNodes,
 } from './text';
 import {
-  DocumentBodyParagraphBlock,
+  DocumentContentBlock,
+  DocumentContentBlockType,
+  DocumentBodyParagraph,
   DocumentBodyParagraphProperties,
-} from '../models/blocks/document-body-paragraph-block';
+} from '../models/blocks/document-body-paragraph';
+import { DocumentText } from '../models/blocks/document-text';
 
-export const generateParagraphBlock = (
+export const generateParagraph = (
   domElement: DomNode,
-): DocumentBodyParagraphBlock => {
-  const paragraphBlock: DocumentBodyParagraphBlock = {
-    type: DocumentBodyBlockType.Paragraph,
-    paragraph: {
-      blocks: [],
-    },
+): DocumentBodyParagraph => {
+  const paragraph: DocumentBodyParagraph = {
+    blocks: [],
   };
   let children = domElement.children;
   const fontType = htmlTagToFontType(domElement.name);
   const properties = generateProperties(domElement.attrs);
   if (properties) {
-    paragraphBlock.paragraph.properties = { ...properties, fontType };
+    paragraph.properties = { ...properties, fontType };
   } else {
-    paragraphBlock.paragraph.properties = { fontType };
+    paragraph.properties = { fontType };
   }
 
   const isPreformatted = fontType === DocumentBodyBlockFontType.Preformatted;
@@ -41,14 +39,12 @@ export const generateParagraphBlock = (
     );
   }
   children?.forEach((child: DomNode) => {
-    paragraphBlock.paragraph.blocks.push(
-      ...generateTextBlocks(child, { isPreformatted }),
-    );
+    paragraph.blocks.push(...generateTextBlocks(child, { isPreformatted }));
   });
-  if (!paragraphBlock.paragraph.blocks.length) {
-    paragraphBlock.paragraph.blocks.push(createEmptyTextBlock());
+  if (!paragraph.blocks.length) {
+    paragraph.blocks.push(generateEmptyTextBlock());
   }
-  return paragraphBlock;
+  return paragraph;
 };
 
 const generateProperties = (
@@ -84,15 +80,19 @@ const generateProperties = (
   return paragraphProperties;
 };
 
-export const createEmptyParagraph = (): DocumentBodyParagraphBlock => {
+export const generateEmptyParagraph = (): DocumentBodyParagraph => {
   return {
-    type: DocumentBodyBlockType.Paragraph,
-    paragraph: {
-      blocks: [createEmptyTextBlock()],
-      properties: {
-        fontType: DocumentBodyBlockFontType.Paragraph,
-      },
+    blocks: [generateEmptyTextBlock()],
+    properties: {
+      fontType: DocumentBodyBlockFontType.Paragraph,
     },
+  };
+};
+
+const generateEmptyTextBlock = (): DocumentContentBlock => {
+  return {
+    type: DocumentContentBlockType.Text,
+    text: generateEmptyDocumentText(),
   };
 };
 
@@ -126,4 +126,10 @@ export const htmlTagToFontType = (
   tag: string,
 ): DocumentBodyBlockFontType | undefined => {
   return tag ? fontTypesByHtmlTag[tag.toLowerCase()] : undefined;
+};
+
+const generateEmptyDocumentText = (): DocumentText => {
+  return {
+    text: ' ',
+  };
 };

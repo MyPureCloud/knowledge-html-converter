@@ -3,20 +3,20 @@ import { StyleAttribute, Tag } from '../models/html';
 import {
   DocumentContentBlock,
   DocumentContentBlockType,
-} from '../models/blocks/document-content-block';
+} from '../models/blocks/document-body-paragraph';
 import { DocumentBodyBlockFontSize } from '../models/blocks/document-body-block';
 import {
-  DocumentTextMark,
+  DocumentTextMarks,
   DocumentTextProperties,
   DocumentText,
-  DocumentTextBlock,
-} from '../models/blocks/document-text-block';
+  TextContentBlock,
+} from '../models/blocks/document-text';
 import { generateHyperlinkBlock } from './hyperlink';
-import { convertRgbToHex, generateImageBlock } from './image';
-import { generateVideoBlock } from './video';
+import { convertRgbToHex, generateImage } from './image';
+import { generateVideo } from './video';
 
 export interface TextBlockOptions {
-  textMarks?: DocumentTextMark[];
+  textMarks?: DocumentTextMarks[];
   hyperlink?: string;
   textProperties?: DocumentTextProperties;
   isPreformatted?: boolean;
@@ -29,24 +29,31 @@ export const generateTextBlocks = (
   const arr: DocumentContentBlock[] = [];
   if (domNode.type === DomNodeType.Text) {
     if (domNode.content) {
-      arr.push(assignAttributes(domNode.content, options));
+      arr.push({
+        type: DocumentContentBlockType.Text,
+        text: generateDocumentText(domNode.content, options),
+      });
     }
   } else if (
     domNode.type === DomNodeType.Tag &&
     domNode.name === Tag.LineBreak
   ) {
-    arr.push(assignAttributes('\n'));
+    arr.push({
+      type: DocumentContentBlockType.Text,
+      text: generateDocumentText('\n'),
+    });
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Image) {
-    arr.push(
-      generateImageBlock(domNode, {
-        hyperlink: options.hyperlink,
-        ...options.textProperties,
-      }),
-    );
+    arr.push({
+      type: DocumentContentBlockType.Image,
+      image: generateImage(domNode, options.textProperties, options.hyperlink),
+    });
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Anchor) {
     arr.push(generateHyperlinkBlock(domNode, options));
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.IFrame) {
-    arr.push(generateVideoBlock(domNode));
+    arr.push({
+      type: DocumentContentBlockType.Video,
+      video: generateVideo(domNode),
+    });
   } else {
     const textMarks = options.textMarks ? [...options.textMarks] : [];
     const textMark = htmlTagToTextMark(domNode.name);
@@ -86,18 +93,18 @@ export const generateTextBlocks = (
   return arr;
 };
 
-const textMarksByHtmlTag: Record<string, DocumentTextMark> = {
-  strong: DocumentTextMark.Bold,
-  em: DocumentTextMark.Italic,
-  u: DocumentTextMark.Underline,
-  s: DocumentTextMark.Strikethrough,
-  sub: DocumentTextMark.Subscript,
-  sup: DocumentTextMark.Superscript,
+const textMarksByHtmlTag: Record<string, DocumentTextMarks> = {
+  strong: DocumentTextMarks.Bold,
+  em: DocumentTextMarks.Italic,
+  u: DocumentTextMarks.Underline,
+  s: DocumentTextMarks.Strikethrough,
+  sub: DocumentTextMarks.Subscript,
+  sup: DocumentTextMarks.Superscript,
 };
 
 export const htmlTagToTextMark = (
   tag: string,
-): DocumentTextMark | undefined => {
+): DocumentTextMarks | undefined => {
   return tag ? textMarksByHtmlTag[tag.toLowerCase()] : undefined;
 };
 
@@ -165,30 +172,24 @@ export const getFontSizeName = (
   }
 };
 
-const assignAttributes = (
+const generateDocumentText = (
   text: string,
   options: TextBlockOptions = {},
-): DocumentTextBlock => {
-  const txt: DocumentText = {
+): DocumentText => {
+  const documentText: DocumentText = {
     text: '',
   };
-  txt.text = text;
+  documentText.text = text;
   if (
     options.textProperties &&
     Object.getOwnPropertyNames(options.textProperties).length
   ) {
-    txt.properties = options.textProperties;
+    documentText.properties = options.textProperties;
   }
   if (options.textMarks && options.textMarks.length) {
-    txt.marks = [...new Set(options.textMarks)];
+    documentText.marks = [...new Set(options.textMarks)];
   }
-
-  const textBlock: DocumentTextBlock = {
-    type: DocumentContentBlockType.Text,
-    text: txt,
-  };
-
-  return textBlock;
+  return documentText;
 };
 
 const blankRegex = /^\s*$/;
@@ -273,25 +274,19 @@ export const shrinkTextNodeWhiteSpaces = (
  * Keeps one node if all nodes are blank text nodes.
  */
 export const removeBlankEdgeTextBlocks = (
-  blocks: DocumentContentBlock[] = [],
+  blocks: TextContentBlock[] = [],
 ): void => {
-  while (
-    blocks.length > 1 &&
-    isBlankTextBlock(blocks[0] as DocumentTextBlock)
-  ) {
+  while (blocks.length > 1 && isBlankTextBlock(blocks[0])) {
     blocks.shift();
   }
-  while (
-    blocks.length > 1 &&
-    isBlankTextBlock(blocks[blocks.length - 1] as DocumentTextBlock)
-  ) {
+  while (blocks.length > 1 && isBlankTextBlock(blocks[blocks.length - 1])) {
     blocks.pop();
   }
 };
 
-const isBlankTextBlock = (textBlock: DocumentTextBlock): boolean =>
-  textBlock.text &&
-  (!textBlock.text.text || blankRegex.test(textBlock.text.text));
+const isBlankTextBlock = (contentBlock: TextContentBlock): boolean =>
+  !!contentBlock.text &&
+  (!contentBlock.text.text || blankRegex.test(contentBlock.text.text));
 
 /**
  * Removes text blocks that are blank and either
@@ -303,38 +298,20 @@ export const mergeBlankTextBlocks = (
   blocks: DocumentContentBlock[] = [],
 ): void => {
   for (let i = 0; i < blocks.length; i++) {
-    const textBlock = asTextBlock(blocks[i]);
-    if (!textBlock || !isBlankTextBlock(textBlock)) {
+    if (!isBlankTextBlock(blocks[i])) {
       continue;
     }
-    const previousTextBlock = i > 0 ? asTextBlock(blocks[i - 1]) : undefined;
+    const previousTextBlock =
+      i > 0 && blocks[i - 1].text ? blocks[i - 1] : undefined;
     const nextTextBlock =
-      i < blocks.length - 1 ? asTextBlock(blocks[i + 1]) : undefined;
+      i < blocks.length - 1 && blocks[i + 1].text ? blocks[i + 1] : undefined;
     if (
       (previousTextBlock &&
-        trailingWhiteSpaceRegex.test(previousTextBlock.text.text)) ||
-      (nextTextBlock && leadingWhiteSpaceRegex.test(nextTextBlock.text.text))
+        trailingWhiteSpaceRegex.test(previousTextBlock.text!.text)) ||
+      (nextTextBlock && leadingWhiteSpaceRegex.test(nextTextBlock.text!.text))
     ) {
       blocks.splice(i, 1);
       i--;
     }
   }
-};
-
-const asTextBlock = (
-  block: DocumentContentBlock,
-): DocumentTextBlock | undefined => {
-  return (block as DocumentTextBlock).type === DocumentContentBlockType.Text &&
-    (block as DocumentTextBlock).text
-    ? (block as DocumentTextBlock)
-    : undefined;
-};
-
-export const createEmptyTextBlock = (): DocumentTextBlock => {
-  return {
-    type: DocumentContentBlockType.Text,
-    text: {
-      text: ' ',
-    },
-  };
 };

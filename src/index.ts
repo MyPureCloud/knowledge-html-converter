@@ -8,33 +8,38 @@ export {
   DocumentBodyBlockFontType,
 } from './models/blocks/document-body-block';
 export {
-  DocumentBodyParagraphBlock,
+  DocumentContentBlock,
+  DocumentContentBlockType,
+  DocumentBodyParagraph,
   DocumentBodyParagraphProperties,
-} from './models/blocks/document-body-paragraph-block';
+} from './models/blocks/document-body-paragraph';
 export {
-  DocumentBodyImageBlock,
+  DocumentBodyImage,
   DocumentBodyImageProperties,
-} from './models/blocks/document-body-image-block';
-export { DocumentBodyVideoBlock } from './models/blocks/document-body-video-block';
+} from './models/blocks/document-body-image';
+export { DocumentBodyVideo } from './models/blocks/document-body-video';
 export {
+  DocumentBodyList,
   DocumentBodyListBlock,
   DocumentBodyListBlockProperties,
-  DocumentBodyListItemBlock,
-  DocumentBodyListItemBlockType,
+  DocumentBodyListBlockType,
   DocumentBodyListItemProperties,
   DocumentListContentBlock,
+  DocumentListContentBlockType,
   DocumentBodyBlockOrderedType,
   DocumentBodyBlockUnorderedType,
-} from './models/blocks/document-body-list-block';
+} from './models/blocks/document-body-list';
 export {
-  DocumentBodyTableBlock,
+  DocumentBodyTable,
   DocumentBodyTableRowBlock,
   DocumentBodyTableCellBlock,
   DocumentTableContentBlock,
+  DocumentTableContentBlockType,
   DocumentBodyTableProperties,
   DocumentBodyTableCaptionBlock,
   DocumentBodyTableCaptionItem,
-  DocumentBodyTableRowBlockProperties as TableRowProperties,
+  DocumentBodyTableCaptionItemType,
+  DocumentBodyTableRowBlockProperties,
   DocumentBodyTableCellBlockProperties,
   DocumentBodyTableBlockRowType,
   DocumentBodyTableBlockCellType,
@@ -42,14 +47,9 @@ export {
   DocumentBodyTableBlockHorizontalAlignType,
   DocumentBodyTableBlockVerticalAlignType,
   DocumentBodyTableBorderStyleType,
-} from './models/blocks/document-body-table-block';
+} from './models/blocks/document-body-table';
 export {
-  DocumentContentBlock,
-  DocumentContentBlockType,
-} from './models/blocks/document-content-block';
-export {
-  DocumentTextBlock,
   DocumentText,
-  DocumentTextMark,
+  DocumentTextMarks,
   DocumentTextProperties,
-} from './models/blocks/document-text-block';
+} from './models/blocks/document-text';

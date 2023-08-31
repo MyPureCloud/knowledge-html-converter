@@ -1,15 +1,17 @@
-import { DocumentBodyImageBlock } from './document-body-image-block';
-import { DocumentBodyListBlock } from './document-body-list-block';
-import { DocumentBodyParagraphBlock } from './document-body-paragraph-block';
-import { DocumentBodyTableBlock } from './document-body-table-block';
-import { DocumentBodyVideoBlock } from './document-body-video-block';
+import { DocumentBodyImage } from './document-body-image';
+import { DocumentBodyList } from './document-body-list';
+import { DocumentBodyParagraph } from './document-body-paragraph';
+import { DocumentBodyTable } from './document-body-table';
+import { DocumentBodyVideo } from './document-body-video';
 
-export type DocumentBodyBlock =
-  | DocumentBodyParagraphBlock
-  | DocumentBodyImageBlock
-  | DocumentBodyVideoBlock
-  | DocumentBodyListBlock
-  | DocumentBodyTableBlock;
+export interface DocumentBodyBlock {
+  type: DocumentBodyBlockType;
+  paragraph?: DocumentBodyParagraph;
+  image?: DocumentBodyImage;
+  video?: DocumentBodyVideo;
+  list?: DocumentBodyList;
+  table?: DocumentBodyTable;
+}
 
 export enum DocumentBodyBlockType {
   Paragraph = 'Paragraph',

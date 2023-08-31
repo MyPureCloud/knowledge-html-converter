@@ -6,13 +6,13 @@ import {
   DocumentBodyBlockType,
 } from './models/blocks/document-body-block';
 import {
-  createEmptyParagraph,
-  generateParagraphBlock,
+  generateEmptyParagraph,
+  generateParagraph,
 } from './converters/paragraph';
-import { generateListBlock } from './converters/list';
-import { generateVideoBlock } from './converters/video';
-import { generateImageBlock } from './converters/image';
-import { generateTableBlock } from './converters/table';
+import { generateList } from './converters/list';
+import { generateVideo } from './converters/video';
+import { generateImage } from './converters/image';
+import { generateTable } from './converters/table';
 
 /**
  * Converts html to document body blocks.
@@ -64,7 +64,75 @@ const convertParsedHtmlToBlocks = (
     }
   });
   if (!blocks.length) {
-    blocks.push(createEmptyParagraph());
+    blocks.push(generateEmptyParagraphBlock());
   }
+  blocks.forEach(removeUndefinedProperties);
   return blocks;
+};
+
+const generateParagraphBlock = (domNode: DomNode): DocumentBodyBlock => {
+  return {
+    type: DocumentBodyBlockType.Paragraph,
+    paragraph: generateParagraph(domNode),
+  };
+};
+
+const generateEmptyParagraphBlock = (): DocumentBodyBlock => {
+  return {
+    type: DocumentBodyBlockType.Paragraph,
+    paragraph: generateEmptyParagraph(),
+  };
+};
+
+const generateListBlock = (
+  domNode: DomNode,
+  type: DocumentBodyBlockType.OrderedList | DocumentBodyBlockType.UnorderedList,
+): DocumentBodyBlock | undefined => {
+  const list = generateList(domNode, type);
+  return list
+    ? {
+        type,
+        list,
+      }
+    : undefined;
+};
+
+const generateImageBlock = (domNode: DomNode): DocumentBodyBlock => {
+  return {
+    type: DocumentBodyBlockType.Image,
+    image: generateImage(domNode),
+  };
+};
+
+const generateVideoBlock = (domNode: DomNode): DocumentBodyBlock => {
+  return {
+    type: DocumentBodyBlockType.Video,
+    video: generateVideo(domNode),
+  };
+};
+
+const generateTableBlock = (
+  domNode: DomNode,
+): DocumentBodyBlock | undefined => {
+  const table = generateTable(domNode);
+  return table
+    ? {
+        type: DocumentBodyBlockType.Table,
+        table: generateTable(domNode),
+      }
+    : undefined;
+};
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const removeUndefinedProperties = (obj: any) => {
+  /* eslint-enable */
+  if (typeof obj === 'object') {
+    Object.getOwnPropertyNames(obj).forEach((prop) => {
+      if (obj[prop] === undefined) {
+        delete obj[prop];
+      } else if (obj[prop] && typeof (obj[prop] === 'object')) {
+        removeUndefinedProperties(obj[prop]);
+      }
+    });
+  }
 };

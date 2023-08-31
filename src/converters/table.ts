@@ -1,7 +1,7 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
-import { generateImageBlock } from './image';
-import { generateListBlock } from './list';
-import { generateParagraphBlock } from './paragraph';
+import { generateImage } from './image';
+import { generateList } from './list';
+import { generateParagraph } from './paragraph';
 import {
   getAlignment,
   getBackgroundColor,
@@ -19,21 +19,24 @@ import {
   getWidth,
 } from './table-properties';
 import {
-  createEmptyTextBlock,
   generateTextBlocks,
   htmlTagToTextMark,
   shrinkTextNodeWhiteSpaces,
   trimEdgeTextNodes,
 } from './text';
-import { generateVideoBlock } from './video';
+import { generateVideo } from './video';
 import { StyleAttribute, Tag } from '../models/html';
 import { DocumentBodyBlockType } from '../models/blocks/document-body-block';
+import {
+  DocumentContentBlock,
+  DocumentContentBlockType,
+} from '../models/blocks/document-body-paragraph';
 import {
   DocumentBodyTableCellBlock,
   DocumentBodyTableCellBlockProperties,
   DocumentBodyTableRowBlock,
   DocumentBodyTableRowBlockProperties,
-  DocumentBodyTableBlock,
+  DocumentBodyTable,
   DocumentBodyTableProperties,
   DocumentTableContentBlock,
   DocumentBodyTableBlockCellType,
@@ -41,21 +44,18 @@ import {
   DocumentBodyTableBlockHorizontalAlignType,
   DocumentBodyTableBorderStyleType,
   DocumentBodyTableBlockRowType,
-} from '../models/blocks/document-body-table-block';
-import { DocumentContentBlock } from '../models/blocks/document-content-block';
+  DocumentTableContentBlockType,
+} from '../models/blocks/document-body-table';
 
 type TablePaddingPropertyHolder = {
   value?: number;
 };
 
-export const generateTableBlock = (
+export const generateTable = (
   tableElement: DomNode,
-): DocumentBodyTableBlock | undefined => {
-  const tableBlock: DocumentBodyTableBlock = {
-    type: DocumentBodyBlockType.Table,
-    table: {
-      rows: [],
-    },
+): DocumentBodyTable | undefined => {
+  const table: DocumentBodyTable = {
+    rows: [],
   };
   const tableProperties = generateTableProperties(tableElement);
   let colgroupIndex;
@@ -63,7 +63,7 @@ export const generateTableBlock = (
   let childrenInDifferentTags: DomNode;
   const tablePaddingProperty: TablePaddingPropertyHolder = {};
   if (tableProperties) {
-    tableBlock.table.properties = tableProperties;
+    table.properties = tableProperties;
   }
   tableElement.children?.forEach((child, index) => {
     switch (child.name) {
@@ -79,7 +79,7 @@ export const generateTableBlock = (
                 tablePaddingProperty,
               );
               if (rowBlock) {
-                tableBlock.table.rows.push(rowBlock);
+                table.rows.push(rowBlock);
               }
             });
         }
@@ -96,7 +96,7 @@ export const generateTableBlock = (
                 tablePaddingProperty,
               );
               if (rowBlock) {
-                tableBlock.table.rows.push(rowBlock);
+                table.rows.push(rowBlock);
               }
             });
         }
@@ -113,7 +113,7 @@ export const generateTableBlock = (
                 tablePaddingProperty,
               );
               if (rowBlock) {
-                tableBlock.table.rows.push(rowBlock);
+                table.rows.push(rowBlock);
               }
             });
         }
@@ -125,21 +125,21 @@ export const generateTableBlock = (
       case Tag.Caption:
         caption = getCaption(child);
         if (caption) {
-          if (!tableBlock.table.properties) {
-            tableBlock.table.properties = {};
+          if (!table.properties) {
+            table.properties = {};
           }
-          tableBlock.table.properties.caption = caption;
+          table.properties.caption = caption;
         }
         break;
     }
   });
   if (tablePaddingProperty.value) {
-    if (!tableBlock.table.properties) {
-      tableBlock.table.properties = {};
+    if (!table.properties) {
+      table.properties = {};
     }
-    tableBlock.table.properties.cellPadding = tablePaddingProperty.value;
+    table.properties.cellPadding = tablePaddingProperty.value;
   }
-  return tableBlock.table.rows.length ? tableBlock : undefined;
+  return table.rows.length ? table : undefined;
 };
 
 const generateRowBlock = (
@@ -224,13 +224,95 @@ const generateCellBlock = (domNode: DomNode): DocumentTableContentBlock[] => {
       blocks.push(block);
     }
     if (textBlocks) {
-      blocks.push(...textBlocks);
+      blocks.push(
+        ...textBlocks.map(documentContentBlockToDocumentTableContentBlock),
+      );
     }
   });
   if (!blocks.length) {
     blocks.push(createEmptyTextBlock());
   }
   return blocks;
+};
+
+const generateParagraphBlock = (
+  domNode: DomNode,
+): DocumentTableContentBlock => {
+  return {
+    type: DocumentTableContentBlockType.Paragraph,
+    paragraph: generateParagraph(domNode),
+  };
+};
+
+const generateListBlock = (
+  domNode: DomNode,
+  type: DocumentBodyBlockType.OrderedList | DocumentBodyBlockType.UnorderedList,
+): DocumentTableContentBlock | undefined => {
+  const list = generateList(domNode, type);
+  return list
+    ? {
+        type: documentBodyBlockListTypeToDtocumentTableContentBlockListType(
+          type,
+        ),
+        list,
+      }
+    : undefined;
+};
+
+const documentBodyBlockListTypeToDtocumentTableContentBlockListType = (
+  type: DocumentBodyBlockType.OrderedList | DocumentBodyBlockType.UnorderedList,
+): DocumentTableContentBlockType => {
+  switch (type) {
+    case DocumentBodyBlockType.OrderedList:
+      return DocumentTableContentBlockType.OrderedList;
+    case DocumentBodyBlockType.UnorderedList:
+      return DocumentTableContentBlockType.UnorderedList;
+  }
+};
+
+const generateImageBlock = (domNode: DomNode): DocumentTableContentBlock => {
+  return {
+    type: DocumentTableContentBlockType.Image,
+    image: generateImage(domNode),
+  };
+};
+
+const generateVideoBlock = (domNode: DomNode): DocumentTableContentBlock => {
+  return {
+    type: DocumentTableContentBlockType.Video,
+    video: generateVideo(domNode),
+  };
+};
+
+const generateTableBlock = (domNode: DomNode): DocumentTableContentBlock => {
+  return {
+    type: DocumentTableContentBlockType.Table,
+    table: generateTable(domNode),
+  };
+};
+
+const documentContentBlockToDocumentTableContentBlock = (
+  block: DocumentContentBlock,
+): DocumentTableContentBlock => {
+  return {
+    type: documentContentBlockTypeToDocumentTableContentBlockType(block.type),
+    text: block.text,
+    image: block.image,
+    video: block.video,
+  };
+};
+
+const documentContentBlockTypeToDocumentTableContentBlockType = (
+  type: DocumentContentBlockType,
+): DocumentTableContentBlockType => {
+  switch (type) {
+    case DocumentContentBlockType.Text:
+      return DocumentTableContentBlockType.Text;
+    case DocumentContentBlockType.Image:
+      return DocumentTableContentBlockType.Image;
+    case DocumentContentBlockType.Video:
+      return DocumentTableContentBlockType.Video;
+  }
 };
 
 const generateTableProperties = (
@@ -438,19 +520,11 @@ const htmlScopeToTableBlockScopeType = (
     : undefined;
 };
 
-const tableBlockHorizontalAlignTypesByCssTextAlign: Record<
-  string,
-  DocumentBodyTableBlockHorizontalAlignType
-> = {
-  center: DocumentBodyTableBlockHorizontalAlignType.Center,
-  left: DocumentBodyTableBlockHorizontalAlignType.Left,
-  right: DocumentBodyTableBlockHorizontalAlignType.Right,
-};
-
-export const cssTextAlignToTableBlockHorizontalAlignType = (
-  textAlign: string,
-): DocumentBodyTableBlockHorizontalAlignType | undefined => {
-  return textAlign
-    ? tableBlockHorizontalAlignTypesByCssTextAlign[textAlign.toLowerCase()]
-    : undefined;
+const createEmptyTextBlock = (): DocumentTableContentBlock => {
+  return {
+    type: DocumentTableContentBlockType.Text,
+    text: {
+      text: ' ',
+    },
+  };
 };

@@ -2,23 +2,27 @@ import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { StyleAttribute, Tag } from '../models/html';
 import { DocumentBodyBlockType } from '../models/blocks/document-body-block';
 import {
+  DocumentContentBlock,
+  DocumentContentBlockType,
+} from '../models/blocks/document-body-paragraph';
+import {
   DocumentBodyTableBlockHorizontalAlignType,
   DocumentBodyTableBlockVerticalAlignType,
   DocumentBodyTableBorderStyleType,
   DocumentBodyTableCaptionBlock,
   DocumentBodyTableCaptionItem,
-} from '../models/blocks/document-body-table-block';
-import { convertRgbToHex, generateImageBlock } from './image';
-import { generateListBlock } from './list';
-import { generateParagraphBlock } from './paragraph';
+  DocumentBodyTableCaptionItemType,
+} from '../models/blocks/document-body-table';
+import { convertRgbToHex, generateImage } from './image';
+import { generateList } from './list';
+import { generateParagraph } from './paragraph';
 import {
   generateTextBlocks,
   htmlTagToTextMark,
   shrinkTextNodeWhiteSpaces,
   trimEdgeTextNodes,
 } from './text';
-import { generateVideoBlock } from './video';
-import { DocumentContentBlock } from '../models/blocks/document-content-block';
+import { generateVideo } from './video';
 
 const emPattern = /^\d+(?:\.\d+)?em$/;
 const pxPattern = /^\d+(?:\.\d+)?px$/;
@@ -244,10 +248,16 @@ export const getCaption = (
           block = generateParagraphBlock(child);
           break;
         case Tag.OrderedList:
-          block = generateListBlock(child, DocumentBodyBlockType.OrderedList);
+          block = generateListBlock(
+            child,
+            DocumentBodyTableCaptionItemType.OrderedList,
+          );
           break;
         case Tag.UnorderedList:
-          block = generateListBlock(child, DocumentBodyBlockType.UnorderedList);
+          block = generateListBlock(
+            child,
+            DocumentBodyTableCaptionItemType.UnorderedList,
+          );
           break;
         case Tag.Image:
           block = generateImageBlock(child);
@@ -266,10 +276,92 @@ export const getCaption = (
       captionBlock.blocks.push(block);
     }
     if (textBlocks) {
-      captionBlock.blocks.push(...textBlocks);
+      captionBlock.blocks.push(
+        ...textBlocks.map(documentContentBlockToDocumentBodyTableCaptionItem),
+      );
     }
   });
   return captionBlock.blocks.length ? captionBlock : undefined;
+};
+
+const generateParagraphBlock = (
+  domNode: DomNode,
+): DocumentBodyTableCaptionItem => {
+  return {
+    type: DocumentBodyTableCaptionItemType.Paragraph,
+    paragraph: generateParagraph(domNode),
+  };
+};
+
+const generateListBlock = (
+  domNode: DomNode,
+  type:
+    | DocumentBodyTableCaptionItemType.OrderedList
+    | DocumentBodyTableCaptionItemType.UnorderedList,
+): DocumentBodyTableCaptionItem | undefined => {
+  const list = generateList(
+    domNode,
+    captionItemListTypeToBodyBlockListType(type),
+  );
+  return list
+    ? {
+        type,
+        list,
+      }
+    : undefined;
+};
+
+const captionItemListTypeToBodyBlockListType = (
+  captionItemType:
+    | DocumentBodyTableCaptionItemType.OrderedList
+    | DocumentBodyTableCaptionItemType.UnorderedList,
+) => {
+  switch (captionItemType) {
+    case DocumentBodyTableCaptionItemType.OrderedList:
+      return DocumentBodyBlockType.OrderedList;
+    case DocumentBodyTableCaptionItemType.UnorderedList:
+      return DocumentBodyBlockType.UnorderedList;
+  }
+};
+
+const generateImageBlock = (domNode: DomNode): DocumentBodyTableCaptionItem => {
+  return {
+    type: DocumentBodyTableCaptionItemType.Image,
+    image: generateImage(domNode),
+  };
+};
+
+const generateVideoBlock = (domNode: DomNode): DocumentBodyTableCaptionItem => {
+  return {
+    type: DocumentBodyTableCaptionItemType.Video,
+    video: generateVideo(domNode),
+  };
+};
+
+const documentContentBlockToDocumentBodyTableCaptionItem = (
+  block: DocumentContentBlock,
+): DocumentBodyTableCaptionItem => {
+  return {
+    type: documentContentBlockTypeToDocumentBodyTableCaptionItemType(
+      block.type,
+    ),
+    text: block.text,
+    image: block.image,
+    video: block.video,
+  };
+};
+
+const documentContentBlockTypeToDocumentBodyTableCaptionItemType = (
+  type: DocumentContentBlockType,
+): DocumentBodyTableCaptionItemType => {
+  switch (type) {
+    case DocumentContentBlockType.Text:
+      return DocumentBodyTableCaptionItemType.Text;
+    case DocumentContentBlockType.Image:
+      return DocumentBodyTableCaptionItemType.Image;
+    case DocumentContentBlockType.Video:
+      return DocumentBodyTableCaptionItemType.Video;
+  }
 };
 
 export const convertPixelsToEM = (value: number): number => {

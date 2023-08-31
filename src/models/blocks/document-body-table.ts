@@ -1,16 +1,12 @@
-import { DocumentBodyBlockType } from './document-body-block';
-import { DocumentBodyImageBlock } from './document-body-image-block';
-import { DocumentBodyListBlock } from './document-body-list-block';
-import { DocumentBodyParagraphBlock } from './document-body-paragraph-block';
-import { DocumentTextBlock } from './document-text-block';
-import { DocumentBodyVideoBlock } from './document-body-video-block';
+import { DocumentBodyImage } from './document-body-image';
+import { DocumentBodyList } from './document-body-list';
+import { DocumentBodyParagraph } from './document-body-paragraph';
+import { DocumentText } from './document-text';
+import { DocumentBodyVideo } from './document-body-video';
 
-export interface DocumentBodyTableBlock {
-  type: DocumentBodyBlockType.Table;
-  table: {
-    rows: DocumentBodyTableRowBlock[];
-    properties?: DocumentBodyTableProperties;
-  };
+export interface DocumentBodyTable {
+  rows: DocumentBodyTableRowBlock[];
+  properties?: DocumentBodyTableProperties;
 }
 
 export interface DocumentBodyTableRowBlock {
@@ -23,13 +19,25 @@ export interface DocumentBodyTableCellBlock {
   properties?: DocumentBodyTableCellBlockProperties;
 }
 
-export type DocumentTableContentBlock =
-  | DocumentBodyParagraphBlock
-  | DocumentTextBlock
-  | DocumentBodyImageBlock
-  | DocumentBodyVideoBlock
-  | DocumentBodyListBlock
-  | DocumentBodyTableBlock;
+export interface DocumentTableContentBlock {
+  type: DocumentTableContentBlockType;
+  paragraph?: DocumentBodyParagraph;
+  text?: DocumentText;
+  image?: DocumentBodyImage;
+  video?: DocumentBodyVideo;
+  list?: DocumentBodyList;
+  table?: DocumentBodyTable;
+}
+
+export enum DocumentTableContentBlockType {
+  Paragraph = 'Paragraph',
+  Text = 'Text',
+  Image = 'Image',
+  Video = 'Video',
+  OrderedList = 'OrderedList',
+  UnorderedList = 'UnorderedList',
+  Table = 'Table',
+}
 
 export interface DocumentBodyTableProperties {
   width?: number;
@@ -48,12 +56,23 @@ export interface DocumentBodyTableCaptionBlock {
   blocks: DocumentBodyTableCaptionItem[];
 }
 
-export type DocumentBodyTableCaptionItem =
-  | DocumentTextBlock
-  | DocumentBodyParagraphBlock
-  | DocumentBodyImageBlock
-  | DocumentBodyVideoBlock
-  | DocumentBodyListBlock;
+export interface DocumentBodyTableCaptionItem {
+  type: DocumentBodyTableCaptionItemType;
+  text?: DocumentText;
+  paragraph?: DocumentBodyParagraph;
+  image?: DocumentBodyImage;
+  video?: DocumentBodyVideo;
+  list?: DocumentBodyList;
+}
+
+export enum DocumentBodyTableCaptionItemType {
+  Text = 'Text',
+  Paragraph = 'Paragraph',
+  Image = 'Image',
+  Video = 'Video',
+  OrderedList = 'OrderedList',
+  UnorderedList = 'UnorderedList',
+}
 
 export interface DocumentBodyTableRowBlockProperties {
   rowType?: DocumentBodyTableBlockRowType;
@@ -66,7 +85,6 @@ export interface DocumentBodyTableRowBlockProperties {
 
 export interface DocumentBodyTableCellBlockProperties {
   cellType?: DocumentBodyTableBlockCellType;
-  scope?: DocumentBodyTableBlockScopeType;
   width?: number;
   height?: number;
   horizontalAlign?: DocumentBodyTableBlockHorizontalAlignType;
@@ -75,6 +93,7 @@ export interface DocumentBodyTableCellBlockProperties {
   borderStyle?: DocumentBodyTableBorderStyleType;
   borderColor?: string;
   backgroundColor?: string;
+  scope?: DocumentBodyTableBlockScopeType;
   colSpan?: number;
   rowSpan?: number;
 }

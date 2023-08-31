@@ -1,5 +1,4 @@
 import { DomNode } from 'html-parse-stringify';
-import { DocumentTextBlock } from '../models/blocks/document-text-block';
 import {
   TextBlockOptions,
   generateTextBlocks,
@@ -8,12 +7,12 @@ import {
 import {
   DocumentContentBlock,
   DocumentContentBlockType,
-} from '../models/blocks/document-content-block';
+} from '../models/blocks/document-body-paragraph';
 
 export const generateHyperlinkBlock = (
   anchorElement: DomNode,
   options: TextBlockOptions = {},
-): DocumentTextBlock => {
+): DocumentContentBlock => {
   const textBlocks: DocumentContentBlock[] = [];
   const hyperlinkFormattings = options.textMarks || [];
   let displayText = '';
@@ -38,17 +37,17 @@ export const generateHyperlinkBlock = (
   ) {
     textBlocks.forEach((textContent) => {
       if (textContent.type === DocumentContentBlockType.Text) {
-        displayText += textContent.text.text;
-        if (textContent.text.marks) {
-          hyperlinkFormattings.push(...textContent.text.marks);
+        displayText += textContent.text!.text;
+        if (textContent.text!.marks) {
+          hyperlinkFormattings.push(...textContent.text!.marks);
         }
       }
     });
-    textBlock.text.text = displayText;
-    textBlock.text.hyperlink = hyperlink;
+    textBlock.text!.text = displayText;
+    textBlock.text!.hyperlink = hyperlink;
     if (hyperlinkFormattings.length > 0) {
-      textBlock.text.marks = Array.from(new Set(hyperlinkFormattings));
+      textBlock.text!.marks = Array.from(new Set(hyperlinkFormattings));
     }
   }
-  return textBlock as DocumentTextBlock;
+  return textBlock;
 };

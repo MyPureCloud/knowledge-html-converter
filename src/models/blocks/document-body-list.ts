@@ -1,51 +1,57 @@
 import {
-  DocumentBodyBlockType,
   DocumentBodyBlockAlignType,
   DocumentBodyBlockFontSize,
   DocumentBodyBlockFontType,
 } from './document-body-block';
-import { DocumentBodyImageBlock } from './document-body-image-block';
-import { DocumentTextBlock } from './document-text-block';
-import { DocumentBodyVideoBlock } from './document-body-video-block';
+import { DocumentBodyImage } from './document-body-image';
+import { DocumentText } from './document-text';
+import { DocumentBodyVideo } from './document-body-video';
 
-export interface DocumentBodyListBlock {
-  type: DocumentBodyBlockType.OrderedList | DocumentBodyBlockType.UnorderedList;
-  list: {
-    blocks: DocumentBodyListItemBlock[];
-    properties?: DocumentBodyListBlockProperties;
-  };
+export interface DocumentBodyList {
+  blocks: DocumentBodyListBlock[];
+  properties?: DocumentBodyListBlockProperties;
 }
 
-export interface DocumentBodyListItemBlock {
-  type: DocumentBodyListItemBlockType.ListItem;
+export interface DocumentBodyListBlock {
+  type: DocumentBodyListBlockType;
   blocks: DocumentListContentBlock[];
   properties?: DocumentBodyListItemProperties;
 }
 
-export enum DocumentBodyListItemBlockType {
+export enum DocumentBodyListBlockType {
   ListItem = 'ListItem',
 }
 
-export type DocumentListContentBlock =
-  | DocumentTextBlock
-  | DocumentBodyImageBlock
-  | DocumentBodyListBlock
-  | DocumentBodyVideoBlock;
+export interface DocumentListContentBlock {
+  type: DocumentListContentBlockType;
+  text?: DocumentText;
+  image?: DocumentBodyImage;
+  list?: DocumentBodyList;
+  video?: DocumentBodyVideo;
+}
+
+export enum DocumentListContentBlockType {
+  Text = 'Text',
+  Image = 'Image',
+  OrderedList = 'OrderedList',
+  UnorderedList = 'UnorderedList',
+  Video = 'Video',
+}
 
 export interface DocumentBodyListBlockProperties {
-  orderedType?: DocumentBodyBlockOrderedType;
   unorderedType?: DocumentBodyBlockUnorderedType;
+  orderedType?: DocumentBodyBlockOrderedType;
 }
 
 export interface DocumentBodyListItemProperties {
-  align?: DocumentBodyBlockAlignType;
   backgroundColor?: string;
-  textColor?: string;
+  align?: DocumentBodyBlockAlignType;
+  indentation?: number;
   fontSize?: DocumentBodyBlockFontSize;
   fontType?: DocumentBodyBlockFontType;
-  indentation?: number;
-  orderedType?: DocumentBodyBlockOrderedType;
+  textColor?: string;
   unorderedType?: DocumentBodyBlockUnorderedType;
+  orderedType?: DocumentBodyBlockOrderedType;
 }
 
 export enum DocumentBodyBlockOrderedType {

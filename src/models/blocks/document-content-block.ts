@@ -1,11 +1,17 @@
-import { DocumentBodyImageBlock } from './document-body-image-block';
-import { DocumentTextBlock } from './document-text-block';
-import { DocumentBodyVideoBlock } from './document-body-video-block';
+import { DocumentBodyImage } from './document-body-image';
+import { DocumentText } from './document-text';
+import { DocumentBodyVideo } from './document-body-video';
 
-export type DocumentContentBlock =
-  | DocumentTextBlock
-  | DocumentBodyImageBlock
-  | DocumentBodyVideoBlock;
+export interface TextContentBlock {
+  text?: DocumentText;
+}
+
+export interface DocumentContentBlock {
+  type: DocumentContentBlockType;
+  text?: DocumentText;
+  image?: DocumentBodyImage;
+  video?: DocumentBodyVideo;
+}
 
 export enum DocumentContentBlockType {
   Text = 'Text',

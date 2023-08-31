@@ -8,56 +8,50 @@ import {
 } from '../models/blocks/document-body-block';
 import { convertRgbToHex } from './image';
 import {
-  DocumentBodyListBlock,
+  DocumentBodyList,
   DocumentBodyListBlockProperties,
-  DocumentBodyListItemBlock,
+  DocumentBodyListBlock,
   DocumentBodyListItemProperties,
-  DocumentBodyListItemBlockType,
+  DocumentBodyListBlockType,
   DocumentBodyBlockOrderedType,
   DocumentBodyBlockUnorderedType,
-} from '../models/blocks/document-body-list-block';
+  DocumentListContentBlockType,
+  DocumentListContentBlock,
+} from '../models/blocks/document-body-list';
 import {
-  createEmptyTextBlock,
+  DocumentContentBlock,
+  DocumentContentBlockType,
+} from '../models/blocks/document-body-paragraph';
+import {
   generateTextBlocks,
   getFontSizeName,
   removeBlankEdgeTextBlocks,
   shrinkTextNodeWhiteSpaces,
   trimEdgeTextNodes,
 } from './text';
-import { DocumentContentBlock } from '../models/blocks/document-content-block';
 import { cssTextAlignToAlignType, htmlTagToFontType } from './paragraph';
 
-export const generateListBlock = (
+export const generateList = (
   listElement: DomNode,
-  listType: DocumentBodyBlockType,
-): DocumentBodyListBlock | undefined => {
-  const listBlock: DocumentBodyListBlock = {
-    type: DocumentBodyBlockType.UnorderedList,
-    list: {
-      blocks: [],
-    },
+  listType:
+    | DocumentBodyBlockType.OrderedList
+    | DocumentBodyBlockType.UnorderedList,
+): DocumentBodyList | undefined => {
+  const list: DocumentBodyList = {
+    blocks: [],
   };
-  if (listType === DocumentBodyBlockType.OrderedList) {
-    listBlock.type = DocumentBodyBlockType.OrderedList;
-  }
-  const properties = generateListProperties(
-    listElement.attrs?.style,
-    listBlock.type,
-  );
+  const properties = generateListProperties(listElement.attrs?.style, listType);
   if (properties) {
-    listBlock.list.properties = properties;
+    list.properties = properties;
   }
 
   listElement.children
     ?.filter((child) => child.type === DomNodeType.Tag)
     .forEach((listItemElement) => {
-      const listItemBlock = generateListItemBlock(
-        listItemElement,
-        listBlock.type,
-      );
-      listBlock.list.blocks.push(listItemBlock);
+      const listItemBlock = generateListItemBlock(listItemElement, listType);
+      list.blocks.push(listItemBlock);
     });
-  return listBlock.list.blocks.length ? listBlock : undefined;
+  return list.blocks.length ? list : undefined;
 };
 
 const generateListProperties = (
@@ -82,7 +76,7 @@ const generateListProperties = (
           if (keyValue[0] === StyleAttribute.ListStyleType) {
             if (listType === DocumentBodyBlockType.OrderedList) {
               orderedType = cssListStyleTypeToOrderedType(keyValue[1]);
-            } else {
+            } else if (listType === DocumentBodyBlockType.UnorderedList) {
               unorderedType = cssListStyleTypeToUnorderedType(keyValue[1]);
             }
           }
@@ -131,9 +125,9 @@ const generateListItemBlock = (
   listType:
     | DocumentBodyBlockType.OrderedList
     | DocumentBodyBlockType.UnorderedList,
-): DocumentBodyListItemBlock => {
-  const listItemBlock: DocumentBodyListItemBlock = {
-    type: DocumentBodyListItemBlockType.ListItem,
+): DocumentBodyListBlock => {
+  const listItemBlock: DocumentBodyListBlock = {
+    type: DocumentBodyListBlockType.ListItem,
     blocks: [],
   };
 
@@ -156,28 +150,30 @@ const generateListItemBlock = (
 
   children?.forEach((child: DomNode) => {
     if (child.name === Tag.OrderedList) {
-      const listBlock = generateListBlock(
-        child,
-        DocumentBodyBlockType.OrderedList,
-      );
-      if (listBlock) {
-        listItemBlock.blocks.push(listBlock);
+      const list = generateList(child, DocumentBodyBlockType.OrderedList);
+      if (list) {
+        listItemBlock.blocks.push({
+          type: DocumentListContentBlockType.OrderedList,
+          list,
+        });
       }
     } else if (child.name === Tag.UnorderedList) {
-      const listBlock = generateListBlock(
-        child,
-        DocumentBodyBlockType.UnorderedList,
-      );
-      if (listBlock) {
-        listItemBlock.blocks.push(listBlock);
+      const list = generateList(child, DocumentBodyBlockType.UnorderedList);
+      if (list) {
+        listItemBlock.blocks.push({
+          type: DocumentListContentBlockType.UnorderedList,
+          list,
+        });
       }
     } else {
       listItemBlock.blocks.push(
-        ...generateTextBlocks(child, { isPreformatted }),
+        ...generateTextBlocks(child, { isPreformatted }).map(
+          documentContentBlockToDocumentListContentBlock,
+        ),
       );
     }
   });
-  removeBlankEdgeTextBlocks(listItemBlock.blocks as DocumentContentBlock[]);
+  removeBlankEdgeTextBlocks(listItemBlock.blocks);
   if (!listItemBlock.blocks.length) {
     listItemBlock.blocks.push(createEmptyTextBlock());
   }
@@ -234,4 +230,37 @@ const cssListStyleTypeToUnorderedType = (
   return listStyleType
     ? unorderedTypesByCssListStyleType[listStyleType.toLowerCase()]
     : undefined;
+};
+
+const createEmptyTextBlock = (): DocumentListContentBlock => {
+  return {
+    type: DocumentListContentBlockType.Text,
+    text: {
+      text: ' ',
+    },
+  };
+};
+
+const documentContentBlockToDocumentListContentBlock = (
+  block: DocumentContentBlock,
+): DocumentListContentBlock => {
+  return {
+    type: documentContentBlockTypeToDocumentListContentBlockType(block.type),
+    text: block.text,
+    image: block.image,
+    video: block.video,
+  };
+};
+
+const documentContentBlockTypeToDocumentListContentBlockType = (
+  type: DocumentContentBlockType,
+): DocumentListContentBlockType => {
+  switch (type) {
+    case DocumentContentBlockType.Text:
+      return DocumentListContentBlockType.Text;
+    case DocumentContentBlockType.Image:
+      return DocumentListContentBlockType.Image;
+    case DocumentContentBlockType.Video:
+      return DocumentListContentBlockType.Video;
+  }
 };
