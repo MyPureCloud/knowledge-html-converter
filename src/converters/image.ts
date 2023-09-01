@@ -3,10 +3,22 @@ import { StyleAttribute } from '../models/html';
 import { DocumentBodyBlockAlignType } from '../models/blocks/document-body-block';
 import {
   DocumentBodyImage,
+  DocumentBodyImageBlock,
   DocumentBodyImageProperties,
 } from '../models/blocks/document-body-image';
 
-export const generateImage = (
+export const generateImageBlock = (
+  imageElement: DomNode,
+  imageProperties: DocumentBodyImageProperties = {},
+  hyperlink: string | undefined = undefined,
+): DocumentBodyImageBlock => {
+  return {
+    type: 'Image',
+    image: generateImage(imageElement, imageProperties, hyperlink),
+  };
+};
+
+const generateImage = (
   imageElement: DomNode,
   imageProperties: DocumentBodyImageProperties = {},
   hyperlink: string | undefined = undefined,
@@ -28,23 +40,6 @@ export const generateImage = (
     hyperlink && { hyperlink },
     properties && { properties },
   );
-};
-
-export const convertRgbToHex = (rgb: string): string | undefined => {
-  const colorsArray = rgb
-    ?.replace('rgb(', '')
-    .replace('rgba(', '')
-    .replace(')', '')
-    .replace(';', '')
-    .split(/\s*,\s*/)
-    .map((x) => Number.parseInt(x, 10));
-  // If rgba(r,g,b,a), exclude opacity
-  if (colorsArray?.length === 4) {
-    colorsArray.pop();
-  }
-  return colorsArray?.length === 3
-    ? rgbToHex(colorsArray[0], colorsArray[1], colorsArray[2])
-    : undefined;
 };
 
 const getImageProperties = (
@@ -92,6 +87,23 @@ const getImageProperties = (
     }
   }
   return imageProperties;
+};
+
+export const convertRgbToHex = (rgb: string): string | undefined => {
+  const colorsArray = rgb
+    ?.replace('rgb(', '')
+    .replace('rgba(', '')
+    .replace(')', '')
+    .replace(';', '')
+    .split(/\s*,\s*/)
+    .map((x) => Number.parseInt(x, 10));
+  // If rgba(r,g,b,a), exclude opacity
+  if (colorsArray?.length === 4) {
+    colorsArray.pop();
+  }
+  return colorsArray?.length === 3
+    ? rgbToHex(colorsArray[0], colorsArray[1], colorsArray[2])
+    : undefined;
 };
 
 const rgbToHex = (red: number, green: number, blue: number): string => {

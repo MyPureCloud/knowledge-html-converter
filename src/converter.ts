@@ -3,13 +3,13 @@ import { sanitizeHtml } from './sanitizer';
 import { Tag } from './models/html';
 import { DocumentBodyBlock } from './models/blocks/document-body-block';
 import {
-  generateEmptyParagraph,
-  generateParagraph,
+  generateEmptyParagraphBlock,
+  generateParagraphBlock,
 } from './converters/paragraph';
-import { generateList } from './converters/list';
-import { generateVideo } from './converters/video';
-import { generateImage } from './converters/image';
-import { generateTable } from './converters/table';
+import { generateListBlock } from './converters/list';
+import { generateVideoBlock } from './converters/video';
+import { generateImageBlock } from './converters/image';
+import { generateTableBlock } from './converters/table';
 
 /**
  * Converts html to document body blocks.
@@ -65,59 +65,6 @@ const convertParsedHtmlToBlocks = (
   }
   blocks.forEach(removeUndefinedProperties);
   return blocks;
-};
-
-const generateParagraphBlock = (domNode: DomNode): DocumentBodyBlock => {
-  return {
-    type: 'Paragraph',
-    paragraph: generateParagraph(domNode),
-  };
-};
-
-const generateEmptyParagraphBlock = (): DocumentBodyBlock => {
-  return {
-    type: 'Paragraph',
-    paragraph: generateEmptyParagraph(),
-  };
-};
-
-const generateListBlock = (
-  domNode: DomNode,
-  type: 'OrderedList' | 'UnorderedList',
-): DocumentBodyBlock | undefined => {
-  const list = generateList(domNode, type);
-  return list
-    ? {
-        type,
-        list,
-      }
-    : undefined;
-};
-
-const generateImageBlock = (domNode: DomNode): DocumentBodyBlock => {
-  return {
-    type: 'Image',
-    image: generateImage(domNode),
-  };
-};
-
-const generateVideoBlock = (domNode: DomNode): DocumentBodyBlock => {
-  return {
-    type: 'Video',
-    video: generateVideo(domNode),
-  };
-};
-
-const generateTableBlock = (
-  domNode: DomNode,
-): DocumentBodyBlock | undefined => {
-  const table = generateTable(domNode);
-  return table
-    ? {
-        type: 'Table',
-        table: generateTable(domNode),
-      }
-    : undefined;
 };
 
 /* eslint-disable @typescript-eslint/no-explicit-any */

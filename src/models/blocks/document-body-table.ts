@@ -4,6 +4,11 @@ import { DocumentBodyParagraph } from './document-body-paragraph';
 import { DocumentText } from './document-text';
 import { DocumentBodyVideo } from './document-body-video';
 
+export interface DocumentBodyTableBlock {
+  type: 'Table';
+  table: DocumentBodyTable;
+}
+
 export interface DocumentBodyTable {
   rows: DocumentBodyTableRowBlock[];
   properties?: DocumentBodyTableProperties;

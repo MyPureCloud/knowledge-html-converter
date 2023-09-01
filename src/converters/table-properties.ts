@@ -8,16 +8,16 @@ import {
   DocumentBodyTableCaptionBlock,
   DocumentBodyTableCaptionItem,
 } from '../models/blocks/document-body-table';
-import { convertRgbToHex, generateImage } from './image';
-import { generateList } from './list';
-import { generateParagraph } from './paragraph';
+import { convertRgbToHex, generateImageBlock } from './image';
+import { generateListBlock } from './list';
+import { generateParagraphBlock } from './paragraph';
 import {
   generateTextBlocks,
   htmlTagToTextMark,
   shrinkTextNodeWhiteSpaces,
   trimEdgeTextNodes,
 } from './text';
-import { generateVideo } from './video';
+import { generateVideoBlock } from './video';
 
 const emPattern = /^\d+(?:\.\d+)?em$/;
 const pxPattern = /^\d+(?:\.\d+)?px$/;
@@ -269,42 +269,6 @@ export const getCaption = (
     }
   });
   return captionBlock.blocks.length ? captionBlock : undefined;
-};
-
-const generateParagraphBlock = (
-  domNode: DomNode,
-): DocumentBodyTableCaptionItem => {
-  return {
-    type: 'Paragraph',
-    paragraph: generateParagraph(domNode),
-  };
-};
-
-const generateListBlock = (
-  domNode: DomNode,
-  type: 'OrderedList' | 'UnorderedList',
-): DocumentBodyTableCaptionItem | undefined => {
-  const list = generateList(domNode, type);
-  return list
-    ? {
-        type,
-        list,
-      }
-    : undefined;
-};
-
-const generateImageBlock = (domNode: DomNode): DocumentBodyTableCaptionItem => {
-  return {
-    type: 'Image',
-    image: generateImage(domNode),
-  };
-};
-
-const generateVideoBlock = (domNode: DomNode): DocumentBodyTableCaptionItem => {
-  return {
-    type: 'Video',
-    video: generateVideo(domNode),
-  };
 };
 
 export const convertPixelsToEM = (value: number): number => {

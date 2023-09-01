@@ -7,10 +7,11 @@ import {
   DocumentTextProperties,
   DocumentText,
   TextContentBlock,
+  DocumentTextBlock,
 } from '../models/blocks/document-text';
 import { generateHyperlinkBlock } from './hyperlink';
-import { convertRgbToHex, generateImage } from './image';
-import { generateVideo } from './video';
+import { convertRgbToHex, generateImageBlock } from './image';
+import { generateVideoBlock } from './video';
 
 export interface TextBlockOptions {
   textMarks?: DocumentTextMarks[];
@@ -26,31 +27,21 @@ export const generateTextBlocks = (
   const arr: DocumentContentBlock[] = [];
   if (domNode.type === DomNodeType.Text) {
     if (domNode.content) {
-      arr.push({
-        type: 'Text',
-        text: generateDocumentText(domNode.content, options),
-      });
+      arr.push(generateTextBlock(domNode.content, options));
     }
   } else if (
     domNode.type === DomNodeType.Tag &&
     domNode.name === Tag.LineBreak
   ) {
-    arr.push({
-      type: 'Text',
-      text: generateDocumentText('\n'),
-    });
+    arr.push(generateTextBlock('\n'));
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Image) {
-    arr.push({
-      type: 'Image',
-      image: generateImage(domNode, options.textProperties, options.hyperlink),
-    });
+    arr.push(
+      generateImageBlock(domNode, options.textProperties, options.hyperlink),
+    );
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Anchor) {
     arr.push(generateHyperlinkBlock(domNode, options));
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.IFrame) {
-    arr.push({
-      type: 'Video',
-      video: generateVideo(domNode),
-    });
+    arr.push(generateVideoBlock(domNode));
   } else {
     const textMarks = options.textMarks ? [...options.textMarks] : [];
     const textMark = htmlTagToTextMark(domNode.name);
@@ -88,6 +79,40 @@ export const generateTextBlocks = (
     }
   }
   return arr;
+};
+
+export const generateTextBlock = (
+  text: string,
+  options: TextBlockOptions = {},
+): DocumentTextBlock => {
+  return {
+    type: 'Text',
+    text: generateDocumentText(text, options),
+  };
+};
+
+export const generateEmptyTextBlock = (): DocumentTextBlock => {
+  return generateTextBlock(' ');
+};
+
+const generateDocumentText = (
+  text: string,
+  options: TextBlockOptions = {},
+): DocumentText => {
+  const documentText: DocumentText = {
+    text: '',
+  };
+  documentText.text = text;
+  if (
+    options.textProperties &&
+    Object.getOwnPropertyNames(options.textProperties).length
+  ) {
+    documentText.properties = options.textProperties;
+  }
+  if (options.textMarks && options.textMarks.length) {
+    documentText.marks = [...new Set(options.textMarks)];
+  }
+  return documentText;
 };
 
 const textMarksByHtmlTag: Record<string, DocumentTextMarks> = {
@@ -167,26 +192,6 @@ export const getFontSizeName = (
     default:
       return undefined;
   }
-};
-
-const generateDocumentText = (
-  text: string,
-  options: TextBlockOptions = {},
-): DocumentText => {
-  const documentText: DocumentText = {
-    text: '',
-  };
-  documentText.text = text;
-  if (
-    options.textProperties &&
-    Object.getOwnPropertyNames(options.textProperties).length
-  ) {
-    documentText.properties = options.textProperties;
-  }
-  if (options.textMarks && options.textMarks.length) {
-    documentText.marks = [...new Set(options.textMarks)];
-  }
-  return documentText;
 };
 
 const blankRegex = /^\s*$/;

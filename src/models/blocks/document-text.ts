@@ -4,6 +4,11 @@ export interface TextContentBlock {
   text?: DocumentText;
 }
 
+export interface DocumentTextBlock {
+  type: 'Text';
+  text: DocumentText;
+}
+
 export interface DocumentText {
   text: string;
   marks?: DocumentTextMarks[];

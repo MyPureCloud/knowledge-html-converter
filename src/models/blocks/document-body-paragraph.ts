@@ -7,6 +7,11 @@ import { DocumentBodyImage } from './document-body-image';
 import { DocumentBodyVideo } from './document-body-video';
 import { DocumentText } from './document-text';
 
+export interface DocumentBodyParagraphBlock {
+  type: 'Paragraph';
+  paragraph: DocumentBodyParagraph;
+}
+
 export interface DocumentBodyParagraph {
   blocks: DocumentContentBlock[];
   properties?: DocumentBodyParagraphProperties;

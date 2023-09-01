@@ -7,6 +7,12 @@ import { DocumentBodyImage } from './document-body-image';
 import { DocumentText } from './document-text';
 import { DocumentBodyVideo } from './document-body-video';
 
+// The type name 'DocumentBodyListBlock' is already the name of list item blocks in the API unfortunately
+export interface DocumentBodyListElementBlock {
+  type: 'OrderedList' | 'UnorderedList';
+  list: DocumentBodyList;
+}
+
 export interface DocumentBodyList {
   blocks: DocumentBodyListBlock[];
   properties?: DocumentBodyListBlockProperties;

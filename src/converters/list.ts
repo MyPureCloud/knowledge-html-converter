@@ -13,9 +13,10 @@ import {
   DocumentBodyListItemProperties,
   DocumentBodyBlockOrderedType,
   DocumentBodyBlockUnorderedType,
-  DocumentListContentBlock,
+  DocumentBodyListElementBlock,
 } from '../models/blocks/document-body-list';
 import {
+  generateEmptyTextBlock,
   generateTextBlocks,
   getFontSizeName,
   removeBlankEdgeTextBlocks,
@@ -24,7 +25,20 @@ import {
 } from './text';
 import { cssTextAlignToAlignType, htmlTagToFontType } from './paragraph';
 
-export const generateList = (
+export const generateListBlock = (
+  listElement: DomNode,
+  listType: 'OrderedList' | 'UnorderedList',
+): DocumentBodyListElementBlock | undefined => {
+  const list = generateList(listElement, listType);
+  return list
+    ? {
+        type: listType,
+        list,
+      }
+    : undefined;
+};
+
+const generateList = (
   listElement: DomNode,
   listType: 'OrderedList' | 'UnorderedList',
 ): DocumentBodyList | undefined => {
@@ -137,20 +151,14 @@ const generateListItemBlock = (
 
   children?.forEach((child: DomNode) => {
     if (child.name === Tag.OrderedList) {
-      const list = generateList(child, 'OrderedList');
-      if (list) {
-        listItemBlock.blocks.push({
-          type: 'OrderedList',
-          list,
-        });
+      const listBlock = generateListBlock(child, 'OrderedList');
+      if (listBlock) {
+        listItemBlock.blocks.push(listBlock);
       }
     } else if (child.name === Tag.UnorderedList) {
-      const list = generateList(child, 'UnorderedList');
-      if (list) {
-        listItemBlock.blocks.push({
-          type: 'UnorderedList',
-          list,
-        });
+      const listBlock = generateListBlock(child, 'UnorderedList');
+      if (listBlock) {
+        listItemBlock.blocks.push(listBlock);
       }
     } else {
       listItemBlock.blocks.push(
@@ -160,7 +168,7 @@ const generateListItemBlock = (
   });
   removeBlankEdgeTextBlocks(listItemBlock.blocks);
   if (!listItemBlock.blocks.length) {
-    listItemBlock.blocks.push(createEmptyTextBlock());
+    listItemBlock.blocks.push(generateEmptyTextBlock());
   }
   return listItemBlock;
 };
@@ -215,13 +223,4 @@ const cssListStyleTypeToUnorderedType = (
   return listStyleType
     ? unorderedTypesByCssListStyleType[listStyleType.toLowerCase()]
     : undefined;
-};
-
-const createEmptyTextBlock = (): DocumentListContentBlock => {
-  return {
-    type: 'Text',
-    text: {
-      text: ' ',
-    },
-  };
 };

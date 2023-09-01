@@ -5,20 +5,27 @@ import {
   DocumentBodyBlockFontType,
 } from '../models/blocks/document-body-block';
 import {
+  generateEmptyTextBlock,
   generateTextBlocks,
   shrinkTextNodeWhiteSpaces,
   trimEdgeTextNodes,
 } from './text';
 import {
-  DocumentContentBlock,
   DocumentBodyParagraph,
   DocumentBodyParagraphProperties,
+  DocumentBodyParagraphBlock,
 } from '../models/blocks/document-body-paragraph';
-import { DocumentText } from '../models/blocks/document-text';
 
-export const generateParagraph = (
+export const generateParagraphBlock = (
   domElement: DomNode,
-): DocumentBodyParagraph => {
+): DocumentBodyParagraphBlock => {
+  return {
+    type: 'Paragraph',
+    paragraph: generateParagraph(domElement),
+  };
+};
+
+const generateParagraph = (domElement: DomNode): DocumentBodyParagraph => {
   const paragraph: DocumentBodyParagraph = {
     blocks: [],
   };
@@ -79,19 +86,19 @@ const generateProperties = (
   return paragraphProperties;
 };
 
-export const generateEmptyParagraph = (): DocumentBodyParagraph => {
+export const generateEmptyParagraphBlock = (): DocumentBodyParagraphBlock => {
+  return {
+    type: 'Paragraph',
+    paragraph: generateEmptyParagraph(),
+  };
+};
+
+const generateEmptyParagraph = (): DocumentBodyParagraph => {
   return {
     blocks: [generateEmptyTextBlock()],
     properties: {
       fontType: DocumentBodyBlockFontType.Paragraph,
     },
-  };
-};
-
-const generateEmptyTextBlock = (): DocumentContentBlock => {
-  return {
-    type: 'Text',
-    text: generateEmptyDocumentText(),
   };
 };
 
@@ -125,10 +132,4 @@ export const htmlTagToFontType = (
   tag: string,
 ): DocumentBodyBlockFontType | undefined => {
   return tag ? fontTypesByHtmlTag[tag.toLowerCase()] : undefined;
-};
-
-const generateEmptyDocumentText = (): DocumentText => {
-  return {
-    text: ' ',
-  };
 };

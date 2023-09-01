@@ -1,7 +1,7 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
-import { generateImage } from './image';
-import { generateList } from './list';
-import { generateParagraph } from './paragraph';
+import { generateImageBlock } from './image';
+import { generateListBlock } from './list';
+import { generateParagraphBlock } from './paragraph';
 import {
   getAlignment,
   getBackgroundColor,
@@ -24,7 +24,7 @@ import {
   shrinkTextNodeWhiteSpaces,
   trimEdgeTextNodes,
 } from './text';
-import { generateVideo } from './video';
+import { generateVideoBlock } from './video';
 import { StyleAttribute, Tag } from '../models/html';
 import { DocumentContentBlock } from '../models/blocks/document-body-paragraph';
 import {
@@ -40,13 +40,26 @@ import {
   DocumentBodyTableBlockHorizontalAlignType,
   DocumentBodyTableBorderStyleType,
   DocumentBodyTableBlockRowType,
+  DocumentBodyTableBlock,
 } from '../models/blocks/document-body-table';
 
 type TablePaddingPropertyHolder = {
   value?: number;
 };
 
-export const generateTable = (
+export const generateTableBlock = (
+  tableElement: DomNode,
+): DocumentBodyTableBlock | undefined => {
+  const table = generateTable(tableElement);
+  return table
+    ? {
+        type: 'Table',
+        table,
+      }
+    : undefined;
+};
+
+const generateTable = (
   tableElement: DomNode,
 ): DocumentBodyTable | undefined => {
   const table: DocumentBodyTable = {
@@ -226,49 +239,6 @@ const generateCellBlock = (domNode: DomNode): DocumentTableContentBlock[] => {
     blocks.push(createEmptyTextBlock());
   }
   return blocks;
-};
-
-const generateParagraphBlock = (
-  domNode: DomNode,
-): DocumentTableContentBlock => {
-  return {
-    type: 'Paragraph',
-    paragraph: generateParagraph(domNode),
-  };
-};
-
-const generateListBlock = (
-  domNode: DomNode,
-  type: 'OrderedList' | 'UnorderedList',
-): DocumentTableContentBlock | undefined => {
-  const list = generateList(domNode, type);
-  return list
-    ? {
-        type,
-        list,
-      }
-    : undefined;
-};
-
-const generateImageBlock = (domNode: DomNode): DocumentTableContentBlock => {
-  return {
-    type: 'Image',
-    image: generateImage(domNode),
-  };
-};
-
-const generateVideoBlock = (domNode: DomNode): DocumentTableContentBlock => {
-  return {
-    type: 'Video',
-    video: generateVideo(domNode),
-  };
-};
-
-const generateTableBlock = (domNode: DomNode): DocumentTableContentBlock => {
-  return {
-    type: 'Table',
-    table: generateTable(domNode),
-  };
 };
 
 const generateTableProperties = (
