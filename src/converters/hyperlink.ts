@@ -1,17 +1,16 @@
 import { DomNode } from 'html-parse-stringify';
-import { TextBlock } from '../models/blocks/text';
 import {
   TextBlockOptions,
   generateTextBlocks,
   shrinkTextNodeWhiteSpaces,
 } from './text';
-import { ContentBlock, ContentBlockType } from '../models/blocks/content-block';
+import { DocumentContentBlock } from '../models/blocks/document-body-paragraph';
 
 export const generateHyperlinkBlock = (
   anchorElement: DomNode,
   options: TextBlockOptions = {},
-): TextBlock => {
-  const textBlocks: ContentBlock[] = [];
+): DocumentContentBlock => {
+  const textBlocks: DocumentContentBlock[] = [];
   const hyperlinkFormattings = options.textMarks || [];
   let displayText = '';
 
@@ -28,20 +27,20 @@ export const generateHyperlinkBlock = (
     textBlocks.push(...generateTextBlocks(child, { ...options, hyperlink }));
   });
   const textBlock = textBlocks[0];
-  if (hyperlink && textBlock && textBlock.type === ContentBlockType.Text) {
+  if (hyperlink && textBlock && textBlock.type === 'Text') {
     textBlocks.forEach((textContent) => {
-      if (textContent.type === ContentBlockType.Text) {
-        displayText += textContent.text.text;
-        if (textContent.text.marks) {
-          hyperlinkFormattings.push(...textContent.text.marks);
+      if (textContent.type === 'Text') {
+        displayText += textContent.text!.text;
+        if (textContent.text!.marks) {
+          hyperlinkFormattings.push(...textContent.text!.marks);
         }
       }
     });
-    textBlock.text.text = displayText;
-    textBlock.text.hyperlink = hyperlink;
+    textBlock.text!.text = displayText;
+    textBlock.text!.hyperlink = hyperlink;
     if (hyperlinkFormattings.length > 0) {
-      textBlock.text.marks = Array.from(new Set(hyperlinkFormattings));
+      textBlock.text!.marks = Array.from(new Set(hyperlinkFormattings));
     }
   }
-  return textBlock as TextBlock;
+  return textBlock;
 };

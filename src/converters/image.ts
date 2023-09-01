@@ -1,36 +1,92 @@
 import { DomNode } from 'html-parse-stringify';
 import { StyleAttribute } from '../models/html';
-import { BlockType } from '../models/blocks/block';
-import { AlignType } from '../models/blocks/align-type';
-import { ImageBlock, ImageProperties } from '../models/blocks/image';
+import { DocumentBodyBlockAlignType } from '../models/blocks/document-body-block';
+import {
+  DocumentBodyImage,
+  DocumentBodyImageBlock,
+  DocumentBodyImageProperties,
+} from '../models/blocks/document-body-image';
 
 export const generateImageBlock = (
   imageElement: DomNode,
-  imageProperties: ImageProperties = {},
-): ImageBlock => {
+  imageProperties: DocumentBodyImageProperties = {},
+  hyperlink: string | undefined = undefined,
+): DocumentBodyImageBlock => {
+  return {
+    type: 'Image',
+    image: generateImage(imageElement, imageProperties, hyperlink),
+  };
+};
+
+const generateImage = (
+  imageElement: DomNode,
+  imageProperties: DocumentBodyImageProperties = {},
+  hyperlink: string | undefined = undefined,
+): DocumentBodyImage => {
   let imgUrl = imageElement.attrs?.src || '';
   imgUrl = imgUrl
     .replace(/&amp;/g, '&')
     .replace(/&gt;/g, '>')
     .replace(/&lt;/g, '<')
     .replace(/&quot;/g, '"');
-  const hyperlink = imageProperties.hyperlink
-    ? imageProperties.hyperlink
-    : null;
   const backgroundColor = imageProperties?.backgroundColor;
   let properties = getImageProperties(imageElement);
   if (backgroundColor) {
     properties = { ...properties, ...{ backgroundColor } };
   }
-  return {
-    type: BlockType.Image,
-    image: Object.assign(
-      {},
-      { url: imgUrl },
-      hyperlink && { hyperlink },
-      properties && { properties },
-    ),
-  };
+  return Object.assign(
+    {},
+    { url: imgUrl },
+    hyperlink && { hyperlink },
+    properties && { properties },
+  );
+};
+
+const getImageProperties = (
+  imageElement: DomNode,
+): DocumentBodyImageProperties | undefined => {
+  let imageProperties: DocumentBodyImageProperties | undefined;
+  if (imageElement.attrs) {
+    let align: DocumentBodyBlockAlignType | undefined;
+    let backgroundColor: string | undefined;
+    if (imageElement.attrs.style) {
+      imageElement.attrs.style
+        .split(/\s*;\s*/) //split with extra spaces around the semi colon
+        .map((chunk) => chunk.split(/\s*:\s*/)) //split key:value with colon
+        .map((keyValue) => {
+          if (keyValue.length === 2) {
+            if (
+              keyValue[0] === StyleAttribute.Float &&
+              keyValue[1].toLocaleLowerCase() === 'left'
+            ) {
+              align = DocumentBodyBlockAlignType.Left;
+              return;
+            } else if (
+              keyValue[0] === StyleAttribute.Float &&
+              keyValue[1].toLocaleLowerCase() === 'right'
+            ) {
+              align = DocumentBodyBlockAlignType.Right;
+              return;
+            } else if (
+              keyValue[0] === 'display' &&
+              keyValue[1].toLocaleLowerCase() === 'block'
+            ) {
+              // For center tiny mce adds style as "display: block; margin-left: auto; margin-right: auto;"
+              align = DocumentBodyBlockAlignType.Center;
+              return;
+            }
+          }
+        });
+    }
+    if (align || backgroundColor) {
+      imageProperties = Object.assign(
+        {},
+        align && { align },
+        backgroundColor && { backgroundColor },
+      );
+    }
+  }
+  return imageProperties;
 };
 
 export const convertRgbToHex = (rgb: string): string | undefined => {
@@ -48,53 +104,6 @@ export const convertRgbToHex = (rgb: string): string | undefined => {
   return colorsArray?.length === 3
     ? rgbToHex(colorsArray[0], colorsArray[1], colorsArray[2])
     : undefined;
-};
-
-const getImageProperties = (
-  imageElement: DomNode,
-): ImageProperties | undefined => {
-  let imageProperties: ImageProperties | undefined;
-  if (imageElement.attrs) {
-    let align: AlignType | undefined;
-    let backgroundColor: string | undefined;
-    if (imageElement.attrs.style) {
-      imageElement.attrs.style
-        .split(/\s*;\s*/) //split with extra spaces around the semi colon
-        .map((chunk) => chunk.split(/\s*:\s*/)) //split key:value with colon
-        .map((keyValue) => {
-          if (keyValue.length === 2) {
-            if (
-              keyValue[0] === StyleAttribute.Float &&
-              keyValue[1].toLocaleLowerCase() === 'left'
-            ) {
-              align = AlignType.Left;
-              return;
-            } else if (
-              keyValue[0] === StyleAttribute.Float &&
-              keyValue[1].toLocaleLowerCase() === 'right'
-            ) {
-              align = AlignType.Right;
-              return;
-            } else if (
-              keyValue[0] === 'display' &&
-              keyValue[1].toLocaleLowerCase() === 'block'
-            ) {
-              // For center tiny mce adds style as "display: block; margin-left: auto; margin-right: auto;"
-              align = AlignType.Center;
-              return;
-            }
-          }
-        });
-    }
-    if (align || backgroundColor) {
-      imageProperties = Object.assign(
-        {},
-        align && { align },
-        backgroundColor && { backgroundColor },
-      );
-    }
-  }
-  return imageProperties;
 };
 
 const rgbToHex = (red: number, green: number, blue: number): string => {

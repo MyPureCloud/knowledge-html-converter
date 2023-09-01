@@ -1,12 +1,20 @@
 import { DomNode } from 'html-parse-stringify';
-import { BlockType } from '../models/blocks/block';
-import { VideoBlock } from '../models/blocks/video';
+import {
+  DocumentBodyVideo,
+  DocumentBodyVideoBlock,
+} from '../models/blocks/document-body-video';
 
-export const generateVideoBlock = (iframeElement: DomNode): VideoBlock => {
+export const generateVideoBlock = (
+  iframeElement: DomNode,
+): DocumentBodyVideoBlock => {
   return {
-    type: BlockType.Video,
-    video: {
-      url: iframeElement.attrs?.src || '',
-    },
+    type: 'Video',
+    video: generateVideo(iframeElement),
+  };
+};
+
+const generateVideo = (iframeElement: DomNode): DocumentBodyVideo => {
+  return {
+    url: iframeElement.attrs?.src || '',
   };
 };

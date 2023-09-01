@@ -19,31 +19,29 @@ import {
   getWidth,
 } from './table-properties';
 import {
-  createEmptyTextBlock,
   generateTextBlocks,
+  htmlTagToTextMark,
   shrinkTextNodeWhiteSpaces,
   trimEdgeTextNodes,
 } from './text';
 import { generateVideoBlock } from './video';
 import { StyleAttribute, Tag } from '../models/html';
-import { BlockType } from '../models/blocks/block';
+import { DocumentContentBlock } from '../models/blocks/document-body-paragraph';
 import {
-  TableCellBlock,
-  TableCellProperties,
-  TableRowBlock,
-  TableRowProperties,
-  TableBlock,
-  TableProperties,
-  TableCellContentBlock,
-  TableBlockCellType,
-  htmlScopeToTableBlockScopeType,
-  TableBlockScopeType,
-  TableBlockHorizontalAlignType,
-  TableBorderStyleType,
-  TableRowType,
-} from '../models/blocks/table';
-import { htmlTagToTextMark } from '../models/blocks/text';
-import { ContentBlock } from '../models/blocks/content-block';
+  DocumentBodyTableCellBlock,
+  DocumentBodyTableCellBlockProperties,
+  DocumentBodyTableRowBlock,
+  DocumentBodyTableRowBlockProperties,
+  DocumentBodyTable,
+  DocumentBodyTableProperties,
+  DocumentTableContentBlock,
+  DocumentBodyTableBlockCellType,
+  DocumentBodyTableBlockScopeType,
+  DocumentBodyTableBlockHorizontalAlignType,
+  DocumentBodyTableBorderStyleType,
+  DocumentBodyTableBlockRowType,
+  DocumentBodyTableBlock,
+} from '../models/blocks/document-body-table';
 
 type TablePaddingPropertyHolder = {
   value?: number;
@@ -51,12 +49,21 @@ type TablePaddingPropertyHolder = {
 
 export const generateTableBlock = (
   tableElement: DomNode,
-): TableBlock | undefined => {
-  const tableBlock: TableBlock = {
-    type: BlockType.Table,
-    table: {
-      rows: [],
-    },
+): DocumentBodyTableBlock | undefined => {
+  const table = generateTable(tableElement);
+  return table
+    ? {
+        type: 'Table',
+        table,
+      }
+    : undefined;
+};
+
+const generateTable = (
+  tableElement: DomNode,
+): DocumentBodyTable | undefined => {
+  const table: DocumentBodyTable = {
+    rows: [],
   };
   const tableProperties = generateTableProperties(tableElement);
   let colgroupIndex;
@@ -64,7 +71,7 @@ export const generateTableBlock = (
   let childrenInDifferentTags: DomNode;
   const tablePaddingProperty: TablePaddingPropertyHolder = {};
   if (tableProperties) {
-    tableBlock.table.properties = tableProperties;
+    table.properties = tableProperties;
   }
   tableElement.children?.forEach((child, index) => {
     switch (child.name) {
@@ -75,12 +82,12 @@ export const generateTableBlock = (
             .forEach((rowElement) => {
               const rowBlock = generateRowBlock(
                 rowElement,
-                TableRowType.Body,
+                DocumentBodyTableBlockRowType.Body,
                 childrenInDifferentTags,
                 tablePaddingProperty,
               );
               if (rowBlock) {
-                tableBlock.table.rows.push(rowBlock);
+                table.rows.push(rowBlock);
               }
             });
         }
@@ -92,12 +99,12 @@ export const generateTableBlock = (
             .forEach((rowElement) => {
               const rowBlock = generateRowBlock(
                 rowElement,
-                TableRowType.Header,
+                DocumentBodyTableBlockRowType.Header,
                 childrenInDifferentTags,
                 tablePaddingProperty,
               );
               if (rowBlock) {
-                tableBlock.table.rows.push(rowBlock);
+                table.rows.push(rowBlock);
               }
             });
         }
@@ -109,12 +116,12 @@ export const generateTableBlock = (
             .forEach((rowElement) => {
               const rowBlock = generateRowBlock(
                 rowElement,
-                TableRowType.Footer,
+                DocumentBodyTableBlockRowType.Footer,
                 childrenInDifferentTags,
                 tablePaddingProperty,
               );
               if (rowBlock) {
-                tableBlock.table.rows.push(rowBlock);
+                table.rows.push(rowBlock);
               }
             });
         }
@@ -126,37 +133,37 @@ export const generateTableBlock = (
       case Tag.Caption:
         caption = getCaption(child);
         if (caption) {
-          if (!tableBlock.table.properties) {
-            tableBlock.table.properties = {};
+          if (!table.properties) {
+            table.properties = {};
           }
-          tableBlock.table.properties.caption = caption;
+          table.properties.caption = caption;
         }
         break;
     }
   });
   if (tablePaddingProperty.value) {
-    if (!tableBlock.table.properties) {
-      tableBlock.table.properties = {};
+    if (!table.properties) {
+      table.properties = {};
     }
-    tableBlock.table.properties.cellPadding = tablePaddingProperty.value;
+    table.properties.cellPadding = tablePaddingProperty.value;
   }
-  return tableBlock.table.rows.length ? tableBlock : undefined;
+  return table.rows.length ? table : undefined;
 };
 
 const generateRowBlock = (
   rowElement: DomNode,
-  rowType: TableRowType,
+  rowType: DocumentBodyTableBlockRowType,
   childrenInDifferentTags: DomNode,
   tablePaddingProperty: TablePaddingPropertyHolder,
-): TableRowBlock | undefined => {
-  const rowBlock: TableRowBlock = {
+): DocumentBodyTableRowBlock | undefined => {
+  const rowBlock: DocumentBodyTableRowBlock = {
     cells: [],
   };
   const cellElements = rowElement.children?.filter(
     (child) => child.type === DomNodeType.Tag,
   );
   cellElements?.forEach((cellElement, index) => {
-    const cellBlock: TableCellBlock = {
+    const cellBlock: DocumentBodyTableCellBlock = {
       blocks: [],
     };
     const blocksInCell = generateCellBlock(cellElement);
@@ -176,15 +183,15 @@ const generateRowBlock = (
   return rowBlock.cells.length ? rowBlock : undefined;
 };
 
-const generateCellBlock = (domNode: DomNode): TableCellContentBlock[] => {
-  const blocks: TableCellContentBlock[] = [];
+const generateCellBlock = (domNode: DomNode): DocumentTableContentBlock[] => {
+  const blocks: DocumentTableContentBlock[] = [];
 
   const children = shrinkTextNodeWhiteSpaces(
     trimEdgeTextNodes(domNode.children),
   );
   children.forEach((child) => {
-    let block: TableCellContentBlock | undefined;
-    let textBlocks: ContentBlock[] | undefined;
+    let block: DocumentTableContentBlock | undefined;
+    let textBlocks: DocumentContentBlock[] | undefined;
     if (child.type === DomNodeType.Text || htmlTagToTextMark(child.name)) {
       textBlocks = generateTextBlocks(child);
     } else {
@@ -200,10 +207,10 @@ const generateCellBlock = (domNode: DomNode): TableCellContentBlock[] => {
           block = generateParagraphBlock(child);
           break;
         case Tag.OrderedList:
-          block = generateListBlock(child, BlockType.OrderedList);
+          block = generateListBlock(child, 'OrderedList');
           break;
         case Tag.UnorderedList:
-          block = generateListBlock(child, BlockType.UnorderedList);
+          block = generateListBlock(child, 'UnorderedList');
           break;
         case Tag.Image:
           block = generateImageBlock(child);
@@ -236,8 +243,8 @@ const generateCellBlock = (domNode: DomNode): TableCellContentBlock[] => {
 
 const generateTableProperties = (
   tableElement: DomNode,
-): TableProperties | undefined => {
-  let tableProperties: TableProperties | undefined;
+): DocumentBodyTableProperties | undefined => {
+  let tableProperties: DocumentBodyTableProperties | undefined;
   let borderWidth;
   let cellSpacing;
   let width;
@@ -296,11 +303,11 @@ const generateTableProperties = (
 
 const generateRowProperties = (
   rowElement: DomNode,
-  rowType: TableRowType,
-): TableRowProperties => {
-  let alignment: TableBlockHorizontalAlignType | undefined;
+  rowType: DocumentBodyTableBlockRowType,
+): DocumentBodyTableRowBlockProperties => {
+  let alignment: DocumentBodyTableBlockHorizontalAlignType | undefined;
   let height: number | undefined;
-  let borderStyle: TableBorderStyleType | undefined;
+  let borderStyle: DocumentBodyTableBorderStyleType | undefined;
   let borderColor: string | undefined;
   let backgroundColor: string | undefined;
 
@@ -327,12 +334,12 @@ const generateCellProperties = (
   cellElement: DomNode,
   colGroup: DomNode,
   tablePaddingProperty: TablePaddingPropertyHolder,
-): TableCellProperties | undefined => {
-  let cellProperties: TableCellProperties | undefined;
+): DocumentBodyTableCellBlockProperties | undefined => {
+  let cellProperties: DocumentBodyTableCellBlockProperties | undefined;
   let rowSpan;
   let colSpan;
-  let cellType: TableBlockCellType | undefined;
-  let scope: TableBlockScopeType | undefined;
+  let cellType: DocumentBodyTableBlockCellType | undefined;
+  let scope: DocumentBodyTableBlockScopeType | undefined;
   let width;
   let cellStyleJson = {};
 
@@ -353,12 +360,12 @@ const generateCellProperties = (
     cellElement.type === DomNodeType.Tag &&
     cellElement.name === Tag.HeaderCell
   ) {
-    cellType = TableBlockCellType.HeaderCell;
+    cellType = DocumentBodyTableBlockCellType.HeaderCell;
   } else if (
     cellElement.type === DomNodeType.Tag &&
     cellElement.name === Tag.DataCell
   ) {
-    cellType = TableBlockCellType.Cell;
+    cellType = DocumentBodyTableBlockCellType.Cell;
   }
 
   if (cellElement.attrs && cellElement.attrs.scope) {
@@ -419,4 +426,31 @@ const generateCellProperties = (
     );
   }
   return cellProperties;
+};
+
+const tableBlockScopeTypesByHtmlScope: Record<
+  string,
+  DocumentBodyTableBlockScopeType
+> = {
+  row: DocumentBodyTableBlockScopeType.Row,
+  col: DocumentBodyTableBlockScopeType.Column,
+  rowgroup: DocumentBodyTableBlockScopeType.RowGroup,
+  colgroup: DocumentBodyTableBlockScopeType.ColumnGroup,
+};
+
+const htmlScopeToTableBlockScopeType = (
+  scope: string,
+): DocumentBodyTableBlockScopeType | undefined => {
+  return scope
+    ? tableBlockScopeTypesByHtmlScope[scope.toLowerCase()]
+    : undefined;
+};
+
+const createEmptyTextBlock = (): DocumentTableContentBlock => {
+  return {
+    type: 'Text',
+    text: {
+      text: ' ',
+    },
+  };
 };
