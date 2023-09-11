@@ -68,6 +68,7 @@ describe('convert-html-to-blocks', function () {
     it('plain-text', test);
     it('white-spaces', test);
     it('nested-text-tags', test);
+    it('html-entities', test);
   });
 
   describe('video', function () {

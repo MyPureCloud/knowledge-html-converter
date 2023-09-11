@@ -1,0 +1,34 @@
+[
+  {
+    "paragraph": {
+      "blocks": [
+        {
+          "text": {
+            "text": "&lt;script&gt;alert('hello');&lt;/script&gt;"
+          },
+          "type": "Text"
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    },
+    "type": "Paragraph"
+  },
+  {
+    "paragraph": {
+      "blocks": [
+        {
+          "text": {
+            "text": "&amp; &lt; &gt; &quot; &nbsp; &copy; &reg; &trade; &asymp; &ne; &pound; &euro; &dollar; &deg;"
+          },
+          "type": "Text"
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    },
+    "type": "Paragraph"
+  }
+]
