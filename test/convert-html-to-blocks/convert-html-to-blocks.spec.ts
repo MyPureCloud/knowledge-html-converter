@@ -42,6 +42,7 @@ describe('convert-html-to-blocks', function () {
     it('empty', test);
     it('empty-no-text', test);
     it('empty-multiple', test);
+    it('float-number-truncation', test);
   });
 
   describe('table', function () {
@@ -59,6 +60,7 @@ describe('convert-html-to-blocks', function () {
     it('empty-row', test);
     it('empty-tables', test);
     it('white-space-between-elements', test);
+    it('float-number-truncation', test);
   });
 
   describe('text', function () {

@@ -1,0 +1,37 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [{ "type": "Text", "text": { "text": "P1" } }],
+      "properties": { "fontType": "Paragraph", "indentation": 5 }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [{ "type": "Text", "text": { "text": "P2" } }],
+      "properties": { "fontType": "Paragraph", "indentation": 5.242524 }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [{ "type": "Text", "text": { "text": "P3" } }],
+      "properties": { "fontType": "Paragraph", "indentation": 52.42524 }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [{ "type": "Text", "text": { "text": "P4" } }],
+      "properties": { "fontType": "Paragraph", "indentation": 5.242523 }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [{ "type": "Text", "text": { "text": "P5" } }],
+      "properties": { "fontType": "Paragraph", "indentation": 5.2425 }
+    }
+  }
+]
