@@ -15,6 +15,7 @@ import {
   DocumentBodyParagraphProperties,
   DocumentBodyParagraphBlock,
 } from '../models/blocks/document-body-paragraph';
+import { truncateToSinglePrecisionFloat } from '../utils';
 
 export const generateParagraphBlock = (
   domElement: DomNode,
@@ -68,7 +69,9 @@ const generateProperties = (
         if (keyValue.length === 2) {
           if (keyValue[0] === StyleAttribute.PaddingLeft) {
             // remove the em from the value
-            indentation = Number(keyValue[1].replace(/\s*em\s*/g, ''));
+            indentation = truncateToSinglePrecisionFloat(
+              Number(keyValue[1].replace(/\s*em\s*/g, '')),
+            );
           }
           if (keyValue[0] === StyleAttribute.TextAlign) {
             align = cssTextAlignToAlignType(keyValue[1]);

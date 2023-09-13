@@ -18,6 +18,7 @@ import {
   trimEdgeTextNodes,
 } from './text';
 import { generateVideoBlock } from './video';
+import { truncateToSinglePrecisionFloat } from '../utils';
 
 const emPattern = /^\d+(?:\.\d+)?em$/;
 const pxPattern = /^\d+(?:\.\d+)?px$/;
@@ -53,7 +54,7 @@ export const getPadding = (
       );
     }
   }
-  return padding;
+  return padding ? truncateToSinglePrecisionFloat(padding) : padding;
 };
 
 export const getBackgroundColor = (
@@ -122,6 +123,9 @@ export const getBorderProperties = (
       borderWidth = convertPixelsToEM(
         Number(result[0].replace(/\s*px\s*/g, '')),
       );
+    }
+    if (borderWidth) {
+      borderWidth = truncateToSinglePrecisionFloat(borderWidth);
     }
     // border style
     borderStyle = cssBorderStyleToTableBorderStyleType(result[1]);
@@ -301,7 +305,7 @@ const getHeightAndWidthProperty = (
       );
     }
   }
-  return value;
+  return value ? truncateToSinglePrecisionFloat(value) : value;
 };
 
 const tableBlockHorizontalAlignTypesByCssTextAlign: Record<

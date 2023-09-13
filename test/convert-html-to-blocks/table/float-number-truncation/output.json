@@ -1,0 +1,72 @@
+[
+  {
+    "type": "Table",
+    "table": {
+      "rows": [
+        {
+          "cells": [
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": "C1"
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell",
+                "width": 12.38948,
+                "height": 3.385928,
+                "borderWidth": 0.8527492
+              }
+            }
+          ],
+          "properties": {
+            "rowType": "Body",
+            "height": 8.684927
+          }
+        }
+      ],
+      "properties": {
+        "width": 122.6835,
+        "height": 268.2831,
+        "cellSpacing": 0.3452398,
+        "cellPadding": 2.382874,
+        "borderWidth": 0.5689372
+      }
+    }
+  },
+  {
+    "type": "Table",
+    "table": {
+      "rows": [
+        {
+          "cells": [
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": "C2"
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell"
+              }
+            }
+          ],
+          "properties": {
+            "rowType": "Body"
+          }
+        }
+      ],
+      "properties": {
+        "borderWidth": 0.3284726,
+        "borderStyle": "Solid",
+        "borderColor": "#ddaaff"
+      }
+    }
+  }
+]
