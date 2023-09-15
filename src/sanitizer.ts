@@ -16,7 +16,7 @@ const options: IOptions = {
     '*': {},
   },
   parser: {
-    decodeEntities: false, // do not convert '&nbsp;' to ' '
+    decodeEntities: false, // do not convert '&nbsp;' to '\u00a0'
   },
 };
 Object.values(StyleAttribute).forEach((stylePropertyName) => {

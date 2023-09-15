@@ -20,7 +20,8 @@ export interface TextBlockOptions {
 
 const lineBreak = '<br>';
 const lineBreakInApi = '\n';
-const nbspCharacter = '\u00a0';
+// TinyMCE in the article editor generates an nbsp character for empty paragraphs, list items, table cells
+export const nbspCharacter = '\u00a0';
 const nbspPlaceholder = '&nbsp-encoded;';
 
 export const generateTextBlocks = (
@@ -88,7 +89,7 @@ export const generateTextBlock = (
 };
 
 export const generateEmptyTextBlock = (): DocumentTextBlock => {
-  return generateTextBlock(' ');
+  return generateTextBlock(nbspCharacter);
 };
 
 const generateDocumentText = (

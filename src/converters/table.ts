@@ -21,6 +21,7 @@ import {
 import {
   generateTextBlocks,
   htmlTagToTextMark,
+  nbspCharacter,
   postProcessTextBlocks,
 } from './text';
 import { generateVideoBlock } from './video';
@@ -448,7 +449,7 @@ const generateEmptyTextBlock = (): DocumentTableContentBlock => {
   return {
     type: 'Text',
     text: {
-      text: ' ',
+      text: nbspCharacter,
     },
   };
 };
