@@ -234,7 +234,7 @@ const generateCellBlock = (domNode: DomNode): DocumentTableContentBlock[] => {
   });
   postProcessTextBlocks(blocks);
   if (!blocks.length) {
-    blocks.push(createEmptyTextBlock());
+    blocks.push(generateEmptyTextBlock());
   }
   return blocks;
 };
@@ -444,7 +444,7 @@ const htmlScopeToTableBlockScopeType = (
     : undefined;
 };
 
-const createEmptyTextBlock = (): DocumentTableContentBlock => {
+const generateEmptyTextBlock = (): DocumentTableContentBlock => {
   return {
     type: 'Text',
     text: {

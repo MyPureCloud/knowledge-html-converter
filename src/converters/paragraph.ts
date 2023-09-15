@@ -18,14 +18,19 @@ import { truncateToSinglePrecisionFloat } from '../utils';
 
 export const generateParagraphBlock = (
   domElement: DomNode,
-): DocumentBodyParagraphBlock => {
-  return {
-    type: 'Paragraph',
-    paragraph: generateParagraph(domElement),
-  };
+): DocumentBodyParagraphBlock | undefined => {
+  const paragraph = generateParagraph(domElement);
+  return paragraph
+    ? {
+        type: 'Paragraph',
+        paragraph,
+      }
+    : undefined;
 };
 
-const generateParagraph = (domElement: DomNode): DocumentBodyParagraph => {
+const generateParagraph = (
+  domElement: DomNode,
+): DocumentBodyParagraph | undefined => {
   const paragraph: DocumentBodyParagraph = {
     blocks: [],
   };
@@ -44,10 +49,7 @@ const generateParagraph = (domElement: DomNode): DocumentBodyParagraph => {
   if (!isPreformatted) {
     postProcessTextBlocks(paragraph.blocks);
   }
-  if (!paragraph.blocks.length) {
-    paragraph.blocks.push(generateEmptyTextBlock());
-  }
-  return paragraph;
+  return paragraph.blocks.length ? paragraph : undefined;
 };
 
 const generateProperties = (
