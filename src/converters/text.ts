@@ -20,6 +20,8 @@ export interface TextBlockOptions {
 
 const lineBreak = '<br>';
 const lineBreakInApi = '\n';
+const nbspCharacter = '\u00a0';
+const nbspPlaceholder = '&nbsp-encoded;';
 
 export const generateTextBlocks = (
   domNode: DomNode,
@@ -204,10 +206,54 @@ const trailingWhiteSpaceRegex = /\s+$/;
 export const postProcessTextBlocks = (
   blocks: Omit<DocumentContentBlock, 'type'>[] = [],
 ): void => {
+  encodeNbspCharactersToPlaceholderLiterals(blocks);
   mergeTextBlocks(blocks);
+
   shrinkTextBlockWhiteSpaces(blocks);
   removeTextBlockEdgeWhiteSpaces(blocks);
+
   replaceLineBreakStrings(blocks);
+  decodeNbspCharactersFromPlaceholderLiterals(blocks);
+};
+
+/**
+ * Encodes '\u00a0' (non-breaking space) characters to the '&converter-nbsp-character;' string literals,
+ * so that these characters are kept when squeezing white spaces.
+ * TinyMCE generates such characters for empty paragraphs
+ */
+const encodeNbspCharactersToPlaceholderLiterals = (
+  blocks: Omit<DocumentContentBlock, 'type'>[] = [],
+): void => {
+  replaceTextBlockStrings(
+    blocks,
+    new RegExp(nbspCharacter, 'g'),
+    nbspPlaceholder,
+  );
+};
+
+/**
+ * Decodes '&converter-nbsp-character;' literals to '\u00a0' (non-breaking space) characters.
+ */
+const decodeNbspCharactersFromPlaceholderLiterals = (
+  blocks: Omit<DocumentContentBlock, 'type'>[] = [],
+): void => {
+  replaceTextBlockStrings(
+    blocks,
+    new RegExp(nbspPlaceholder, 'g'),
+    nbspCharacter,
+  );
+};
+
+const replaceTextBlockStrings = (
+  blocks: Omit<DocumentContentBlock, 'type'>[] = [],
+  from: RegExp,
+  to: string,
+): void => {
+  blocks.forEach((block) => {
+    if (block.text) {
+      block.text.text = block.text.text.replace(from, to);
+    }
+  });
 };
 
 /**
@@ -273,17 +319,11 @@ const textPropertiesEqual = (
 const shrinkTextBlockWhiteSpaces = (
   blocks: Omit<DocumentContentBlock, 'type'>[] = [],
 ): void => {
-  for (let i = 0; i < blocks.length; i++) {
-    if (blocks[i].text && /\s+/.test(blocks[i].text!.text)) {
-      blocks[i] = {
-        ...blocks[i],
-        text: {
-          ...blocks[i].text,
-          text: blocks[i].text!.text.replace(/\s+/g, ' '),
-        },
-      };
+  blocks.forEach((block) => {
+    if (block.text && /\s+/.test(block.text.text)) {
+      block.text.text = block.text.text.replace(/\s+/g, ' ');
     }
-  }
+  });
 };
 
 /**
@@ -329,11 +369,11 @@ const isInlineElement = (block: Omit<DocumentContentBlock, 'type'>): boolean =>
 const replaceLineBreakStrings = (
   blocks: Omit<DocumentContentBlock, 'type'>[] = [],
 ): void => {
-  for (let i = blocks.length - 1; i >= 0; i--) {
-    if (blocks[i].text && blocks[i].text?.text === lineBreak) {
-      blocks[i].text!.text = lineBreakInApi;
+  blocks.forEach((block) => {
+    if (block.text && block.text.text === lineBreak) {
+      block.text.text = lineBreakInApi;
     }
-  }
+  });
 };
 
 /**

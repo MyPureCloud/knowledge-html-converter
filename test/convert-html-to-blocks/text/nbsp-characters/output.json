@@ -1,0 +1,50 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "nbsp character"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "  having   both   nbsp        and space   characters  "
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]
