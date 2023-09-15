@@ -14,8 +14,7 @@ import { generateParagraphBlock } from './paragraph';
 import {
   generateTextBlocks,
   htmlTagToTextMark,
-  shrinkTextNodeWhiteSpaces,
-  trimEdgeTextNodes,
+  postProcessTextBlocks,
 } from './text';
 import { generateVideoBlock } from './video';
 import { truncateToSinglePrecisionFloat } from '../utils';
@@ -224,10 +223,7 @@ export const getCaption = (
     blocks: [],
   };
 
-  const children = shrinkTextNodeWhiteSpaces(
-    trimEdgeTextNodes(captionElement.children),
-  );
-
+  const children = captionElement.children || [];
   children.forEach((child) => {
     let block: DocumentBodyTableCaptionItem | undefined;
     let textBlocks: DocumentContentBlock[] | undefined;
@@ -272,6 +268,7 @@ export const getCaption = (
       captionBlock.blocks.push(...textBlocks);
     }
   });
+  postProcessTextBlocks(captionBlock.blocks);
   return captionBlock.blocks.length ? captionBlock : undefined;
 };
 

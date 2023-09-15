@@ -24,12 +24,6 @@
                   }
                 },
                 {
-                  "type": "Text",
-                  "text": {
-                    "text": " "
-                  }
-                },
-                {
                   "type": "UnorderedList",
                   "list": {
                     "blocks": [
@@ -40,12 +34,6 @@
                         ]
                       }
                     ]
-                  }
-                },
-                {
-                  "type": "Text",
-                  "text": {
-                    "text": " "
                   }
                 },
                 {
@@ -78,7 +66,7 @@
                 {
                   "type": "Text",
                   "text": {
-                    "text": " text "
+                    "text": "text "
                   }
                 },
                 {

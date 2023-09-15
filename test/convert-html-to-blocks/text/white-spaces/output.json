@@ -32,7 +32,7 @@
         {
           "type": "Text",
           "text": {
-            "text": " In links, too. ",
+            "text": "In links, too.",
             "hyperlink": "https://example.com"
           }
         }

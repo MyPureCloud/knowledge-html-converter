@@ -21,8 +21,7 @@ import {
 import {
   generateTextBlocks,
   htmlTagToTextMark,
-  shrinkTextNodeWhiteSpaces,
-  trimEdgeTextNodes,
+  postProcessTextBlocks,
 } from './text';
 import { generateVideoBlock } from './video';
 import { StyleAttribute, Tag } from '../models/html';
@@ -186,9 +185,7 @@ const generateRowBlock = (
 const generateCellBlock = (domNode: DomNode): DocumentTableContentBlock[] => {
   const blocks: DocumentTableContentBlock[] = [];
 
-  const children = shrinkTextNodeWhiteSpaces(
-    trimEdgeTextNodes(domNode.children),
-  );
+  const children = domNode.children || [];
   children.forEach((child) => {
     let block: DocumentTableContentBlock | undefined;
     let textBlocks: DocumentContentBlock[] | undefined;
@@ -235,6 +232,7 @@ const generateCellBlock = (domNode: DomNode): DocumentTableContentBlock[] => {
       blocks.push(...textBlocks);
     }
   });
+  postProcessTextBlocks(blocks);
   if (!blocks.length) {
     blocks.push(createEmptyTextBlock());
   }

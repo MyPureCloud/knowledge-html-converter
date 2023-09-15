@@ -50,19 +50,7 @@
             "rowType": "Body"
           }
         }
-      ],
-      "properties": {
-        "caption": {
-          "blocks": [
-            {
-              "type": "Text",
-              "text": {
-                "text": " "
-              }
-            }
-          ]
-        }
-      }
+      ]
     }
   }
 ]

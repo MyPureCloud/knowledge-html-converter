@@ -76,14 +76,14 @@
             {
               "type": "Text",
               "text": {
-                "text": " Strong ",
+                "text": "Strong ",
                 "marks": ["Bold"]
               }
             },
             {
               "type": "Text",
               "text": {
-                "text": " caption"
+                "text": "caption"
               }
             }
           ]

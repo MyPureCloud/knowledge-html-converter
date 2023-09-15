@@ -7,8 +7,7 @@ import {
 import {
   generateEmptyTextBlock,
   generateTextBlocks,
-  shrinkTextNodeWhiteSpaces,
-  trimEdgeTextNodes,
+  postProcessTextBlocks,
 } from './text';
 import {
   DocumentBodyParagraph,
@@ -30,7 +29,6 @@ const generateParagraph = (domElement: DomNode): DocumentBodyParagraph => {
   const paragraph: DocumentBodyParagraph = {
     blocks: [],
   };
-  let children = domElement.children;
   const fontType = htmlTagToFontType(domElement.name);
   const properties = generateProperties(domElement.attrs);
   if (properties) {
@@ -40,14 +38,12 @@ const generateParagraph = (domElement: DomNode): DocumentBodyParagraph => {
   }
 
   const isPreformatted = fontType === DocumentBodyBlockFontType.Preformatted;
-  if (!isPreformatted) {
-    children = shrinkTextNodeWhiteSpaces(
-      trimEdgeTextNodes(domElement.children),
-    );
-  }
-  children?.forEach((child: DomNode) => {
-    paragraph.blocks.push(...generateTextBlocks(child, { isPreformatted }));
+  domElement.children?.forEach((child: DomNode) => {
+    paragraph.blocks.push(...generateTextBlocks(child));
   });
+  if (!isPreformatted) {
+    postProcessTextBlocks(paragraph.blocks);
+  }
   if (!paragraph.blocks.length) {
     paragraph.blocks.push(generateEmptyTextBlock());
   }
@@ -132,7 +128,7 @@ const fontTypesByHtmlTag: Record<string, DocumentBodyBlockFontType> = {
 };
 
 export const htmlTagToFontType = (
-  tag: string,
+  tag: string | undefined,
 ): DocumentBodyBlockFontType | undefined => {
   return tag ? fontTypesByHtmlTag[tag.toLowerCase()] : undefined;
 };

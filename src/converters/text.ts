@@ -6,7 +6,6 @@ import {
   DocumentTextMarks,
   DocumentTextProperties,
   DocumentText,
-  TextContentBlock,
   DocumentTextBlock,
 } from '../models/blocks/document-text';
 import { generateHyperlinkBlock } from './hyperlink';
@@ -17,8 +16,10 @@ export interface TextBlockOptions {
   textMarks?: DocumentTextMarks[];
   hyperlink?: string;
   textProperties?: DocumentTextProperties;
-  isPreformatted?: boolean;
 }
+
+const lineBreak = '<br>';
+const lineBreakInApi = '\n';
 
 export const generateTextBlocks = (
   domNode: DomNode,
@@ -33,7 +34,7 @@ export const generateTextBlocks = (
     domNode.type === DomNodeType.Tag &&
     domNode.name === Tag.LineBreak
   ) {
-    arr.push(generateTextBlock('\n'));
+    arr.push(generateTextBlock(lineBreak));
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Image) {
     arr.push(
       generateImageBlock(domNode, options.textProperties, options.hyperlink),
@@ -61,11 +62,7 @@ export const generateTextBlocks = (
         generateTextProperties(domNode.attrs.style),
       );
     }
-    let children = domNode.children;
-    if (!options.isPreformatted) {
-      children = shrinkTextNodeWhiteSpaces(children);
-    }
-    children?.forEach((child) => {
+    domNode.children?.forEach((child) => {
       arr.push(
         ...generateTextBlocks(child, {
           ...options,
@@ -74,9 +71,6 @@ export const generateTextBlocks = (
         }),
       );
     });
-    if (!options.isPreformatted) {
-      mergeBlankTextBlocks(arr);
-    }
   }
   return arr;
 };
@@ -125,7 +119,7 @@ const textMarksByHtmlTag: Record<string, DocumentTextMarks> = {
 };
 
 export const htmlTagToTextMark = (
-  tag: string,
+  tag: string | undefined,
 ): DocumentTextMarks | undefined => {
   return tag ? textMarksByHtmlTag[tag.toLowerCase()] : undefined;
 };
@@ -199,76 +193,147 @@ const leadingWhiteSpaceRegex = /^\s+/;
 const trailingWhiteSpaceRegex = /\s+$/;
 
 /**
- * Removes leading and trailing blank text nodes,
- * then removes leading white spaces from the first text node
- * and trailing white spaces from the last text node.
- * Keeps one node if all nodes are blank text nodes.
+ * Applies text block post processing:
+ * - Merge adjacent text blocks when they have the same formatting.
+ * - Replace adjacent white space characters with a single space character.
+ * - Remove leading/trailing white spaces from text blocks when the
+ *   previous/next block either has trailing/leading white space or
+ *   represents an html block element.
+ * - Replace '<br>' with '\n' to indicate line break to the knowledge api.
  */
-export const trimEdgeTextNodes = (domNodes: DomNode[] = []): DomNode[] => {
-  const nodes = [...domNodes];
-  removeBlankEdgeTextNodes(nodes);
-  removeEdgeWhiteSpaces(nodes);
-  return nodes;
+export const postProcessTextBlocks = (
+  blocks: Omit<DocumentContentBlock, 'type'>[] = [],
+): void => {
+  mergeTextBlocks(blocks);
+  shrinkTextBlockWhiteSpaces(blocks);
+  removeTextBlockEdgeWhiteSpaces(blocks);
+  replaceLineBreakStrings(blocks);
 };
-
-const removeBlankEdgeTextNodes = (nodes: DomNode[]): void => {
-  while (nodes.length > 1 && isBlankTextNode(nodes[0])) {
-    nodes.shift();
-  }
-  while (nodes.length > 1 && isBlankTextNode(nodes[nodes.length - 1])) {
-    nodes.pop();
-  }
-};
-
-const removeEdgeWhiteSpaces = (nodes: DomNode[]): void => {
-  if (nodes.length) {
-    if (
-      nodes[0].type === DomNodeType.Text &&
-      leadingWhiteSpaceRegex.test(nodes[0].content!) &&
-      !blankRegex.test(nodes[0].content!)
-    ) {
-      nodes[0] = {
-        ...nodes[0],
-        content: nodes[0].content!.replace(leadingWhiteSpaceRegex, ''),
-      };
-    }
-    if (
-      nodes[nodes.length - 1] &&
-      nodes[nodes.length - 1].type === DomNodeType.Text &&
-      trailingWhiteSpaceRegex.test(nodes[nodes.length - 1].content!) &&
-      !blankRegex.test(nodes[nodes.length - 1].content!)
-    ) {
-      nodes[nodes.length - 1] = {
-        ...nodes[nodes.length - 1],
-        content: nodes[nodes.length - 1].content!.replace(
-          trailingWhiteSpaceRegex,
-          '',
-        ),
-      };
-    }
-  }
-};
-
-const isBlankTextNode = (node: DomNode): boolean =>
-  node.type === DomNodeType.Text &&
-  (!node.content || blankRegex.test(node.content));
 
 /**
- * Replaces consecutive white space characters with a single space character.
+ * Merges adjacent text blocks when they have the same formatting.
  */
-export const shrinkTextNodeWhiteSpaces = (
-  domNodes: DomNode[] = [],
-): DomNode[] => {
-  const nodes = [...domNodes];
-  for (let i = 0; i < nodes.length; i++) {
-    if (nodes[i].type === DomNodeType.Text && /\s+/.test(nodes[i].content!)) {
-      nodes[i] = {
-        ...nodes[i],
-        content: nodes[i].content!.replace(/\s+/g, ' '),
+const mergeTextBlocks = (
+  blocks: Omit<DocumentContentBlock, 'type'>[] = [],
+): void => {
+  for (let i = 0; i < blocks.length - 1; i++) {
+    if (!blocks[i].text || !blocks[i + 1].text) {
+      continue;
+    }
+    const current = blocks[i].text!;
+    const next = blocks[i + 1].text!;
+    if (
+      hyperlinksEqual(current.hyperlink, next.hyperlink) &&
+      textMarksEqual(current.marks, next.marks) &&
+      textPropertiesEqual(current.properties, next.properties)
+    ) {
+      current.text = current.text + next.text;
+      blocks.splice(i + 1, 1);
+      --i;
+    }
+  }
+};
+
+const hyperlinksEqual = (
+  link1: string | undefined,
+  link2: string | undefined,
+): boolean => (!link1 && !link2) || link1 === link2;
+
+const textMarksEqual = (
+  m1: DocumentTextMarks[] | undefined,
+  m2: DocumentTextMarks[] | undefined,
+): boolean => {
+  m1 = m1 || [];
+  m2 = m2 || [];
+  if (m1.length === 0 && m2.length === 0) {
+    return true;
+  }
+  if (m1.length !== m2.length) {
+    return false;
+  }
+  const sorted1 = [...m1].sort();
+  const sorted2 = [...m2].sort();
+  return sorted1.every((val, index) => val === sorted2[index]);
+};
+
+const textPropertiesEqual = (
+  p1: DocumentTextProperties = {},
+  p2: DocumentTextProperties = {},
+) => {
+  return (
+    p1.backgroundColor === p2.backgroundColor &&
+    p1.fontSize === p2.fontSize &&
+    p1.textColor === p2.textColor
+  );
+};
+
+/**
+ * Replaces adjacent white space characters with a single space character.
+ */
+const shrinkTextBlockWhiteSpaces = (
+  blocks: Omit<DocumentContentBlock, 'type'>[] = [],
+): void => {
+  for (let i = 0; i < blocks.length; i++) {
+    if (blocks[i].text && /\s+/.test(blocks[i].text!.text)) {
+      blocks[i] = {
+        ...blocks[i],
+        text: {
+          ...blocks[i].text,
+          text: blocks[i].text!.text.replace(/\s+/g, ' '),
+        },
       };
     }
   }
-  return nodes;
+};
+
+/**
+ * Removes leading/trailing white spaces from text blocks when the
+ * previous/next block either has trailing/leading white space or
+ * represents an html block element.
+ */
+const removeTextBlockEdgeWhiteSpaces = (
+  blocks: Omit<DocumentContentBlock, 'type'>[] = [],
+): void => {
+  for (let i = blocks.length - 1; i >= 0; i--) {
+    if (!blocks[i].text) {
+      continue;
+    }
+    const currentText = blocks[i].text!;
+    const textToLeft = blocks[i - 1]?.text;
+    if (
+      trailingWhiteSpaceRegex.test(currentText.text) &&
+      (i === blocks.length - 1 || !isInlineElement(blocks[i + 1]))
+    ) {
+      currentText.text = currentText.text.replace(trailingWhiteSpaceRegex, '');
+    }
+    if (
+      leadingWhiteSpaceRegex.test(currentText.text) &&
+      (i === 0 ||
+        !isInlineElement(blocks[i - 1]) ||
+        (textToLeft && trailingWhiteSpaceRegex.test(textToLeft.text)))
+    ) {
+      currentText.text = currentText.text.replace(leadingWhiteSpaceRegex, '');
+    }
+    if (!currentText.text) {
+      blocks.splice(i, 1);
+    }
+  }
+};
+
+const isInlineElement = (block: Omit<DocumentContentBlock, 'type'>): boolean =>
+  !!(block.text || block.image || block.video);
+
+/**
+ * Replaces '<br>' with '\n' to indicate line break to the knowledge api.
+ */
+const replaceLineBreakStrings = (
+  blocks: Omit<DocumentContentBlock, 'type'>[] = [],
+): void => {
+  for (let i = blocks.length - 1; i >= 0; i--) {
+    if (blocks[i].text && blocks[i].text?.text === lineBreak) {
+      blocks[i].text!.text = lineBreakInApi;
+    }
+  }
 };
 
 /**
@@ -276,44 +341,19 @@ export const shrinkTextNodeWhiteSpaces = (
  * Keeps one node if all nodes are blank text nodes.
  */
 export const removeBlankEdgeTextBlocks = (
-  blocks: TextContentBlock[] = [],
+  blocks: Omit<DocumentContentBlock, 'type'>[] = [],
 ): void => {
-  while (blocks.length > 1 && isBlankTextBlock(blocks[0])) {
+  while (blocks.length > 0 && isBlankTextBlock(blocks[0])) {
     blocks.shift();
   }
-  while (blocks.length > 1 && isBlankTextBlock(blocks[blocks.length - 1])) {
+  while (blocks.length > 0 && isBlankTextBlock(blocks[blocks.length - 1])) {
     blocks.pop();
   }
 };
 
-const isBlankTextBlock = (contentBlock: TextContentBlock): boolean =>
-  !!contentBlock.text &&
-  (!contentBlock.text.text || blankRegex.test(contentBlock.text.text));
+const isBlankTextBlock = (
+  contentBlock: Omit<DocumentContentBlock, 'type'>,
+): boolean => !!contentBlock.text && isBlankDocumentText(contentBlock.text);
 
-/**
- * Removes text blocks that are blank and either
- * the previous text block ends with white space or
- * the next text block starts with white space.
- * @param blocks
- */
-export const mergeBlankTextBlocks = (
-  blocks: DocumentContentBlock[] = [],
-): void => {
-  for (let i = 0; i < blocks.length; i++) {
-    if (!isBlankTextBlock(blocks[i])) {
-      continue;
-    }
-    const previousTextBlock =
-      i > 0 && blocks[i - 1].text ? blocks[i - 1] : undefined;
-    const nextTextBlock =
-      i < blocks.length - 1 && blocks[i + 1].text ? blocks[i + 1] : undefined;
-    if (
-      (previousTextBlock &&
-        trailingWhiteSpaceRegex.test(previousTextBlock.text!.text)) ||
-      (nextTextBlock && leadingWhiteSpaceRegex.test(nextTextBlock.text!.text))
-    ) {
-      blocks.splice(i, 1);
-      i--;
-    }
-  }
-};
+const isBlankDocumentText = (documentText: DocumentText): boolean =>
+  !documentText.text || blankRegex.test(documentText.text);

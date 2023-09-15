@@ -19,9 +19,8 @@ import {
   generateEmptyTextBlock,
   generateTextBlocks,
   getFontSizeName,
+  postProcessTextBlocks,
   removeBlankEdgeTextBlocks,
-  shrinkTextNodeWhiteSpaces,
-  trimEdgeTextNodes,
 } from './text';
 import { cssTextAlignToAlignType, htmlTagToFontType } from './paragraph';
 
@@ -144,12 +143,8 @@ const generateListItemBlock = (
     listItemBlock.properties.fontType = fontType;
   }
   const isPreformatted = fontType === DocumentBodyBlockFontType.Preformatted;
-  let children = listItemElement.children;
-  if (!isPreformatted) {
-    children = shrinkTextNodeWhiteSpaces(trimEdgeTextNodes(children));
-  }
 
-  children?.forEach((child: DomNode) => {
+  listItemElement.children?.forEach((child: DomNode) => {
     if (child.name === Tag.OrderedList) {
       const listBlock = generateListBlock(child, 'OrderedList');
       if (listBlock) {
@@ -161,12 +156,14 @@ const generateListItemBlock = (
         listItemBlock.blocks.push(listBlock);
       }
     } else {
-      listItemBlock.blocks.push(
-        ...generateTextBlocks(child, { isPreformatted }),
-      );
+      listItemBlock.blocks.push(...generateTextBlocks(child));
     }
   });
-  removeBlankEdgeTextBlocks(listItemBlock.blocks);
+  if (!isPreformatted) {
+    postProcessTextBlocks(listItemBlock.blocks);
+  } else {
+    removeBlankEdgeTextBlocks(listItemBlock.blocks);
+  }
   if (!listItemBlock.blocks.length) {
     listItemBlock.blocks.push(generateEmptyTextBlock());
   }
