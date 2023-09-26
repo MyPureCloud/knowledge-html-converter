@@ -6,7 +6,7 @@
         {
           "type": "Text",
           "text": {
-            "text": "one"
+            "text": " "
           }
         }
       ],
@@ -22,7 +22,23 @@
         {
           "type": "Text",
           "text": {
-            "text": "two"
+            "text": "nbsp character"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "  having   both   nbsp        and space   characters  "
           }
         }
       ],

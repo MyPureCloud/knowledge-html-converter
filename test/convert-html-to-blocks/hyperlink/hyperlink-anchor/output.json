@@ -13,13 +13,7 @@
         {
           "type": "Text",
           "text": {
-            "text": " "
-          }
-        },
-        {
-          "type": "Text",
-          "text": {
-            "text": "link to link"
+            "text": " link to link"
           }
         }
       ],

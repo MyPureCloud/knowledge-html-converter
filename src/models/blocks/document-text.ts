@@ -1,9 +1,5 @@
 import { DocumentBodyBlockFontSize } from './document-body-block';
 
-export interface TextContentBlock {
-  text?: DocumentText;
-}
-
 export interface DocumentTextBlock {
   type: 'Text';
   text: DocumentText;

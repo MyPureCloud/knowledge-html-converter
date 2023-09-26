@@ -1,9 +1,5 @@
 import { DomNode } from 'html-parse-stringify';
-import {
-  TextBlockOptions,
-  generateTextBlocks,
-  shrinkTextNodeWhiteSpaces,
-} from './text';
+import { TextBlockOptions, generateTextBlocks } from './text';
 import { DocumentContentBlock } from '../models/blocks/document-body-paragraph';
 
 export const generateHyperlinkBlock = (
@@ -19,11 +15,7 @@ export const generateHyperlinkBlock = (
   if (hyperlink && hyperlink.startsWith('#')) {
     hyperlink = undefined;
   }
-  let children = anchorElement.children;
-  if (!options.isPreformatted) {
-    children = shrinkTextNodeWhiteSpaces(children);
-  }
-  children?.forEach((child) => {
+  anchorElement.children?.forEach((child) => {
     textBlocks.push(...generateTextBlocks(child, { ...options, hyperlink }));
   });
   const textBlock = textBlocks[0];

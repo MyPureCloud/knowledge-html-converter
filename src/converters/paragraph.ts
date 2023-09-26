@@ -7,8 +7,7 @@ import {
 import {
   generateEmptyTextBlock,
   generateTextBlocks,
-  shrinkTextNodeWhiteSpaces,
-  trimEdgeTextNodes,
+  postProcessTextBlocks,
 } from './text';
 import {
   DocumentBodyParagraph,
@@ -19,18 +18,22 @@ import { truncateToSinglePrecisionFloat } from '../utils';
 
 export const generateParagraphBlock = (
   domElement: DomNode,
-): DocumentBodyParagraphBlock => {
-  return {
-    type: 'Paragraph',
-    paragraph: generateParagraph(domElement),
-  };
+): DocumentBodyParagraphBlock | undefined => {
+  const paragraph = generateParagraph(domElement);
+  return paragraph
+    ? {
+        type: 'Paragraph',
+        paragraph,
+      }
+    : undefined;
 };
 
-const generateParagraph = (domElement: DomNode): DocumentBodyParagraph => {
+const generateParagraph = (
+  domElement: DomNode,
+): DocumentBodyParagraph | undefined => {
   const paragraph: DocumentBodyParagraph = {
     blocks: [],
   };
-  let children = domElement.children;
   const fontType = htmlTagToFontType(domElement.name);
   const properties = generateProperties(domElement.attrs);
   if (properties) {
@@ -40,18 +43,13 @@ const generateParagraph = (domElement: DomNode): DocumentBodyParagraph => {
   }
 
   const isPreformatted = fontType === DocumentBodyBlockFontType.Preformatted;
-  if (!isPreformatted) {
-    children = shrinkTextNodeWhiteSpaces(
-      trimEdgeTextNodes(domElement.children),
-    );
-  }
-  children?.forEach((child: DomNode) => {
-    paragraph.blocks.push(...generateTextBlocks(child, { isPreformatted }));
+  domElement.children?.forEach((child: DomNode) => {
+    paragraph.blocks.push(...generateTextBlocks(child));
   });
-  if (!paragraph.blocks.length) {
-    paragraph.blocks.push(generateEmptyTextBlock());
+  if (!isPreformatted) {
+    postProcessTextBlocks(paragraph.blocks);
   }
-  return paragraph;
+  return paragraph.blocks.length ? paragraph : undefined;
 };
 
 const generateProperties = (
@@ -132,7 +130,7 @@ const fontTypesByHtmlTag: Record<string, DocumentBodyBlockFontType> = {
 };
 
 export const htmlTagToFontType = (
-  tag: string,
+  tag: string | undefined,
 ): DocumentBodyBlockFontType | undefined => {
   return tag ? fontTypesByHtmlTag[tag.toLowerCase()] : undefined;
 };

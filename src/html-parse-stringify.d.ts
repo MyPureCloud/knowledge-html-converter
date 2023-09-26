@@ -5,7 +5,7 @@ declare module 'html-parse-stringify' {
     type: DomNodeType;
     content?: string;
     voidElement?: boolean;
-    name: string;
+    name?: string;
     attrs?: Record<string, string>;
     children?: DomNode[];
   }

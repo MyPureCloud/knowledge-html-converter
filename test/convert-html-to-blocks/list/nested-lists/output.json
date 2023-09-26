@@ -19,12 +19,6 @@
               }
             },
             {
-              "type": "Text",
-              "text": {
-                "text": " "
-              }
-            },
-            {
               "type": "OrderedList",
               "list": {
                 "blocks": [
@@ -91,12 +85,6 @@
                   "textColor": "#e03e2d",
                   "backgroundColor": "#f1c40f"
                 }
-              }
-            },
-            {
-              "type": "Text",
-              "text": {
-                "text": " "
               }
             },
             {
