@@ -1,5 +1,5 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
-import { StyleAttribute, Tag } from '../models/html';
+import { parseColorString } from '../utils/color';
 import { DocumentContentBlock } from '../models/blocks/document-body-paragraph';
 import {
   DocumentBodyTableBlockHorizontalAlignType,
@@ -8,7 +8,8 @@ import {
   DocumentBodyTableCaptionBlock,
   DocumentBodyTableCaptionItem,
 } from '../models/blocks/document-body-table';
-import { convertRgbToHex, generateImageBlock } from './image';
+import { StyleAttribute, Tag } from '../models/html';
+import { generateImageBlock } from './image';
 import { generateListBlock } from './list';
 import { generateParagraphBlock } from './paragraph';
 import {
@@ -67,11 +68,9 @@ export const getBackgroundColor = (
       StyleAttribute.BackgroundColor,
     )
   ) {
-    backgroundColor = styleKeyValues[StyleAttribute.BackgroundColor].startsWith(
-      '#',
-    )
-      ? styleKeyValues[StyleAttribute.BackgroundColor]
-      : convertRgbToHex(styleKeyValues[StyleAttribute.BackgroundColor]);
+    backgroundColor = parseColorString(
+      styleKeyValues[StyleAttribute.BackgroundColor],
+    );
   }
   return backgroundColor;
 };
@@ -86,9 +85,7 @@ export const getBorderColor = (
       StyleAttribute.BorderColor,
     )
   ) {
-    borderColor = styleKeyValues[StyleAttribute.BorderColor].startsWith('#')
-      ? styleKeyValues[StyleAttribute.BorderColor]
-      : convertRgbToHex(styleKeyValues[StyleAttribute.BorderColor]);
+    borderColor = parseColorString(styleKeyValues[StyleAttribute.BorderColor]);
   }
   return borderColor;
 };
@@ -130,9 +127,7 @@ export const getBorderProperties = (
     borderStyle = cssBorderStyleToTableBorderStyleType(result[1]);
 
     // border color
-    borderColor = result[2].startsWith('#')
-      ? result[2]
-      : convertRgbToHex(result[2]);
+    borderColor = parseColorString(result[2]);
   }
   return [borderWidth, borderStyle, borderColor];
 };

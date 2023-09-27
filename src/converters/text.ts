@@ -9,8 +9,9 @@ import {
   DocumentTextBlock,
 } from '../models/blocks/document-text';
 import { generateHyperlinkBlock } from './hyperlink';
-import { convertRgbToHex, generateImageBlock } from './image';
+import { generateImageBlock } from './image';
 import { generateVideoBlock } from './video';
+import { parseColorString } from '../utils/color';
 
 export interface TextBlockOptions {
   textMarks?: DocumentTextMarks[];
@@ -138,21 +139,19 @@ export const generateTextProperties = (
     styles
       .split(/\s*;\s*/) //split with extra spaces around the semi colon
       .map((chunk: string) => chunk.split(/\s*:\s*/)) //split key:value with colon
-      .map((keyValue: string[]) => {
-        if (keyValue.length === 2) {
-          if (keyValue[0] === StyleAttribute.BackgroundColor) {
-            backgroundColor = keyValue[1].startsWith('#')
-              ? keyValue[1]
-              : convertRgbToHex(keyValue[1]);
-          }
-          if (keyValue[0] === StyleAttribute.FontSize) {
-            fontSize = getFontSizeName(keyValue[1]);
-          }
-          if (keyValue[0] === StyleAttribute.TextColor) {
-            textColor = keyValue[1].startsWith('#')
-              ? keyValue[1]
-              : convertRgbToHex(keyValue[1]);
-          }
+      .filter(
+        (keyValue) =>
+          keyValue && keyValue.length === 2 && keyValue[0] && keyValue[1],
+      ) //filter valid properties
+      .map(([key, value]: string[]) => {
+        if (key === StyleAttribute.BackgroundColor) {
+          backgroundColor = parseColorString(value);
+        }
+        if (key === StyleAttribute.FontSize) {
+          fontSize = getFontSizeName(value);
+        }
+        if (key === StyleAttribute.TextColor) {
+          textColor = parseColorString(value);
         }
       });
     if (backgroundColor || fontSize || textColor) {
