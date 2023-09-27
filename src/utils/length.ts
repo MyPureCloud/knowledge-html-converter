@@ -18,7 +18,7 @@ export const getLength = (size: string | undefined): number | undefined => {
   return value ? truncateToSinglePrecisionFloat(value) : value;
 };
 
-const convertPixelsToEM = (value: number): number => {
+export const convertPixelsToEM = (value: number): number => {
   return value / 16; // 16 is the base font-size for browsers
 };
 

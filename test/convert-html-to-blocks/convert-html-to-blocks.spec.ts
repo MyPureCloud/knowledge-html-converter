@@ -73,6 +73,7 @@ describe('convert-html-to-blocks', function () {
     it('nested-text-tags', test);
     it('html-entities', test);
     it('nbsp-characters', test);
+    it('font-size', test);
   });
 
   describe('video', function () {

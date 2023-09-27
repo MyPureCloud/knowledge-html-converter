@@ -12,6 +12,7 @@ import { generateHyperlinkBlock } from './hyperlink';
 import { generateImageBlock } from './image';
 import { generateVideoBlock } from './video';
 import { parseColorString } from '../utils/color';
+import { convertPixelsToEM, getLength } from '../utils/length';
 
 export interface TextBlockOptions {
   textMarks?: DocumentTextMarks[];
@@ -169,24 +170,26 @@ export const generateTextProperties = (
 export const getFontSizeName = (
   htmlFontSizeValue: string,
 ): DocumentBodyBlockFontSize | undefined => {
-  // TODO make this more robust
-  switch (htmlFontSizeValue) {
-    case '9px':
-      return DocumentBodyBlockFontSize.XxSmall;
-    case '10px':
-      return DocumentBodyBlockFontSize.XSmall;
-    case '13.333px':
-      return DocumentBodyBlockFontSize.Small;
-    case '16px':
-      return DocumentBodyBlockFontSize.Medium;
-    case '18px':
-      return DocumentBodyBlockFontSize.Large;
-    case '24px':
-      return DocumentBodyBlockFontSize.XLarge;
-    case '32px':
-      return DocumentBodyBlockFontSize.XxLarge;
-    default:
-      return undefined;
+  const emFontSize = getLength(htmlFontSizeValue);
+
+  if (!emFontSize) {
+    return undefined;
+  }
+
+  if (emFontSize <= convertPixelsToEM(9)) {
+    return DocumentBodyBlockFontSize.XxSmall;
+  } else if (emFontSize <= convertPixelsToEM(10)) {
+    return DocumentBodyBlockFontSize.XSmall;
+  } else if (emFontSize <= convertPixelsToEM(13.333)) {
+    return DocumentBodyBlockFontSize.Small;
+  } else if (emFontSize <= convertPixelsToEM(16)) {
+    return DocumentBodyBlockFontSize.Medium;
+  } else if (emFontSize <= convertPixelsToEM(18)) {
+    return DocumentBodyBlockFontSize.Large;
+  } else if (emFontSize <= convertPixelsToEM(24)) {
+    return DocumentBodyBlockFontSize.XLarge;
+  } else {
+    return DocumentBodyBlockFontSize.XxLarge;
   }
 };
 
