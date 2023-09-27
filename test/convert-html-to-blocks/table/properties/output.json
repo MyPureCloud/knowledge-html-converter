@@ -75,7 +75,9 @@
         }
       ],
       "properties": {
-        "width": 73.03066
+        "width": 73.03066,
+        "borderColor": "#FFFFFF",
+        "borderWidth": 0.375
       }
     }
   }
