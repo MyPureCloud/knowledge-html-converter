@@ -156,6 +156,21 @@
         {
           "type": "Text",
           "text": {
+            "text": "S font size",
+            "properties": {
+              "fontSize": "Small"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
             "text": "XS font size",
             "properties": {
               "fontSize": "XSmall"

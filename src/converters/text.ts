@@ -180,7 +180,7 @@ export const getFontSizeName = (
     return DocumentBodyBlockFontSize.XxSmall;
   } else if (emFontSize <= convertPixelsToEM(10)) {
     return DocumentBodyBlockFontSize.XSmall;
-  } else if (emFontSize <= convertPixelsToEM(13.333)) {
+  } else if (emFontSize <= convertPixelsToEM(13.3333)) {
     return DocumentBodyBlockFontSize.Small;
   } else if (emFontSize <= convertPixelsToEM(16)) {
     return DocumentBodyBlockFontSize.Medium;

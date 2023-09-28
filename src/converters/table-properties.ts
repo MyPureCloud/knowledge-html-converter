@@ -153,7 +153,9 @@ export const getHorizontalAlign = (
 export const getVerticalAlign = (
   styleKeyValues: Record<string, string>,
 ): DocumentBodyTableBlockVerticalAlignType | undefined => {
-  return cssVerticalAlignToTableBlockVerticalAlignType(styleKeyValues[StyleAttribute.VerticalAlign]);
+  return cssVerticalAlignToTableBlockVerticalAlignType(
+    styleKeyValues[StyleAttribute.VerticalAlign],
+  );
 };
 
 export const getBorderWidth = (
