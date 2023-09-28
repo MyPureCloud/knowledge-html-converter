@@ -88,31 +88,3 @@ const getImageProperties = (
   }
   return imageProperties;
 };
-
-export const convertRgbToHex = (rgb: string): string | undefined => {
-  const colorsArray = rgb
-    ?.replace('rgb(', '')
-    .replace('rgba(', '')
-    .replace(')', '')
-    .replace(';', '')
-    .split(/\s*,\s*/)
-    .map((x) => Number.parseInt(x, 10));
-  // If rgba(r,g,b,a), exclude opacity
-  if (colorsArray?.length === 4) {
-    colorsArray.pop();
-  }
-  return colorsArray?.length === 3
-    ? rgbToHex(colorsArray[0], colorsArray[1], colorsArray[2])
-    : undefined;
-};
-
-const rgbToHex = (red: number, green: number, blue: number): string => {
-  return (
-    '#' + componentToHex(red) + componentToHex(green) + componentToHex(blue)
-  );
-};
-
-const componentToHex = (c: number): string => {
-  const hex = c.toString(16);
-  return hex.length === 1 ? '0' + hex : hex;
-};

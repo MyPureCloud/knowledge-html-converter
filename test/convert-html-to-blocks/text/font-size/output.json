@@ -1,0 +1,216 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "XXL font size",
+            "properties": {
+              "fontSize": "XxLarge"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "XXL font size",
+            "properties": {
+              "fontSize": "XxLarge"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "XL font size",
+            "properties": {
+              "fontSize": "XLarge"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "XL font size",
+            "properties": {
+              "fontSize": "XLarge"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "L font size",
+            "properties": {
+              "fontSize": "Large"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "L font size",
+            "properties": {
+              "fontSize": "Large"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "M font size",
+            "properties": {
+              "fontSize": "Medium"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "M font size",
+            "properties": {
+              "fontSize": "Medium"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "S font size",
+            "properties": {
+              "fontSize": "Small"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "S font size",
+            "properties": {
+              "fontSize": "Small"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "S font size",
+            "properties": {
+              "fontSize": "Small"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "XS font size",
+            "properties": {
+              "fontSize": "XSmall"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "XXS font size",
+            "properties": {
+              "fontSize": "XxSmall"
+            }
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "XXS font size",
+            "properties": {
+              "fontSize": "XxSmall"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]

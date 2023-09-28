@@ -61,6 +61,7 @@ describe('convert-html-to-blocks', function () {
     it('empty-tables', test);
     it('white-space-between-elements', test);
     it('float-number-truncation', test);
+    it('colors', test);
   });
 
   describe('text', function () {
@@ -72,6 +73,7 @@ describe('convert-html-to-blocks', function () {
     it('nested-text-tags', test);
     it('html-entities', test);
     it('nbsp-characters', test);
+    it('font-size', test);
   });
 
   describe('video', function () {

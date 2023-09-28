@@ -1,20 +1,20 @@
 import { DomNode } from 'html-parse-stringify';
-import { StyleAttribute } from '../models/html';
+import { getLength } from '../utils/length';
 import {
   DocumentBodyBlockAlignType,
   DocumentBodyBlockFontType,
 } from '../models/blocks/document-body-block';
 import {
+  DocumentBodyParagraph,
+  DocumentBodyParagraphBlock,
+  DocumentBodyParagraphProperties,
+} from '../models/blocks/document-body-paragraph';
+import { StyleAttribute } from '../models/html';
+import {
   generateEmptyTextBlock,
   generateTextBlocks,
   postProcessTextBlocks,
 } from './text';
-import {
-  DocumentBodyParagraph,
-  DocumentBodyParagraphProperties,
-  DocumentBodyParagraphBlock,
-} from '../models/blocks/document-body-paragraph';
-import { truncateToSinglePrecisionFloat } from '../utils';
 
 export const generateParagraphBlock = (
   domElement: DomNode,
@@ -66,10 +66,7 @@ const generateProperties = (
       .map((keyValue) => {
         if (keyValue.length === 2) {
           if (keyValue[0] === StyleAttribute.PaddingLeft) {
-            // remove the em from the value
-            indentation = truncateToSinglePrecisionFloat(
-              Number(keyValue[1].replace(/\s*em\s*/g, '')),
-            );
+            indentation = getLength(keyValue[1]);
           }
           if (keyValue[0] === StyleAttribute.TextAlign) {
             align = cssTextAlignToAlignType(keyValue[1]);

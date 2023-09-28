@@ -9,8 +9,10 @@ import {
   DocumentTextBlock,
 } from '../models/blocks/document-text';
 import { generateHyperlinkBlock } from './hyperlink';
-import { convertRgbToHex, generateImageBlock } from './image';
+import { generateImageBlock } from './image';
 import { generateVideoBlock } from './video';
+import { parseColorString } from '../utils/color';
+import { convertPixelsToEM, getLength } from '../utils/length';
 
 export interface TextBlockOptions {
   textMarks?: DocumentTextMarks[];
@@ -138,21 +140,19 @@ export const generateTextProperties = (
     styles
       .split(/\s*;\s*/) //split with extra spaces around the semi colon
       .map((chunk: string) => chunk.split(/\s*:\s*/)) //split key:value with colon
-      .map((keyValue: string[]) => {
-        if (keyValue.length === 2) {
-          if (keyValue[0] === StyleAttribute.BackgroundColor) {
-            backgroundColor = keyValue[1].startsWith('#')
-              ? keyValue[1]
-              : convertRgbToHex(keyValue[1]);
-          }
-          if (keyValue[0] === StyleAttribute.FontSize) {
-            fontSize = getFontSizeName(keyValue[1]);
-          }
-          if (keyValue[0] === StyleAttribute.TextColor) {
-            textColor = keyValue[1].startsWith('#')
-              ? keyValue[1]
-              : convertRgbToHex(keyValue[1]);
-          }
+      .filter(
+        (keyValue) =>
+          keyValue && keyValue.length === 2 && keyValue[0] && keyValue[1],
+      ) //filter valid properties
+      .map(([key, value]: string[]) => {
+        if (key === StyleAttribute.BackgroundColor) {
+          backgroundColor = parseColorString(value);
+        }
+        if (key === StyleAttribute.FontSize) {
+          fontSize = getFontSizeName(value);
+        }
+        if (key === StyleAttribute.TextColor) {
+          textColor = parseColorString(value);
         }
       });
     if (backgroundColor || fontSize || textColor) {
@@ -170,24 +170,26 @@ export const generateTextProperties = (
 export const getFontSizeName = (
   htmlFontSizeValue: string,
 ): DocumentBodyBlockFontSize | undefined => {
-  // TODO make this more robust
-  switch (htmlFontSizeValue) {
-    case '9px':
-      return DocumentBodyBlockFontSize.XxSmall;
-    case '10px':
-      return DocumentBodyBlockFontSize.XSmall;
-    case '13.333px':
-      return DocumentBodyBlockFontSize.Small;
-    case '16px':
-      return DocumentBodyBlockFontSize.Medium;
-    case '18px':
-      return DocumentBodyBlockFontSize.Large;
-    case '24px':
-      return DocumentBodyBlockFontSize.XLarge;
-    case '32px':
-      return DocumentBodyBlockFontSize.XxLarge;
-    default:
-      return undefined;
+  const emFontSize = getLength(htmlFontSizeValue);
+
+  if (!emFontSize) {
+    return undefined;
+  }
+
+  if (emFontSize <= convertPixelsToEM(9)) {
+    return DocumentBodyBlockFontSize.XxSmall;
+  } else if (emFontSize <= convertPixelsToEM(10)) {
+    return DocumentBodyBlockFontSize.XSmall;
+  } else if (emFontSize <= convertPixelsToEM(13.3333)) {
+    return DocumentBodyBlockFontSize.Small;
+  } else if (emFontSize <= convertPixelsToEM(16)) {
+    return DocumentBodyBlockFontSize.Medium;
+  } else if (emFontSize <= convertPixelsToEM(18)) {
+    return DocumentBodyBlockFontSize.Large;
+  } else if (emFontSize <= convertPixelsToEM(24)) {
+    return DocumentBodyBlockFontSize.XLarge;
+  } else {
+    return DocumentBodyBlockFontSize.XxLarge;
   }
 };
 

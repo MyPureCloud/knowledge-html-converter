@@ -16,7 +16,8 @@
         }
       ],
       "properties": {
-        "fontType": "Paragraph"
+        "fontType": "Paragraph",
+        "indentation": 2
       }
     }
   }

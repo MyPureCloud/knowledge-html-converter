@@ -5,7 +5,6 @@ import {
   DocumentBodyBlockFontSize,
   DocumentBodyBlockFontType,
 } from '../models/blocks/document-body-block';
-import { convertRgbToHex } from './image';
 import {
   DocumentBodyList,
   DocumentBodyListBlockProperties,
@@ -23,6 +22,7 @@ import {
   removeBlankEdgeTextBlocks,
 } from './text';
 import { cssTextAlignToAlignType, htmlTagToFontType } from './paragraph';
+import { parseColorString } from '../utils/color';
 
 export const generateListBlock = (
   listElement: DomNode,
@@ -86,14 +86,10 @@ const generateListProperties = (
             fontSize = getFontSizeName(keyValue[1]);
           }
           if (keyValue[0] === StyleAttribute.TextColor) {
-            textColor = keyValue[1].startsWith('#')
-              ? keyValue[1]
-              : convertRgbToHex(keyValue[1]);
+            textColor = parseColorString(keyValue[1]);
           }
           if (keyValue[0] === StyleAttribute.BackgroundColor) {
-            backgroundColor = keyValue[1].startsWith('#')
-              ? keyValue[1]
-              : convertRgbToHex(keyValue[1]);
+            backgroundColor = parseColorString(keyValue[1]);
           }
           if (keyValue[0] === StyleAttribute.TextAlign) {
             align = cssTextAlignToAlignType(keyValue[1]);
