@@ -1,6 +1,8 @@
 # knowledge-html-converter
 
-Converts html to the knowledge document variation content json format used by the Genesys Knowledge API: https://developer.genesys.cloud/devapps/api-explorer#post-api-v2-knowledge-knowledgebases--knowledgeBaseId--documents--documentId--variations
+Takes an html string as input and converts it to the json format of knowledge document variation content, which can be used in the Genesys Knowledge API: https://developer.genesys.cloud/devapps/api-explorer#post-api-v2-knowledge-knowledgebases--knowledgeBaseId--documents--documentId--variations
+
+Please, note that this library is not stable yet and expect changes in how we translate html to the AST of the API. The code was extracted from the Knowledge Articles editor UI that converts the output of the html editor in the UI to the knowledge AST and we are still working on enchancing the code to better deal with html coming from an external source.
 
 ## Installation
 
