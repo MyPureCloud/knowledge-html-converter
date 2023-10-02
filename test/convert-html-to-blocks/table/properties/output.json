@@ -16,7 +16,7 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "width": 36.46963
+                "width": 34.375
               }
             },
             {
@@ -30,7 +30,7 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "width": 36.46963
+                "width": 34.375
               }
             }
           ],
@@ -51,7 +51,7 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "width": 36.46963
+                "width": 34.375
               }
             },
             {
@@ -65,7 +65,7 @@
               ],
               "properties": {
                 "cellType": "Cell",
-                "width": 36.46963
+                "width": 34.375
               }
             }
           ],
@@ -75,7 +75,7 @@
         }
       ],
       "properties": {
-        "width": 73.03066,
+        "width": 68.75,
         "borderColor": "#FFFFFF",
         "borderWidth": 0.375
       }
