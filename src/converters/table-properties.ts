@@ -1,6 +1,6 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
 import { parseColorString } from '../utils/color.js';
-import { getLength } from '../utils/length.js';
+import { getLength, getLengthWithUnit } from '../utils/length.js';
 import { DocumentContentBlock } from '../models/blocks/document-body-paragraph.js';
 import {
   DocumentBodyTableBlockHorizontalAlignType,
@@ -20,6 +20,8 @@ import {
   postProcessTextBlocks,
 } from './text.js';
 import { generateVideoBlock } from './video.js';
+import { Length } from '../models/html/length.js';
+import { HtmlConverterOptions } from '../models/options/html-converter-options.js';
 
 export const getStyleKeyValues = (
   domElement: DomNode,
@@ -40,6 +42,11 @@ export const getPadding = (
   return getLength(styleKeyValues[StyleAttribute.Padding]);
 };
 
+/*
+ * Handles the styles 'background-color', 'background'
+ * First it looks for the style 'background-color'
+ * if not present then for the style 'background'
+ */
 export const getBackgroundColor = (
   styleKeyValues: Record<string, string>,
 ): string | undefined => {
@@ -49,11 +56,15 @@ export const getBackgroundColor = (
     Object.prototype.hasOwnProperty.call(
       styleKeyValues,
       StyleAttribute.BackgroundColor,
+    ) ||
+    Object.prototype.hasOwnProperty.call(
+      styleKeyValues,
+      StyleAttribute.Background,
     )
   ) {
-    backgroundColor = parseColorString(
-      styleKeyValues[StyleAttribute.BackgroundColor],
-    );
+    backgroundColor =
+      parseColorString(styleKeyValues[StyleAttribute.BackgroundColor]) ??
+      parseColorString(styleKeyValues[StyleAttribute.Background]);
   }
   return backgroundColor;
 };
@@ -85,25 +96,39 @@ export const getBorderStyle = (
 export const getBorderProperties = (
   styleKeyValues: Record<string, string>,
 ): (number | string | undefined)[] => {
+  const borderWidthPattern = /\d+(?:\.\d+)?(px|em)/i;
+  const borderStylePattern =
+    /dotted|dashed|solid|double|groove|ridge|inset|outset|none|hidden/gi;
+  const colorPattern =
+    /#(0x)?[0-9a-f]+|rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)|rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(,\s*(\d{1,3})\s*)?\)/gi;
   let borderWidth: number | undefined;
   let borderStyle: string | undefined;
   let borderColor: string | undefined;
   if (
     Object.prototype.hasOwnProperty.call(styleKeyValues, StyleAttribute.Border)
   ) {
-    const properties = styleKeyValues[StyleAttribute.Border].split(' ');
-    const result = properties.splice(0, 2);
-    result.push(properties.join(' '));
-
-    if (result.length != 3) {
-      return [undefined, undefined, undefined];
+    let borderValue: string = styleKeyValues[StyleAttribute.Border] ?? '';
+    // border color
+    const color = colorPattern.test(borderValue)
+      ? borderValue!.match(colorPattern)![0]
+      : undefined;
+    if (color) {
+      borderColor = parseColorString(color);
+      borderValue = borderValue.replace(color, '').trim();
     }
-
-    borderWidth = getLength(result[0]);
-
-    borderStyle = cssBorderStyleToTableBorderStyleType(result[1]);
-
-    borderColor = parseColorString(result[2]);
+    // border style
+    const style = borderStylePattern.test(borderValue)
+      ? borderValue!.match(borderStylePattern)![0]
+      : undefined;
+    if (style) {
+      borderStyle = cssBorderStyleToTableBorderStyleType(style);
+      borderValue = borderValue.replace(style, '').trim();
+    }
+    // border width
+    const width = borderWidthPattern.test(borderValue)
+      ? borderValue!.match(borderWidthPattern)![0]
+      : undefined;
+    borderWidth = getLength(width);
   }
   return [borderWidth, borderStyle, borderColor];
 };
@@ -182,8 +207,20 @@ export const getHeight = (
 
 export const getWidth = (
   styleKeyValues: Record<string, string>,
+  options: HtmlConverterOptions = {},
 ): number | undefined => {
-  return getHeightAndWidthProperty(styleKeyValues, StyleAttribute.Width);
+  return getHeightAndWidthProperty(
+    styleKeyValues,
+    StyleAttribute.Width,
+    options,
+  );
+};
+
+export const getWidthWithUnit = (
+  styleKeyValues: Record<string, string>,
+  options: HtmlConverterOptions,
+): Length | undefined => {
+  return getWidthAndUnit(styleKeyValues, StyleAttribute.Width, options);
 };
 
 export const getCaption = (
@@ -245,9 +282,21 @@ export const getCaption = (
 const getHeightAndWidthProperty = (
   styleKeyValues: Record<string, string>,
   key: string,
+  options: HtmlConverterOptions = {},
 ): number | undefined => {
   if (Object.prototype.hasOwnProperty.call(styleKeyValues, key)) {
-    return getLength(styleKeyValues[key]);
+    return getLength(styleKeyValues[key], options.baseFontSize);
+  }
+  return undefined;
+};
+
+const getWidthAndUnit = (
+  styleKeyValues: Record<string, string>,
+  key: string,
+  options: HtmlConverterOptions,
+): Length | undefined => {
+  if (Object.prototype.hasOwnProperty.call(styleKeyValues, key)) {
+    return getLengthWithUnit(styleKeyValues[key], options.baseFontSize);
   }
   return undefined;
 };

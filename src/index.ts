@@ -57,3 +57,4 @@ export {
   DocumentTextMarks,
   DocumentTextProperties,
 } from './models/blocks/document-text.js';
+export { HtmlConverterOptions } from './models/options/html-converter-options.js';

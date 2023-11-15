@@ -1,0 +1,48 @@
+[
+  {
+    "type": "UnorderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": "heading2"
+              }
+            }
+          ],
+          "properties": {
+            "fontType": "Heading2"
+          }
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": "paragraph"
+              }
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": "heading6"
+              }
+            }
+          ],
+          "properties": {
+            "fontType": "Heading6"
+          }
+        }
+      ]
+    }
+  }
+]

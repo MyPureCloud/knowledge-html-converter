@@ -4,6 +4,7 @@ import { convertHtmlToBlocks } from '../../src/index.js';
 import { expect } from 'chai';
 import { Context } from 'mocha';
 import { DocumentBodyBlock } from '../../src/models/blocks/document-body-block.js';
+import { HtmlConverterOptions } from '../../src/models/options/html-converter-options.js';
 
 describe('convert-html-to-blocks', function () {
   describe('hyperlink', function () {
@@ -11,6 +12,8 @@ describe('convert-html-to-blocks', function () {
     it('hyperlink-with-formatting', test); // knowledge-administration-ui / hyperlink-utils.spec.ts / should generate hyperlink text blocks from html
     it('hyperlink-with-image', test); // knowledge-administration-ui / hyperlink-utils.spec.ts / should create an image block with hyperlink property when image is present inside anchor tag
     it('hyperlink-anchor', test);
+    it('hyperlink-with-formatting2', test);
+    it('hyperlink-with-text-properties', test);
   });
 
   describe('image', function () {
@@ -26,9 +29,11 @@ describe('convert-html-to-blocks', function () {
     it('nested-lists', test); // knowledge-administration-ui / list-block-utils.spec.ts / should generate nested list blocks with properties from mock html
     it('list-style-types', test);
     it('paragraph', test);
+    it('font-types', test);
     it('white-spaces', test);
     it('empty-list-items', test);
     it('empty-lists', test);
+    it('hyperlink', test);
   });
 
   describe('paragraph', function () {
@@ -64,6 +69,7 @@ describe('convert-html-to-blocks', function () {
     it('white-space-between-elements', test);
     it('float-number-truncation', test);
     it('colors', test);
+    it('with-block-text', test);
   });
 
   describe('text', function () {
@@ -80,6 +86,30 @@ describe('convert-html-to-blocks', function () {
 
   describe('video', function () {
     it('simple', test); // knowledge-administration-ui / video-block-utils.spec.ts / should generate video blocks from html
+  });
+
+  /*
+    These unit tests test scenarios for options
+    1) handleWidthWithUnits : if set true, handles the table width with unit. Sample output will be ' width: 100,  widthUnit: "Percentage" '.
+        The default value is false, which does not have widthUnit property. This converts the width in to em units. 
+    
+    2) baseFontSize: Need this during the conversions of em, px. The default text size in browsers is 16px. So, the default size of 1em is 16px.
+        If user needs to override, then use this option like 'baseFontSize : 20'.
+  */
+  describe('options', function () {
+    // all options are undefined, then it should work Default values.
+    it('undefined-options', testUndefinedOptions); // { baseFontSize: undefined, handleWidthWithUnits: undefined }
+    // handleWidthWithUnits
+    it('default-percentage', test); // with no options and table width in %
+    it('default-pixel', test); // with no options and table width in px
+    it('default-em', test); // with no options and table width in em
+    it('handleWidthWithUnits-percentage', testHandleWidthWithUnitEnabled);
+    it('handleWidthWithUnits-pixel', testHandleWidthWithUnitEnabled);
+    it('handleWidthWithUnits-em', testHandleWidthWithUnitEnabled);
+    it('handleWidthWithUnits-disabled', testHandleWidthWithUnitDisabled);
+
+    // baseFontSize
+    it('baseFontSize-set', testBaseFontSize); // Set to 32 {baseFontSize: 32}
   });
 
   /**
@@ -99,14 +129,19 @@ describe('convert-html-to-blocks', function () {
    *
    * output:  test/convert-html-to-blocks/text/properties/output.json
    */
-  async function test(this: Context): Promise<void> {
+  async function test(
+    this: Context,
+    options: HtmlConverterOptions = {},
+  ): Promise<void> {
     const dirName = join('test', ...this.test!.titlePath());
-    const html = (await readFile(join(dirName, 'input.html'))).toString();
+    const html = (await readFile(join(dirName, 'input.html')))
+      .toString()
+      .replace(/\r/gi, '');
     const expectedJson = JSON.parse(
       (await readFile(join(dirName, 'output.json'))).toString(),
     );
 
-    const actualJson = convertHtmlToBlocks(html);
+    const actualJson = convertHtmlToBlocks(html, options);
 
     try {
       expect(actualJson).to.deep.equal(expectedJson);
@@ -119,6 +154,29 @@ describe('convert-html-to-blocks', function () {
       );
       throw error;
     }
+  }
+
+  async function testHandleWidthWithUnitEnabled(this: Context): Promise<void> {
+    return test.call(this, {
+      handleWidthWithUnits: true,
+    } as HtmlConverterOptions);
+  }
+
+  async function testHandleWidthWithUnitDisabled(this: Context): Promise<void> {
+    return test.call(this, {
+      handleWidthWithUnits: false,
+    } as HtmlConverterOptions);
+  }
+
+  async function testBaseFontSize(this: Context): Promise<void> {
+    return test.call(this, { baseFontSize: 32 } as HtmlConverterOptions);
+  }
+
+  async function testUndefinedOptions(this: Context): Promise<void> {
+    return test.call(this, {
+      baseFontSize: undefined,
+      handleWidthWithUnits: undefined,
+    } as HtmlConverterOptions);
   }
 
   function addActualAndExpectedJsonsToErrorMessage(

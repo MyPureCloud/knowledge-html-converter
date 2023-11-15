@@ -72,6 +72,17 @@
     }
   },
   {
+    "type": "OrderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [{ "type": "Text", "text": { "text": "item" } }]
+        }
+      ]
+    }
+  },
+  {
     "type": "UnorderedList",
     "list": {
       "blocks": [
@@ -105,6 +116,17 @@
         }
       ],
       "properties": { "unorderedType": "None" }
+    }
+  },
+  {
+    "type": "UnorderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [{ "type": "Text", "text": { "text": "item" } }]
+        }
+      ]
     }
   }
 ]

@@ -16,6 +16,12 @@ import { convertHtmlToBlocks } from 'knowledge-html-converter';
 const documentBodyBlocks = convertHtmlToBlocks('<html><body><p>Document content</p></body></html>');
 ```
 
+This will convert html to blocks with default options, If needed you can customize the options
+
+```
+const documentBodyBlocks = convertHtmlToBlocks('<html><body><p>Document content</p></body></html>', { handleWidthWithUnits: true, baseFontSize: 32 });
+```
+
 NOTE: The package is now pure [ESM](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules). It cannot be require()'d from CommonJS.
 
 The value of `documentBodyBlocks` will be:
@@ -74,6 +80,21 @@ fetch('https://api.mypurecloud.com/api/v2/knowledge/knowledgeBases/<kb-id>/docum
   }),
 });
 ```
+
+### Default options
+
+```
+{
+  handleWidthWithUnits: false,
+  baseFontSize: 16
+}
+```
+
+# | OPTION |DEFAULT VALUE| USAGE
+
+---- | ------- | --- | -------------
+1 | handleWidthWithUnits | false | If set true, handles the table width with unit. Sample output will be ' width: 100, widthUnit: "Percentage" '.
+2 | baseFontSize | 16 | The default text size in a browser is 16px. So for the default size, 16px is converted to 1em. If you need to override the default font-size, use this option like 'baseFontSize : 32'. For the option 'baseFontSize : 32', the conversion will be 32px to 1em.
 
 ## Developer setup
 
