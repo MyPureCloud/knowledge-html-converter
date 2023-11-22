@@ -2,7 +2,7 @@ import { DomNode } from 'html-parse-stringify';
 import {
   DocumentBodyVideo,
   DocumentBodyVideoBlock,
-} from '../models/blocks/document-body-video';
+} from '../models/blocks/document-body-video.js';
 
 export const generateVideoBlock = (
   iframeElement: DomNode,

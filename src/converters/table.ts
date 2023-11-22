@@ -1,7 +1,7 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
-import { generateImageBlock } from './image';
-import { generateListBlock } from './list';
-import { generateParagraphBlock } from './paragraph';
+import { generateImageBlock } from './image.js';
+import { generateListBlock } from './list.js';
+import { generateParagraphBlock } from './paragraph.js';
 import {
   getAlignment,
   getBackgroundColor,
@@ -17,16 +17,17 @@ import {
   getStyleKeyValues,
   getVerticalAlign,
   getWidth,
-} from './table-properties';
+} from './table-properties.js';
 import {
   generateTextBlocks,
   htmlTagToTextMark,
   nbspCharacter,
   postProcessTextBlocks,
-} from './text';
-import { generateVideoBlock } from './video';
-import { StyleAttribute, Tag } from '../models/html';
-import { DocumentContentBlock } from '../models/blocks/document-body-paragraph';
+} from './text.js';
+import { generateVideoBlock } from './video.js';
+import { StyleAttribute } from '../models/html/style-attribute.js';
+import { Tag } from '../models/html/tag.js';
+import { DocumentContentBlock } from '../models/blocks/document-body-paragraph.js';
 import {
   DocumentBodyTableCellBlock,
   DocumentBodyTableCellBlockProperties,
@@ -41,7 +42,7 @@ import {
   DocumentBodyTableBorderStyleType,
   DocumentBodyTableBlockRowType,
   DocumentBodyTableBlock,
-} from '../models/blocks/document-body-table';
+} from '../models/blocks/document-body-table.js';
 
 type TablePaddingPropertyHolder = {
   value?: number;

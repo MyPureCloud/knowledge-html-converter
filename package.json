@@ -1,12 +1,19 @@
 {
   "name": "knowledge-html-converter",
-  "version": "0.1.0",
+  "version": "0.1.1-esm.13",
   "description": "Converts html to the json format of genesys knowledge article content.",
   "author": "Genesys Cloud Services, Inc.",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/MyPureCloud/knowledge-html-converter.git"
+  },
+  "type": "module",
+  "module": "dist/index.js",
+  "main": "dist/index.js",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "default": "./dist/index.js"
   },
   "engines": {
     "node": ">=16",
@@ -15,7 +22,6 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
   "scripts": {
     "clean": "rimraf dist",
     "compile": "tsc --declaration",
@@ -37,6 +43,7 @@
     "sanitize-html": "2.11.0"
   },
   "devDependencies": {
+    "@istanbuljs/esm-loader-hook": "0.2.0",
     "@istanbuljs/nyc-config-typescript": "1.0.2",
     "@types/chai": "4.3.5",
     "@types/mocha": "10.0.1",

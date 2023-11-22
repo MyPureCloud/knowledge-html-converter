@@ -1,9 +1,9 @@
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import { convertHtmlToBlocks } from '../../src';
+import { convertHtmlToBlocks } from '../../src/index.js';
 import { expect } from 'chai';
 import { Context } from 'mocha';
-import { DocumentBodyBlock } from '../../src/models/blocks/document-body-block';
+import { DocumentBodyBlock } from '../../src/models/blocks/document-body-block.js';
 
 describe('convert-html-to-blocks', function () {
   describe('hyperlink', function () {

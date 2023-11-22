@@ -1,24 +1,25 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
-import { parseColorString } from '../utils/color';
-import { getLength } from '../utils/length';
-import { DocumentContentBlock } from '../models/blocks/document-body-paragraph';
+import { parseColorString } from '../utils/color.js';
+import { getLength } from '../utils/length.js';
+import { DocumentContentBlock } from '../models/blocks/document-body-paragraph.js';
 import {
   DocumentBodyTableBlockHorizontalAlignType,
   DocumentBodyTableBlockVerticalAlignType,
   DocumentBodyTableBorderStyleType,
   DocumentBodyTableCaptionBlock,
   DocumentBodyTableCaptionItem,
-} from '../models/blocks/document-body-table';
-import { StyleAttribute, Tag } from '../models/html';
-import { generateImageBlock } from './image';
-import { generateListBlock } from './list';
-import { generateParagraphBlock } from './paragraph';
+} from '../models/blocks/document-body-table.js';
+import { StyleAttribute } from '../models/html/style-attribute.js';
+import { Tag } from '../models/html/tag.js';
+import { generateImageBlock } from './image.js';
+import { generateListBlock } from './list.js';
+import { generateParagraphBlock } from './paragraph.js';
 import {
   generateTextBlocks,
   htmlTagToTextMark,
   postProcessTextBlocks,
-} from './text';
-import { generateVideoBlock } from './video';
+} from './text.js';
+import { generateVideoBlock } from './video.js';
 
 export const getStyleKeyValues = (
   domElement: DomNode,

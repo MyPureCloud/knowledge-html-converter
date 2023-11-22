@@ -1,4 +1,4 @@
-export { convertHtmlToBlocks } from './converter';
+export { convertHtmlToBlocks } from './converter.js';
 
 export {
   DocumentBodyBlock,
@@ -6,29 +6,32 @@ export {
   DocumentBodyBlockAlignType,
   DocumentBodyBlockFontSize,
   DocumentBodyBlockFontType,
-} from './models/blocks/document-body-block';
+} from './models/blocks/document-body-block.js';
 export {
   DocumentContentBlock,
   DocumentContentBlockType,
   DocumentBodyParagraph,
   DocumentBodyParagraphProperties,
-} from './models/blocks/document-body-paragraph';
+  DocumentBodyParagraphBlock,
+} from './models/blocks/document-body-paragraph.js';
 export {
   DocumentBodyImage,
   DocumentBodyImageProperties,
-} from './models/blocks/document-body-image';
-export { DocumentBodyVideo } from './models/blocks/document-body-video';
+  DocumentBodyImageBlock,
+} from './models/blocks/document-body-image.js';
+export { DocumentBodyVideo } from './models/blocks/document-body-video.js';
 export {
   DocumentBodyList,
   DocumentBodyListBlock,
   DocumentBodyListBlockProperties,
   DocumentBodyListBlockType,
   DocumentBodyListItemProperties,
+  DocumentBodyListElementBlock,
   DocumentListContentBlock,
   DocumentListContentBlockType,
   DocumentBodyBlockOrderedType,
   DocumentBodyBlockUnorderedType,
-} from './models/blocks/document-body-list';
+} from './models/blocks/document-body-list.js';
 export {
   DocumentBodyTable,
   DocumentBodyTableRowBlock,
@@ -36,6 +39,7 @@ export {
   DocumentTableContentBlock,
   DocumentTableContentBlockType,
   DocumentBodyTableProperties,
+  DocumentBodyTableBlock,
   DocumentBodyTableCaptionBlock,
   DocumentBodyTableCaptionItem,
   DocumentBodyTableCaptionItemType,
@@ -47,9 +51,9 @@ export {
   DocumentBodyTableBlockHorizontalAlignType,
   DocumentBodyTableBlockVerticalAlignType,
   DocumentBodyTableBorderStyleType,
-} from './models/blocks/document-body-table';
+} from './models/blocks/document-body-table.js';
 export {
   DocumentText,
   DocumentTextMarks,
   DocumentTextProperties,
-} from './models/blocks/document-text';
+} from './models/blocks/document-text.js';

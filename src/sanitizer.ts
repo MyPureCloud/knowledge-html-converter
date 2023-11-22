@@ -1,6 +1,7 @@
-import * as sanitizeHtmlLib from 'sanitize-html';
+import sanitizeHtmlLib from 'sanitize-html';
 import { IOptions } from 'sanitize-html';
-import { StyleAttribute, Tag } from './models/html';
+import { StyleAttribute } from './models/html/style-attribute.js';
+import { Tag } from './models/html/tag.js';
 
 const options: IOptions = {
   allowedTags: Object.values(Tag),

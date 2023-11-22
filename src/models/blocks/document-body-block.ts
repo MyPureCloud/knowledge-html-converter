@@ -1,8 +1,8 @@
-import { DocumentBodyImage } from './document-body-image';
-import { DocumentBodyList } from './document-body-list';
-import { DocumentBodyParagraph } from './document-body-paragraph';
-import { DocumentBodyTable } from './document-body-table';
-import { DocumentBodyVideo } from './document-body-video';
+import { DocumentBodyImage } from './document-body-image.js';
+import { DocumentBodyList } from './document-body-list.js';
+import { DocumentBodyParagraph } from './document-body-paragraph.js';
+import { DocumentBodyTable } from './document-body-table.js';
+import { DocumentBodyVideo } from './document-body-video.js';
 
 export interface DocumentBodyBlock {
   type: DocumentBodyBlockType;
