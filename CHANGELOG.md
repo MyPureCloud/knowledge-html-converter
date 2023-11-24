@@ -1,6 +1,6 @@
 # Change log
 
-## 0.3.2 (2024-01-21)
+## 0.3.2 (2024-01-23)
 
 ### Changed:
 
@@ -8,6 +8,7 @@
 2. Handling style attribute 'background' along with 'background-color' of \<span\> tags.
 3. Handling 'border', 'bgcolor' attributes of \<table\> tags.
 4. Handling tables' width with units based on settings option 'handleWidthWithUnits'.
+5. Added support for <strike> tag
 
 ## 0.3.1 (2024-01-16)
 

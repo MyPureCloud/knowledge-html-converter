@@ -14,6 +14,7 @@ export enum Tag {
   Italic = 'em',
   Underline = 'u',
   Strikethrough = 's',
+  Strike = 'strike',
   Subscript = 'sub',
   Superscript = 'sup',
   LineBreak = 'br',

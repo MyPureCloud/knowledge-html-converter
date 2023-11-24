@@ -50,6 +50,7 @@ describe('convert-html-to-blocks', function () {
     it('empty-no-text', test);
     it('empty-multiple', test);
     it('float-number-truncation', test);
+    it('comments', test);
   });
 
   describe('table', function () {
@@ -82,6 +83,9 @@ describe('convert-html-to-blocks', function () {
     it('html-entities', test);
     it('nbsp-characters', test);
     it('font-size', test);
+    it('text-marks', test);
+    it('empty-strike-tag', test);
+    it('single-empty-bold-tag', test);
   });
 
   describe('video', function () {

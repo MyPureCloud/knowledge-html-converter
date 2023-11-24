@@ -1,0 +1,97 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "bold",
+            "marks": ["Bold"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": ", "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "italics",
+            "marks": ["Italic"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": ", "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "underline",
+            "marks": ["Underline"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": ", "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "strike",
+            "marks": ["Strikethrough"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": ", "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "strikethrough",
+            "marks": ["Strikethrough"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": ", "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "subscript",
+            "marks": ["Subscript"]
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": " &amp; "
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "superscript",
+            "marks": ["Superscript"]
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]

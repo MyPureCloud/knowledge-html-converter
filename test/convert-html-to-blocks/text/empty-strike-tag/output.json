@@ -1,0 +1,19 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Empty strike tag",
+            "marks": ["Bold"]
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]

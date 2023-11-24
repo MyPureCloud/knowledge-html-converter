@@ -124,6 +124,7 @@ const textMarksByHtmlTag: Record<string, DocumentTextMarks> = {
   em: DocumentTextMarks.Italic,
   u: DocumentTextMarks.Underline,
   s: DocumentTextMarks.Strikethrough,
+  strike: DocumentTextMarks.Strikethrough,
   sub: DocumentTextMarks.Subscript,
   sup: DocumentTextMarks.Superscript,
 };

@@ -1,0 +1,19 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Testing comments",
+            "marks": ["Bold"]
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Heading2"
+      }
+    }
+  }
+]
