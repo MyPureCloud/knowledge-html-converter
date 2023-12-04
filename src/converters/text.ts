@@ -46,7 +46,10 @@ export const generateTextBlocks = (
       generateImageBlock(domNode, options.textProperties, options.hyperlink),
     );
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Anchor) {
-    arr.push(generateHyperlinkBlock(domNode, options));
+    const link = generateHyperlinkBlock(domNode, options);
+    if (link) {
+      arr.push(link);
+    }
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.IFrame) {
     arr.push(generateVideoBlock(domNode));
   } else {
