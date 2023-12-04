@@ -9,7 +9,7 @@
             "text": "Test text",
             "properties": {
               "fontSize": "XLarge",
-              "textColor": "#3598db",
+              "textColor": "#ff4500",
               "backgroundColor": "#fbeeb8"
             }
           }
