@@ -47,13 +47,22 @@ const convertParsedHtmlToBlocks = (
         block = generateListBlock(domNode, 'UnorderedList');
         break;
       case Tag.Image:
-        block = generateImageBlock(domNode);
+        if (domNode?.attrs?.src) {
+          block = generateImageBlock(domNode);
+        }
         break;
       case Tag.IFrame:
         block = generateVideoBlock(domNode);
         break;
       case Tag.Table:
         block = generateTableBlock(domNode);
+        break;
+      default:
+        block = generateParagraphBlock({
+          name: Tag.Paragraph,
+          type: DomNodeType.Text,
+          children: [domNode],
+        });
         break;
     }
     if (block) {

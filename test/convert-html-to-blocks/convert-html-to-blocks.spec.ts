@@ -16,6 +16,7 @@ describe('convert-html-to-blocks', function () {
   describe('image', function () {
     it('image', test); // knowledge-administration-ui / image-block-utils.spec.ts / should generate image block from image html
     it('image-with-properties', test); // knowledge-administration-ui / image-block-utils.spec.ts / should generate image block with properties from image html
+    it('image-with-embedded-src', test);
   });
 
   describe('list', function () {

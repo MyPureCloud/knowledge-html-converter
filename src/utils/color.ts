@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const tinycolor = require('tinycolor2');
+import * as tinycolor from 'tinycolor2';
 
 export const parseColorString = (colorString: string): string | undefined => {
   if (!colorString) {
