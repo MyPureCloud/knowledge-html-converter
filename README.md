@@ -85,6 +85,12 @@ fetch('https://api.mypurecloud.com/api/v2/knowledge/knowledgeBases/<kb-id>/docum
 
 Node v16, npm v8.
 
+### Git Pre-commit Hooks
+
+`npm run prepare`
+
+Installs husky to run precommit hooks: eslint, prettier. See [.husky/pre-commit](.husky/pre-commit) and `"lint-staged"` in [package.json](package.json).
+
 ### Tests
 
 `npm test`
