@@ -16,13 +16,7 @@ import { convertHtmlToBlocks } from 'knowledge-html-converter';
 const documentBodyBlocks = convertHtmlToBlocks('<html><body><p>Document content</p></body></html>');
 ```
 
-or
-
-```
-const knowledgeHtmlConverter = require('knowledge-html-converter');
-
-const documentBodyBlocks = knowledgeHtmlConverter.convertHtmlToBlocks('<html><body><p>Document content</p></body></html>');
-```
+NOTE: The package is now pure [ESM](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules). It cannot be require()'d from CommonJS.
 
 The value of `documentBodyBlocks` will be:
 

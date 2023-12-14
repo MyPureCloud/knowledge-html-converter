@@ -1,15 +1,15 @@
-import { parse, DomNode } from 'html-parse-stringify';
-import { sanitizeHtml } from './sanitizer';
-import { Tag } from './models/html';
-import { DocumentBodyBlock } from './models/blocks/document-body-block';
+import HtmlParseStringify, { DomNode } from 'html-parse-stringify';
+import { sanitizeHtml } from './sanitizer.js';
+import { Tag } from './models/html/tag.js';
+import { DocumentBodyBlock } from './models/blocks/document-body-block.js';
 import {
   generateEmptyParagraphBlock,
   generateParagraphBlock,
-} from './converters/paragraph';
-import { generateListBlock } from './converters/list';
-import { generateVideoBlock } from './converters/video';
-import { generateImageBlock } from './converters/image';
-import { generateTableBlock } from './converters/table';
+} from './converters/paragraph.js';
+import { generateListBlock } from './converters/list.js';
+import { generateVideoBlock } from './converters/video.js';
+import { generateImageBlock } from './converters/image.js';
+import { generateTableBlock } from './converters/table.js';
 
 /**
  * Converts html to document body blocks.
@@ -18,7 +18,7 @@ import { generateTableBlock } from './converters/table';
  */
 export const convertHtmlToBlocks = (html: string): DocumentBodyBlock[] => {
   html = sanitizeHtml(html || '');
-  const domNodes = parse(html);
+  const domNodes = HtmlParseStringify.parse(html);
   return convertParsedHtmlToBlocks(domNodes);
 };
 

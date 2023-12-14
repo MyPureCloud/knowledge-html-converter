@@ -2,10 +2,10 @@ import {
   DocumentBodyBlockAlignType,
   DocumentBodyBlockFontSize,
   DocumentBodyBlockFontType,
-} from './document-body-block';
-import { DocumentBodyImage } from './document-body-image';
-import { DocumentBodyVideo } from './document-body-video';
-import { DocumentText } from './document-text';
+} from './document-body-block.js';
+import { DocumentBodyImage } from './document-body-image.js';
+import { DocumentBodyVideo } from './document-body-video.js';
+import { DocumentText } from './document-text.js';
 
 export interface DocumentBodyParagraphBlock {
   type: 'Paragraph';

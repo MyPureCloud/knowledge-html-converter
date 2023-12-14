@@ -2,10 +2,10 @@ import {
   DocumentBodyBlockAlignType,
   DocumentBodyBlockFontSize,
   DocumentBodyBlockFontType,
-} from './document-body-block';
-import { DocumentBodyImage } from './document-body-image';
-import { DocumentText } from './document-text';
-import { DocumentBodyVideo } from './document-body-video';
+} from './document-body-block.js';
+import { DocumentBodyImage } from './document-body-image.js';
+import { DocumentText } from './document-text.js';
+import { DocumentBodyVideo } from './document-body-video.js';
 
 // The type name 'DocumentBodyListBlock' is already the name of list item blocks in the API unfortunately
 export interface DocumentBodyListElementBlock {

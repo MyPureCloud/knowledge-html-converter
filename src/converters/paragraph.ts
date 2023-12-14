@@ -1,20 +1,20 @@
 import { DomNode } from 'html-parse-stringify';
-import { getLength } from '../utils/length';
+import { getLength } from '../utils/length.js';
 import {
   DocumentBodyBlockAlignType,
   DocumentBodyBlockFontType,
-} from '../models/blocks/document-body-block';
+} from '../models/blocks/document-body-block.js';
 import {
   DocumentBodyParagraph,
   DocumentBodyParagraphBlock,
   DocumentBodyParagraphProperties,
-} from '../models/blocks/document-body-paragraph';
-import { StyleAttribute } from '../models/html';
+} from '../models/blocks/document-body-paragraph.js';
+import { StyleAttribute } from '../models/html/style-attribute.js';
 import {
   generateEmptyTextBlock,
   generateTextBlocks,
   postProcessTextBlocks,
-} from './text';
+} from './text.js';
 
 export const generateParagraphBlock = (
   domElement: DomNode,

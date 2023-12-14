@@ -1,11 +1,11 @@
 import { DomNode } from 'html-parse-stringify';
-import { StyleAttribute } from '../models/html';
-import { DocumentBodyBlockAlignType } from '../models/blocks/document-body-block';
+import { StyleAttribute } from '../models/html/style-attribute.js';
+import { DocumentBodyBlockAlignType } from '../models/blocks/document-body-block.js';
 import {
   DocumentBodyImage,
   DocumentBodyImageBlock,
   DocumentBodyImageProperties,
-} from '../models/blocks/document-body-image';
+} from '../models/blocks/document-body-image.js';
 
 export const generateImageBlock = (
   imageElement: DomNode,

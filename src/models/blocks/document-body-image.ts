@@ -1,4 +1,4 @@
-import { DocumentBodyBlockAlignType } from './document-body-block';
+import { DocumentBodyBlockAlignType } from './document-body-block.js';
 
 export interface DocumentBodyImageBlock {
   type: 'Image';

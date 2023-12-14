@@ -1,10 +1,11 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
-import { StyleAttribute, Tag } from '../models/html';
+import { StyleAttribute } from '../models/html/style-attribute.js';
+import { Tag } from '../models/html/tag.js';
 import {
   DocumentBodyBlockAlignType,
   DocumentBodyBlockFontSize,
   DocumentBodyBlockFontType,
-} from '../models/blocks/document-body-block';
+} from '../models/blocks/document-body-block.js';
 import {
   DocumentBodyList,
   DocumentBodyListBlockProperties,
@@ -13,16 +14,16 @@ import {
   DocumentBodyBlockOrderedType,
   DocumentBodyBlockUnorderedType,
   DocumentBodyListElementBlock,
-} from '../models/blocks/document-body-list';
+} from '../models/blocks/document-body-list.js';
 import {
   generateEmptyTextBlock,
   generateTextBlocks,
   getFontSizeName,
   postProcessTextBlocks,
   removeBlankEdgeTextBlocks,
-} from './text';
-import { cssTextAlignToAlignType, htmlTagToFontType } from './paragraph';
-import { parseColorString } from '../utils/color';
+} from './text.js';
+import { cssTextAlignToAlignType, htmlTagToFontType } from './paragraph.js';
+import { parseColorString } from '../utils/color.js';
 
 export const generateListBlock = (
   listElement: DomNode,

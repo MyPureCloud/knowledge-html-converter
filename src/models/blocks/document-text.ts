@@ -1,4 +1,4 @@
-import { DocumentBodyBlockFontSize } from './document-body-block';
+import { DocumentBodyBlockFontSize } from './document-body-block.js';
 
 export interface DocumentTextBlock {
   type: 'Text';

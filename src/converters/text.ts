@@ -1,18 +1,19 @@
 import { DomNode, DomNodeType } from 'html-parse-stringify';
-import { StyleAttribute, Tag } from '../models/html';
-import { DocumentContentBlock } from '../models/blocks/document-body-paragraph';
-import { DocumentBodyBlockFontSize } from '../models/blocks/document-body-block';
+import { StyleAttribute } from '../models/html/style-attribute.js';
+import { Tag } from '../models/html/tag.js';
+import { DocumentContentBlock } from '../models/blocks/document-body-paragraph.js';
+import { DocumentBodyBlockFontSize } from '../models/blocks/document-body-block.js';
 import {
   DocumentTextMarks,
   DocumentTextProperties,
   DocumentText,
   DocumentTextBlock,
-} from '../models/blocks/document-text';
-import { generateHyperlinkBlock } from './hyperlink';
-import { generateImageBlock } from './image';
-import { generateVideoBlock } from './video';
-import { parseColorString } from '../utils/color';
-import { convertPixelsToEM, getLength } from '../utils/length';
+} from '../models/blocks/document-text.js';
+import { generateHyperlinkBlock } from './hyperlink.js';
+import { generateImageBlock } from './image.js';
+import { generateVideoBlock } from './video.js';
+import { parseColorString } from '../utils/color.js';
+import { convertPixelsToEM, getLength } from '../utils/length.js';
 
 export interface TextBlockOptions {
   textMarks?: DocumentTextMarks[];

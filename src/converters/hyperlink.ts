@@ -1,6 +1,6 @@
 import { DomNode } from 'html-parse-stringify';
-import { TextBlockOptions, generateTextBlocks } from './text';
-import { DocumentContentBlock } from '../models/blocks/document-body-paragraph';
+import { TextBlockOptions, generateTextBlocks } from './text.js';
+import { DocumentContentBlock } from '../models/blocks/document-body-paragraph.js';
 
 export const generateHyperlinkBlock = (
   anchorElement: DomNode,
