@@ -1,4 +1,4 @@
-import HtmlParseStringify, { DomNode } from 'html-parse-stringify';
+import HtmlParseStringify, { DomNode, DomNodeType } from 'html-parse-stringify';
 import { sanitizeHtml } from './sanitizer.js';
 import { Tag } from './models/html/tag.js';
 import { DocumentBodyBlock } from './models/blocks/document-body-block.js';
