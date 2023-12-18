@@ -1,9 +1,15 @@
+import tinycolor from 'tinycolor2';
+
 export const parseColorString = (colorString: string): string | undefined => {
   if (!colorString) {
     return undefined;
   }
 
-  return validateHexColor(colorString) || convertRgbToHex(colorString);
+  return (
+    validateHexColor(colorString) ||
+    convertRgbToHex(colorString) ||
+    colorNameToHex(colorString)
+  );
 };
 
 const validateHexColor = (colorString: string): string | undefined => {
@@ -39,4 +45,6 @@ const componentToHex = (c: number): string => {
   return hex.length === 1 ? '0' + hex : hex;
 };
 
-// Todo tanslate predifined color values: https://www.w3schools.com/cssref/css_colors.php
+const colorNameToHex = (colorString: string): string | undefined => {
+  return tinycolor(colorString).toHexString();
+};

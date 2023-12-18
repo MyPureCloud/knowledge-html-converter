@@ -1,4 +1,4 @@
-import HtmlParseStringify, { DomNode } from 'html-parse-stringify';
+import HtmlParseStringify, { DomNode, DomNodeType } from 'html-parse-stringify';
 import { sanitizeHtml } from './sanitizer.js';
 import { Tag } from './models/html/tag.js';
 import { DocumentBodyBlock } from './models/blocks/document-body-block.js';
@@ -47,13 +47,22 @@ const convertParsedHtmlToBlocks = (
         block = generateListBlock(domNode, 'UnorderedList');
         break;
       case Tag.Image:
-        block = generateImageBlock(domNode);
+        if (domNode?.attrs?.src) {
+          block = generateImageBlock(domNode);
+        }
         break;
       case Tag.IFrame:
         block = generateVideoBlock(domNode);
         break;
       case Tag.Table:
         block = generateTableBlock(domNode);
+        break;
+      default:
+        block = generateParagraphBlock({
+          name: Tag.Paragraph,
+          type: DomNodeType.Text,
+          children: [domNode],
+        });
         break;
     }
     if (block) {

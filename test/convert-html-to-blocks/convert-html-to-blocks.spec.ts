@@ -7,6 +7,7 @@ import { DocumentBodyBlock } from '../../src/models/blocks/document-body-block.j
 
 describe('convert-html-to-blocks', function () {
   describe('hyperlink', function () {
+    it('hyperlink-with-no-text', test);
     it('hyperlink-with-formatting', test); // knowledge-administration-ui / hyperlink-utils.spec.ts / should generate hyperlink text blocks from html
     it('hyperlink-with-image', test); // knowledge-administration-ui / hyperlink-utils.spec.ts / should create an image block with hyperlink property when image is present inside anchor tag
     it('hyperlink-anchor', test);
@@ -15,6 +16,7 @@ describe('convert-html-to-blocks', function () {
   describe('image', function () {
     it('image', test); // knowledge-administration-ui / image-block-utils.spec.ts / should generate image block from image html
     it('image-with-properties', test); // knowledge-administration-ui / image-block-utils.spec.ts / should generate image block with properties from image html
+    it('image-with-embedded-src', test);
   });
 
   describe('list', function () {

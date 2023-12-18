@@ -1,18 +1,18 @@
 [
   {
+    "type": "Paragraph",
     "paragraph": {
       "blocks": [
         {
+          "type": "Text",
           "text": {
-            "text": "just text without block tags"
-          },
-          "type": "Text"
+            "text": "link to link"
+          }
         }
       ],
       "properties": {
         "fontType": "Paragraph"
       }
-    },
-    "type": "Paragraph"
+    }
   }
 ]

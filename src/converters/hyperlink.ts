@@ -5,7 +5,7 @@ import { DocumentContentBlock } from '../models/blocks/document-body-paragraph.j
 export const generateHyperlinkBlock = (
   anchorElement: DomNode,
   options: TextBlockOptions = {},
-): DocumentContentBlock => {
+): DocumentContentBlock | null => {
   const textBlocks: DocumentContentBlock[] = [];
   const hyperlinkFormattings = options.textMarks || [];
   let displayText = '';
@@ -18,6 +18,9 @@ export const generateHyperlinkBlock = (
   anchorElement.children?.forEach((child) => {
     textBlocks.push(...generateTextBlocks(child, { ...options, hyperlink }));
   });
+  if (textBlocks.length === 0) {
+    return null;
+  }
   const textBlock = textBlocks[0];
   if (hyperlink && textBlock && textBlock.type === 'Text') {
     textBlocks.forEach((textContent) => {

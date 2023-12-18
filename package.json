@@ -1,6 +1,6 @@
 {
   "name": "knowledge-html-converter",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Converts html to the json format of genesys knowledge article content.",
   "author": "Genesys Cloud Services, Inc.",
   "license": "MIT",
@@ -40,7 +40,8 @@
   },
   "dependencies": {
     "html-parse-stringify": "3.0.1",
-    "sanitize-html": "2.11.0"
+    "sanitize-html": "2.11.0",
+    "tinycolor2": "1.6.0"
   },
   "devDependencies": {
     "@istanbuljs/esm-loader-hook": "0.2.0",
@@ -49,6 +50,7 @@
     "@types/mocha": "10.0.1",
     "@types/node": "16.18.41",
     "@types/sanitize-html": "2.9.0",
+    "@types/tinycolor2": "1.4.6",
     "@typescript-eslint/eslint-plugin": "6.2.0",
     "@typescript-eslint/parser": "6.2.0",
     "chai": "4.3.10",
