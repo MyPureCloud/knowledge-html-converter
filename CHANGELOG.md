@@ -1,5 +1,9 @@
 # Change log
 
+## 0.3.1 (2024-01-16)
+
+Update dev dependencies
+
 ## 0.3.0 (2023-12-18)
 
 ### Bugfixes:
