@@ -1,0 +1,45 @@
+[
+  {
+    "type": "OrderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": "One "
+              }
+            },
+            {
+              "type": "Text",
+              "text": {
+                "text": "link",
+                "hyperlink": "https://google.com"
+              }
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": "Two "
+              }
+            },
+            {
+              "type": "Text",
+              "text": {
+                "text": "link",
+                "hyperlink": "https://www.youtube.com/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

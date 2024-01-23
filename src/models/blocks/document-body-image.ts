@@ -15,4 +15,5 @@ export interface DocumentBodyImageProperties {
   backgroundColor?: string;
   align?: DocumentBodyBlockAlignType;
   indentation?: number;
+  width?: number;
 }

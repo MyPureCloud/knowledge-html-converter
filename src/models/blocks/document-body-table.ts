@@ -45,6 +45,7 @@ export type DocumentTableContentBlockType =
 
 export interface DocumentBodyTableProperties {
   width?: number;
+  widthUnit?: DocumentBodyLengthUnit;
   height?: number;
   cellSpacing?: number;
   cellPadding?: number;
@@ -142,4 +143,9 @@ export enum DocumentBodyTableBorderStyleType {
   Outset = 'Outset',
   Hidden = 'Hidden',
   None = 'None',
+}
+
+export enum DocumentBodyLengthUnit {
+  Percentage = 'Percentage',
+  Em = 'Em',
 }

@@ -1,0 +1,52 @@
+[
+  {
+    "type": "Table",
+    "table": {
+      "rows": [
+        {
+          "cells": [
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": "Lithium 3 Li 6.94",
+                    "hyperlink": "/wiki/Lithium",
+                    "properties": {
+                      "textColor": "#000000"
+                    }
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell",
+                "textColor": "#000000"
+              }
+            },
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": "Beryllium 4 Be 9.0122",
+                    "hyperlink": "/wiki/Beryllium",
+                    "properties": {
+                      "textColor": "#000000"
+                    }
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell",
+                "textColor": "#000000"
+              }
+            }
+          ],
+          "properties": {
+            "rowType": "Body"
+          }
+        }
+      ]
+    }
+  }
+]

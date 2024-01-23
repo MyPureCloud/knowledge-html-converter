@@ -10,20 +10,30 @@ import { generateListBlock } from './converters/list.js';
 import { generateVideoBlock } from './converters/video.js';
 import { generateImageBlock } from './converters/image.js';
 import { generateTableBlock } from './converters/table.js';
+import {
+  DefaultOptions,
+  HtmlConverterOptions,
+} from './models/options/html-converter-options.js';
 
 /**
  * Converts html to document body blocks.
  * @param html html string, such as '\<p\>Document content\</p\>'
  * @returns document body blocks
  */
-export const convertHtmlToBlocks = (html: string): DocumentBodyBlock[] => {
+export const convertHtmlToBlocks = (
+  html: string,
+  options: HtmlConverterOptions = DefaultOptions,
+): DocumentBodyBlock[] => {
+  options = options ?? DefaultOptions; // if the parameter is NULL set it to DefaultOptions
+  options.baseFontSize = options?.baseFontSize ?? 16; // if NULL set it to default value
   html = sanitizeHtml(html || '');
   const domNodes = HtmlParseStringify.parse(html);
-  return convertParsedHtmlToBlocks(domNodes);
+  return convertParsedHtmlToBlocks(domNodes, options);
 };
 
 const convertParsedHtmlToBlocks = (
   domNodes: DomNode[],
+  options: HtmlConverterOptions,
 ): DocumentBodyBlock[] => {
   const blocks: DocumentBodyBlock[] = [];
 
@@ -55,7 +65,7 @@ const convertParsedHtmlToBlocks = (
         block = generateVideoBlock(domNode);
         break;
       case Tag.Table:
-        block = generateTableBlock(domNode);
+        block = generateTableBlock(domNode, options);
         break;
       default:
         block = generateParagraphBlock({

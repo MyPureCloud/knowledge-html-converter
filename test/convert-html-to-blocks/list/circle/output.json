@@ -1,0 +1,45 @@
+[
+  {
+    "type": "UnorderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": "One"
+              }
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": "Two"
+              }
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": "Three"
+              }
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "unorderedType": "Circle"
+      }
+    }
+  }
+]

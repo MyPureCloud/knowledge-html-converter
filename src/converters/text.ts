@@ -14,6 +14,7 @@ import { generateImageBlock } from './image.js';
 import { generateVideoBlock } from './video.js';
 import { parseColorString } from '../utils/color.js';
 import { convertPixelsToEM, getLength } from '../utils/length.js';
+import { getBlockProperties } from '../utils/block.js';
 
 export interface TextBlockOptions {
   textMarks?: DocumentTextMarks[];
@@ -22,7 +23,7 @@ export interface TextBlockOptions {
 }
 
 const lineBreak = '<br>';
-const lineBreakInApi = '\n';
+export const lineBreakInApi = '\n';
 // TinyMCE in the article editor generates an nbsp character for empty paragraphs, list items, table cells
 export const nbspCharacter = '\u00a0';
 const nbspPlaceholder = '&nbsp-encoded;';
@@ -141,6 +142,7 @@ export const generateTextProperties = (
     let backgroundColor: string | undefined;
     let fontSize: DocumentBodyBlockFontSize | undefined;
     let textColor: string | undefined;
+    let display: string = ''; // To handle block display
     styles
       .split(/\s*;\s*/) //split with extra spaces around the semi colon
       .map((chunk: string) => chunk.split(/\s*:\s*/)) //split key:value with colon
@@ -158,10 +160,21 @@ export const generateTextProperties = (
         if (key === StyleAttribute.TextColor) {
           textColor = parseColorString(value);
         }
+        if (key === StyleAttribute.Display) {
+          display = value;
+        }
       });
-    if (backgroundColor || fontSize || textColor) {
+    // In case of text blocks with display as block,
+    // To treat them as a block element, add a new line after each text block
+    // And move all the block level properties on text block to the closest parent block element like paragraph/list item/table cell
+    let blockProperties;
+    if (display?.toLowerCase() === 'block') {
+      blockProperties = getBlockProperties(styles);
+    }
+    if (backgroundColor || fontSize || textColor || blockProperties) {
       textProperties = Object.assign(
         {},
+        blockProperties,
         backgroundColor && { backgroundColor },
         fontSize && { fontSize },
         textColor && { textColor },

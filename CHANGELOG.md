@@ -1,6 +1,17 @@
 # Change log
 
+## 0.3.2 (2024-01-21)
+
+### Changed:
+
+1. Handling text blocks with style 'display: block' as block element.
+2. Handling style attribute 'background' along with 'background-color' of \<span\> tags.
+3. Handling 'border', 'bgcolor' attributes of \<table\> tags.
+4. Handling tables' width with units based on settings option 'handleWidthWithUnits'.
+
 ## 0.3.1 (2024-01-16)
+
+### Changed:
 
 Update dev dependencies
 

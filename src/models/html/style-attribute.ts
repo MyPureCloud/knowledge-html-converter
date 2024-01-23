@@ -2,7 +2,9 @@ export enum StyleAttribute {
   // Text block level
   FontSize = 'font-size',
   BackgroundColor = 'background-color',
+  Background = 'background',
   TextColor = 'color',
+  Display = 'display',
   // Paragraph level
   PaddingLeft = 'padding-left',
   TextAlign = 'text-align',

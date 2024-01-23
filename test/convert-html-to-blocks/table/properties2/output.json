@@ -18,7 +18,8 @@
                 "cellType": "Cell",
                 "height": 1.3999,
                 "borderWidth": 0.125,
-                "borderColor": "#e03e2d"
+                "borderColor": "#e03e2d",
+                "borderStyle": "Double"
               }
             },
             {
@@ -34,7 +35,8 @@
                 "cellType": "Cell",
                 "height": 1.3999,
                 "borderWidth": 0.125,
-                "borderColor": "#e03e2d"
+                "borderColor": "#e03e2d",
+                "borderStyle": "Double"
               }
             }
           ],
@@ -58,7 +60,8 @@
                 "cellType": "Cell",
                 "height": 1.3999,
                 "borderWidth": 0.125,
-                "borderColor": "#e03e2d"
+                "borderColor": "#e03e2d",
+                "borderStyle": "Double"
               }
             },
             {
@@ -74,7 +77,8 @@
                 "cellType": "Cell",
                 "height": 1.3999,
                 "borderWidth": 0.125,
-                "borderColor": "#e03e2d"
+                "borderColor": "#e03e2d",
+                "borderStyle": "Double"
               }
             }
           ],
@@ -98,7 +102,8 @@
                 "cellType": "Cell",
                 "height": 1.3999,
                 "borderWidth": 0.125,
-                "borderColor": "#e03e2d"
+                "borderColor": "#e03e2d",
+                "borderStyle": "Double"
               }
             },
             {
@@ -114,7 +119,8 @@
                 "cellType": "Cell",
                 "height": 1.3999,
                 "borderWidth": 0.125,
-                "borderColor": "#e03e2d"
+                "borderColor": "#e03e2d",
+                "borderStyle": "Double"
               }
             }
           ],

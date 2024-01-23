@@ -1,0 +1,23 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "bold link",
+            "hyperlink": "https://google.com",
+            "marks": ["Italic", "Bold"],
+            "properties": {
+              "backgroundColor": "#f8cac6"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]

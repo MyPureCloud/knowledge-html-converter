@@ -1,0 +1,56 @@
+[
+  {
+    "type": "Table",
+    "table": {
+      "rows": [
+        {
+          "cells": [
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": "1"
+                  }
+                }
+              ],
+              "properties": {
+                "borderColor": "#e03e2d",
+                "borderStyle": "Double",
+                "borderWidth": 0.125,
+                "cellType": "Cell"
+              }
+            },
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": "Name1"
+                  }
+                }
+              ],
+              "properties": {
+                "borderColor": "#e03e2d",
+                "borderStyle": "Double",
+                "borderWidth": 0.125,
+                "cellType": "Cell"
+              }
+            }
+          ],
+          "properties": {
+            "rowType": "Body"
+          }
+        }
+      ],
+      "properties": {
+        "backgroundColor": "#fbeeb8",
+        "borderColor": "#e03e2d",
+        "borderStyle": "Double",
+        "borderWidth": 0.125,
+        "width": 25,
+        "widthUnit": "Em"
+      }
+    }
+  }
+]
