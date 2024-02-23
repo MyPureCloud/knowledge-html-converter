@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "html-parse-stringify": "3.0.1",
-    "sanitize-html": "2.11.0",
+    "sanitize-html": "2.12.1",
     "tinycolor2": "1.6.0"
   },
   "devDependencies": {
