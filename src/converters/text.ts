@@ -289,6 +289,10 @@ const mergeTextBlocks = (
     }
     const current = blocks[i].text!;
     const next = blocks[i + 1].text!;
+    // Don't merge the line break text block with others
+    if (current.text === lineBreak || next.text === lineBreak) {
+      continue;
+    }
     if (
       hyperlinksEqual(current.hyperlink, next.hyperlink) &&
       textMarksEqual(current.marks, next.marks) &&

@@ -1,5 +1,11 @@
 # Change log
 
+## 0.3.3 (2024-04-05)
+
+### Bugfixes:
+
+1. Fixing issue with new lines(\n) in text blocks.
+
 ## 0.3.2 (2024-01-23)
 
 ### Changed:

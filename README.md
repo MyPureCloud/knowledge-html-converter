@@ -90,11 +90,10 @@ fetch('https://api.mypurecloud.com/api/v2/knowledge/knowledgeBases/<kb-id>/docum
 }
 ```
 
-# | OPTION |DEFAULT VALUE| USAGE
-
----- | ------- | --- | -------------
-1 | handleWidthWithUnits | false | If set true, handles the table width with unit. Sample output will be ' width: 100, widthUnit: "Percentage" '.
-2 | baseFontSize | 16 | The default text size in a browser is 16px. So for the default size, 16px is converted to 1em. If you need to override the default font-size, use this option like 'baseFontSize : 32'. For the option 'baseFontSize : 32', the conversion will be 32px to 1em.
+| SNO | OPTION               | DEFAULT VALUE | USAGE                                                                                                                                                                                                                                                           |
+| --- | -------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | handleWidthWithUnits | false         | If set true, handles the table width with unit. Sample output will be ' width: 100, widthUnit: "Percentage" '.                                                                                                                                                  |
+| 2   | baseFontSize         | 16            | The default text size in a browser is 16px. So for the default size, 16px is converted to 1em. If you need to override the default font-size, use this option like 'baseFontSize : 32'. For the option 'baseFontSize : 32', the conversion will be 32px to 1em. |
 
 ## Developer setup
 

@@ -86,6 +86,7 @@ describe('convert-html-to-blocks', function () {
     it('text-marks', test);
     it('empty-strike-tag', test);
     it('single-empty-bold-tag', test);
+    it('line-break', test);
   });
 
   describe('video', function () {

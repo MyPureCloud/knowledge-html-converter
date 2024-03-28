@@ -1,0 +1,30 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Something"
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "\n"
+          }
+        },
+        {
+          "type": "Text",
+          "text": {
+            "text": "new line"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  }
+]
