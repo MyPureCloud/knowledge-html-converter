@@ -73,7 +73,7 @@ const generateTable = (
   };
   const tableProperties = generateTableProperties(tableElement, options);
   let defaultCellBorderProperties: DocumentBodyTableCellBlockProperties;
-  if (tableElement.attrs?.border === '1') {
+  if (tableElement.attrs?.border === '1' && tableProperties) {
     const borderWidth = tableProperties!.borderWidth;
     const borderStyle = tableProperties!.borderStyle;
     const borderColor = tableProperties!.borderColor;
