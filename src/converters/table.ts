@@ -74,9 +74,9 @@ const generateTable = (
   const tableProperties = generateTableProperties(tableElement, options);
   let defaultCellBorderProperties: DocumentBodyTableCellBlockProperties;
   if (tableElement.attrs?.border === '1') {
-    const borderWidth = tableProperties!.borderWidth;
-    const borderStyle = tableProperties!.borderStyle;
-    const borderColor = tableProperties!.borderColor;
+    const borderWidth = tableProperties?.borderWidth;
+    const borderStyle = tableProperties?.borderStyle;
+    const borderColor = tableProperties?.borderColor;
     if (borderWidth || borderStyle || borderColor) {
       defaultCellBorderProperties = Object.assign(
         {},
@@ -300,6 +300,11 @@ const generateTableProperties = (
   // Handle bgcolor attribute on table
   if (tableElement.attrs?.bgcolor) {
     backgroundColor = tableElement.attrs?.bgcolor;
+  }
+  // Handle border attribute on table
+  if (tableElement.attrs?.border === '1') {
+    borderWidth = 0.0625;
+    borderStyle = DocumentBodyTableBorderStyleType.Solid;
   }
 
   if (tableElement.attrs && tableElement.attrs?.style) {
