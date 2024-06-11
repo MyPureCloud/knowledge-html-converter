@@ -70,6 +70,7 @@ describe('convert-html-to-blocks', function () {
     it('white-space-between-elements', test);
     it('float-number-truncation', test);
     it('colors', test);
+    it('border', test);
     it('with-block-text', test);
   });
 
