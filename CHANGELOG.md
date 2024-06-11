@@ -5,7 +5,7 @@
 ### Bugfixes:
 
 1. Fixing table border="1" issue
-https://github.com/MyPureCloud/knowledge-html-converter/issues/5
+   https://github.com/MyPureCloud/knowledge-html-converter/issues/5
 
 ## 0.3.3 (2024-04-05)
 
