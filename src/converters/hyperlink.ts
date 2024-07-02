@@ -2,10 +2,11 @@ import { DomNode } from 'html-parse-stringify';
 import { TextBlockOptions, generateTextBlocks, nbspCharacter } from './text.js';
 import { DocumentContentBlock } from '../models/blocks/document-body-paragraph.js';
 import { StyleAttribute } from '../models/html/style-attribute.js';
-import { DocumentBodyBlockFontSize } from '../index.js';
+import { DocumentBodyBlockFontSize, HtmlConverterOptions } from '../index.js';
 
 export const generateHyperlinkBlock = (
   anchorElement: DomNode,
+  converterOptions: HtmlConverterOptions,
   options: TextBlockOptions = {},
 ): DocumentContentBlock | null => {
   const textBlocks: DocumentContentBlock[] = [];
@@ -39,7 +40,9 @@ export const generateHyperlinkBlock = (
   });
   // Generate all the text blocks under anchor element
   anchorElement.children?.forEach((child) => {
-    textBlocks.push(...generateTextBlocks(child, { ...options, hyperlink }));
+    textBlocks.push(
+      ...generateTextBlocks(child, converterOptions, { ...options, hyperlink }),
+    );
   });
   if (textBlocks.length === 0) {
     return null;

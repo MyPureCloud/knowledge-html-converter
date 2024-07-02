@@ -15,6 +15,7 @@ import { generateVideoBlock } from './video.js';
 import { parseColorString } from '../utils/color.js';
 import { convertPixelsToEM, getLength } from '../utils/length.js';
 import { getBlockProperties } from '../utils/block.js';
+import { HtmlConverterOptions } from '../models/options/html-converter-options.js';
 
 export interface TextBlockOptions {
   textMarks?: DocumentTextMarks[];
@@ -30,6 +31,7 @@ const nbspPlaceholder = '&nbsp-encoded;';
 
 export const generateTextBlocks = (
   domNode: DomNode,
+  converterOptions: HtmlConverterOptions,
   options: TextBlockOptions = {},
 ): DocumentContentBlock[] => {
   const arr: DocumentContentBlock[] = [];
@@ -44,10 +46,15 @@ export const generateTextBlocks = (
     arr.push(generateTextBlock(lineBreak));
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Image) {
     arr.push(
-      generateImageBlock(domNode, options.textProperties, options.hyperlink),
+      generateImageBlock(
+        domNode,
+        converterOptions,
+        options.textProperties,
+        options.hyperlink,
+      ),
     );
   } else if (domNode.type === DomNodeType.Tag && domNode.name === Tag.Anchor) {
-    const link = generateHyperlinkBlock(domNode, options);
+    const link = generateHyperlinkBlock(domNode, converterOptions, options);
     if (link) {
       arr.push(link);
     }
@@ -74,7 +81,7 @@ export const generateTextBlocks = (
     }
     domNode.children?.forEach((child) => {
       arr.push(
-        ...generateTextBlocks(child, {
+        ...generateTextBlocks(child, converterOptions, {
           ...options,
           textMarks,
           textProperties,

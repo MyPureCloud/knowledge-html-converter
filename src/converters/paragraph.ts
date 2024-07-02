@@ -15,11 +15,13 @@ import {
   generateTextBlocks,
   postProcessTextBlocks,
 } from './text.js';
+import { HtmlConverterOptions } from '../models/options/html-converter-options.js';
 
 export const generateParagraphBlock = (
   domElement: DomNode,
+  converterOptions: HtmlConverterOptions,
 ): DocumentBodyParagraphBlock | undefined => {
-  const paragraph = generateParagraph(domElement);
+  const paragraph = generateParagraph(domElement, converterOptions);
   return paragraph
     ? {
         type: 'Paragraph',
@@ -30,6 +32,7 @@ export const generateParagraphBlock = (
 
 const generateParagraph = (
   domElement: DomNode,
+  converterOptions: HtmlConverterOptions,
 ): DocumentBodyParagraph | undefined => {
   const paragraph: DocumentBodyParagraph = {
     blocks: [],
@@ -44,7 +47,7 @@ const generateParagraph = (
 
   const isPreformatted = fontType === DocumentBodyBlockFontType.Preformatted;
   domElement.children?.forEach((child: DomNode) => {
-    paragraph.blocks.push(...generateTextBlocks(child));
+    paragraph.blocks.push(...generateTextBlocks(child, converterOptions));
   });
   if (!isPreformatted) {
     postProcessTextBlocks(paragraph.blocks);

@@ -58,3 +58,7 @@ export {
   DocumentTextProperties,
 } from './models/blocks/document-text.js';
 export { HtmlConverterOptions } from './models/options/html-converter-options.js';
+export {
+  DocumentElementLength,
+  DocumentElementLengthUnit,
+} from './models/blocks/document-element-length.js';

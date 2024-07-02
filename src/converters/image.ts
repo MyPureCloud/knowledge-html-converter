@@ -6,20 +6,34 @@ import {
   DocumentBodyImageBlock,
   DocumentBodyImageProperties,
 } from '../models/blocks/document-body-image.js';
+import {
+  getStyleKeyValues,
+  getWidth,
+  getWidthWithUnit,
+} from './table-properties.js';
+import { HtmlConverterOptions } from '../models/options/html-converter-options.js';
+import { DocumentElementLength } from '../models/blocks/document-element-length.js';
 
 export const generateImageBlock = (
   imageElement: DomNode,
+  converterOptions: HtmlConverterOptions,
   imageProperties: DocumentBodyImageProperties = {},
   hyperlink: string | undefined = undefined,
 ): DocumentBodyImageBlock => {
   return {
     type: 'Image',
-    image: generateImage(imageElement, imageProperties, hyperlink),
+    image: generateImage(
+      imageElement,
+      converterOptions,
+      imageProperties,
+      hyperlink,
+    ),
   };
 };
 
 const generateImage = (
   imageElement: DomNode,
+  converterOptions: HtmlConverterOptions,
   imageProperties: DocumentBodyImageProperties = {},
   hyperlink: string | undefined = undefined,
 ): DocumentBodyImage => {
@@ -30,7 +44,7 @@ const generateImage = (
     .replace(/&lt;/g, '<')
     .replace(/&quot;/g, '"');
   const backgroundColor = imageProperties?.backgroundColor;
-  let properties = getImageProperties(imageElement);
+  let properties = getImageProperties(imageElement, converterOptions);
   if (backgroundColor) {
     properties = { ...properties, ...{ backgroundColor } };
   }
@@ -44,47 +58,64 @@ const generateImage = (
 
 const getImageProperties = (
   imageElement: DomNode,
+  converterOptions: HtmlConverterOptions,
 ): DocumentBodyImageProperties | undefined => {
   let imageProperties: DocumentBodyImageProperties | undefined;
   if (imageElement.attrs) {
     let align: DocumentBodyBlockAlignType | undefined;
     let backgroundColor: string | undefined;
+    let width: number | undefined;
+    let widthWithUnit: DocumentElementLength | undefined;
+
     if (imageElement.attrs.style) {
-      imageElement.attrs.style
-        .split(/\s*;\s*/) //split with extra spaces around the semi colon
-        .map((chunk) => chunk.split(/\s*:\s*/)) //split key:value with colon
-        .map((keyValue) => {
-          if (keyValue.length === 2) {
-            if (
-              keyValue[0] === StyleAttribute.Float &&
-              keyValue[1].toLocaleLowerCase() === 'left'
-            ) {
-              align = DocumentBodyBlockAlignType.Left;
-              return;
-            } else if (
-              keyValue[0] === StyleAttribute.Float &&
-              keyValue[1].toLocaleLowerCase() === 'right'
-            ) {
-              align = DocumentBodyBlockAlignType.Right;
-              return;
-            } else if (
-              keyValue[0] === 'display' &&
-              keyValue[1].toLocaleLowerCase() === 'block'
-            ) {
-              // For center tiny mce adds style as "display: block; margin-left: auto; margin-right: auto;"
-              align = DocumentBodyBlockAlignType.Center;
-              return;
-            }
-          }
-        });
+      const styleKeyValues = getStyleKeyValues(imageElement);
+
+      align = getFloat(styleKeyValues);
+      width = getWidth(styleKeyValues, converterOptions);
+      if (converterOptions.handleWidthWithUnits) {
+        widthWithUnit = getWidthWithUnit(styleKeyValues);
+      }
     }
-    if (align || backgroundColor) {
+    if (align || backgroundColor || width || widthWithUnit) {
       imageProperties = Object.assign(
         {},
         align && { align },
         backgroundColor && { backgroundColor },
+        width && { width },
+        widthWithUnit && { widthWithUnit },
       );
     }
   }
   return imageProperties;
+};
+
+export const getFloat = (
+  styleKeyValues: Record<string, string>,
+): DocumentBodyBlockAlignType | undefined => {
+  let float: DocumentBodyBlockAlignType | undefined;
+
+  if (
+    Object.prototype.hasOwnProperty.call(styleKeyValues, StyleAttribute.Float)
+  ) {
+    if (styleKeyValues[StyleAttribute.Float].toLocaleLowerCase() === 'left') {
+      float = DocumentBodyBlockAlignType.Left;
+    } else if (
+      styleKeyValues[StyleAttribute.Float].toLocaleLowerCase() === 'right'
+    ) {
+      float = DocumentBodyBlockAlignType.Right;
+    }
+  }
+
+  if (
+    Object.prototype.hasOwnProperty.call(
+      styleKeyValues,
+      StyleAttribute.Display,
+    ) &&
+    styleKeyValues[StyleAttribute.Display].toLocaleLowerCase() === 'block'
+  ) {
+    // For center tiny mce adds style as "display: block; margin-left: auto; margin-right: auto;"
+    float = DocumentBodyBlockAlignType.Center;
+  }
+
+  return float;
 };

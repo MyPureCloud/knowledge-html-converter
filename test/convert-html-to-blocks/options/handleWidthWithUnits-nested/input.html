@@ -1,0 +1,57 @@
+<p style="padding-left: 1em; text-align: center;">
+    <span style="font-size: 24px;">This is a sample for nested table and image width with units</span>
+  </p>
+
+<span>Image nested into hyperlink</span>
+<p>
+<a data-properties='{"text":"","hyperlink":"https://example.com","linkType":"url","targetType":"new_tab"}'
+   target="_blank"
+   title="https://example.com" href="https://example.com"><img src="https://www.genesys.com/media/genesys-logo-base.svg"
+       style="width: 160px"
+       alt="No image available"></a>
+</p>
+
+<span>Image nested into list</span>
+  <ol>
+    <li>
+      <img src="https://www.genesys.com/media/genesys-logo-base.svg"
+           style="width: 10em"
+           alt="No image available"/>
+    </li>
+    <li>
+      <ul>
+        <li>
+          <img src="https://www.genesys.com/media/genesys-logo-base.svg"
+               style="width: 10em"
+               alt="No image available"/>
+        </li>
+      </ul>
+    </li>
+  </ol>
+
+<span>Table width nested table and image inside</span>
+<table border="1" style="width: 100%;">
+  <tbody>
+  <tr>
+    <td style="width: 37.5em;" scope="None" data-mce-style="width: 37.5em;">
+      <table border="1" style="height: 1.0625em; width: 80%;" data-mce-style="height: 1.0625em; width: 80%;">
+        <tbody>
+        <tr>
+          <td style="width: 37.5em;" scope="None" data-mce-style="width: 37.5em;">Nested Table Col-1</td>
+          <td style="width: 37.5em;" scope="None" data-mce-style="width: 37.5em;">Nested Table Col-2</td>
+        </tr>
+        <tr>
+          <td>
+            <img src="https://www.genesys.com/media/genesys-logo-base.svg"
+                 style="width: 50%"
+                 alt="No image available"/>
+          </td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+    <td style="width: 37.5em;" scope="None" data-mce-style="width: 37.5em;">Outer Table Col - 2&nbsp;</td>
+  </tr>
+  </tbody>
+</table>

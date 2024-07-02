@@ -3,6 +3,7 @@ import { DocumentBodyList } from './document-body-list.js';
 import { DocumentBodyParagraph } from './document-body-paragraph.js';
 import { DocumentText } from './document-text.js';
 import { DocumentBodyVideo } from './document-body-video.js';
+import { DocumentElementLength } from './document-element-length.js';
 
 export interface DocumentBodyTableBlock {
   type: 'Table';
@@ -45,7 +46,7 @@ export type DocumentTableContentBlockType =
 
 export interface DocumentBodyTableProperties {
   width?: number;
-  widthUnit?: DocumentBodyLengthUnit;
+  widthWithUnit?: DocumentElementLength;
   height?: number;
   cellSpacing?: number;
   cellPadding?: number;
@@ -90,6 +91,7 @@ export interface DocumentBodyTableRowBlockProperties {
 export interface DocumentBodyTableCellBlockProperties {
   cellType?: DocumentBodyTableBlockCellType;
   width?: number;
+  widthWithUnit?: DocumentElementLength;
   height?: number;
   horizontalAlign?: DocumentBodyTableBlockHorizontalAlignType;
   verticalAlign?: DocumentBodyTableBlockVerticalAlignType;
@@ -143,9 +145,4 @@ export enum DocumentBodyTableBorderStyleType {
   Outset = 'Outset',
   Hidden = 'Hidden',
   None = 'None',
-}
-
-export enum DocumentBodyLengthUnit {
-  Percentage = 'Percentage',
-  Em = 'Em',
 }

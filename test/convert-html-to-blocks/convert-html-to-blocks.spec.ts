@@ -109,10 +109,26 @@ describe('convert-html-to-blocks', function () {
     it('default-percentage', test); // with no options and table width in %
     it('default-pixel', test); // with no options and table width in px
     it('default-em', test); // with no options and table width in em
+    // handleWidthWithUnits - for tables and table cells
     it('handleWidthWithUnits-percentage', testHandleWidthWithUnitEnabled);
     it('handleWidthWithUnits-pixel', testHandleWidthWithUnitEnabled);
+    it(
+      'handleWidthWithUnits-pixel-no-input-unit',
+      testHandleWidthWithUnitEnabled,
+    );
     it('handleWidthWithUnits-em', testHandleWidthWithUnitEnabled);
     it('handleWidthWithUnits-disabled', testHandleWidthWithUnitDisabled);
+    // handleWidthWithUnits - for images
+    it('handleWidthWithUnits-percentage-image', testHandleWidthWithUnitEnabled);
+    it('handleWidthWithUnits-pixel-image', testHandleWidthWithUnitEnabled);
+    it(
+      'handleWidthWithUnits-pixel-image-no-input-unit',
+      testHandleWidthWithUnitEnabled,
+    );
+    it('handleWidthWithUnits-em-image', testHandleWidthWithUnitEnabled);
+    it('handleWidthWithUnits-disabled-image', testHandleWidthWithUnitDisabled);
+    // handleWidthWithUnits - table and images
+    it('handleWidthWithUnits-nested', testHandleWidthWithUnitEnabled);
 
     // baseFontSize
     it('baseFontSize-set', testBaseFontSize); // Set to 32 {baseFontSize: 32}

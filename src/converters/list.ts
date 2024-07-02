@@ -24,12 +24,14 @@ import {
 } from './text.js';
 import { cssTextAlignToAlignType, htmlTagToFontType } from './paragraph.js';
 import { parseColorString } from '../utils/color.js';
+import { HtmlConverterOptions } from '../models/options/html-converter-options.js';
 
 export const generateListBlock = (
   listElement: DomNode,
   listType: 'OrderedList' | 'UnorderedList',
+  converterOptions: HtmlConverterOptions,
 ): DocumentBodyListElementBlock | undefined => {
-  const list = generateList(listElement, listType);
+  const list = generateList(listElement, listType, converterOptions);
   return list
     ? {
         type: listType,
@@ -41,6 +43,7 @@ export const generateListBlock = (
 const generateList = (
   listElement: DomNode,
   listType: 'OrderedList' | 'UnorderedList',
+  converterOptions: HtmlConverterOptions,
 ): DocumentBodyList | undefined => {
   const list: DocumentBodyList = {
     blocks: [],
@@ -53,7 +56,11 @@ const generateList = (
   listElement.children
     ?.filter((child) => child.type === DomNodeType.Tag)
     .forEach((listItemElement) => {
-      const listItemBlock = generateListItemBlock(listItemElement, listType);
+      const listItemBlock = generateListItemBlock(
+        listItemElement,
+        listType,
+        converterOptions,
+      );
       list.blocks.push(listItemBlock);
     });
   return list.blocks.length ? list : undefined;
@@ -122,6 +129,7 @@ const generateListProperties = (
 const generateListItemBlock = (
   listItemElement: DomNode,
   listType: 'OrderedList' | 'UnorderedList',
+  converterOptions: HtmlConverterOptions,
 ): DocumentBodyListBlock => {
   const listItemBlock: DocumentBodyListBlock = {
     type: 'ListItem',
@@ -143,17 +151,25 @@ const generateListItemBlock = (
 
   listItemElement.children?.forEach((child: DomNode) => {
     if (child.name === Tag.OrderedList) {
-      const listBlock = generateListBlock(child, 'OrderedList');
+      const listBlock = generateListBlock(
+        child,
+        'OrderedList',
+        converterOptions,
+      );
       if (listBlock) {
         listItemBlock.blocks.push(listBlock);
       }
     } else if (child.name === Tag.UnorderedList) {
-      const listBlock = generateListBlock(child, 'UnorderedList');
+      const listBlock = generateListBlock(
+        child,
+        'UnorderedList',
+        converterOptions,
+      );
       if (listBlock) {
         listItemBlock.blocks.push(listBlock);
       }
     } else {
-      listItemBlock.blocks.push(...generateTextBlocks(child));
+      listItemBlock.blocks.push(...generateTextBlocks(child, converterOptions));
     }
   });
   if (!isPreformatted) {

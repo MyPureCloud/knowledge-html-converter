@@ -1,0 +1,299 @@
+[
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "This is a sample for nested table and image width with units",
+            "properties": {
+              "fontSize": "XLarge"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "indentation": 1,
+        "align": "Center",
+        "fontType": "Paragraph"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Image nested into hyperlink"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Image",
+          "image": {
+            "url": "https://www.genesys.com/media/genesys-logo-base.svg",
+            "hyperlink": "https://example.com",
+            "properties": {
+              "width": 10,
+              "widthWithUnit": {
+                "value": 160,
+                "unit": "Px"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Image nested into list"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  },
+  {
+    "type": "OrderedList",
+    "list": {
+      "blocks": [
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Image",
+              "image": {
+                "url": "https://www.genesys.com/media/genesys-logo-base.svg",
+                "properties": {
+                  "width": 10,
+                  "widthWithUnit": {
+                    "value": 10,
+                    "unit": "Em"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "UnorderedList",
+              "list": {
+                "blocks": [
+                  {
+                    "type": "ListItem",
+                    "blocks": [
+                      {
+                        "type": "Image",
+                        "image": {
+                          "url": "https://www.genesys.com/media/genesys-logo-base.svg",
+                          "properties": {
+                            "width": 10,
+                            "widthWithUnit": {
+                              "value": 10,
+                              "unit": "Em"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "type": "Paragraph",
+    "paragraph": {
+      "blocks": [
+        {
+          "type": "Text",
+          "text": {
+            "text": "Table width nested table and image inside"
+          }
+        }
+      ],
+      "properties": {
+        "fontType": "Paragraph"
+      }
+    }
+  },
+  {
+    "type": "Table",
+    "table": {
+      "rows": [
+        {
+          "cells": [
+            {
+              "blocks": [
+                {
+                  "type": "Table",
+                  "table": {
+                    "rows": [
+                      {
+                        "cells": [
+                          {
+                            "blocks": [
+                              {
+                                "type": "Text",
+                                "text": {
+                                  "text": "Nested Table Col-1"
+                                }
+                              }
+                            ],
+                            "properties": {
+                              "cellType": "Cell",
+                              "width": 37.5,
+                              "widthWithUnit": {
+                                "unit": "Em",
+                                "value": 37.5
+                              }
+                            }
+                          },
+                          {
+                            "blocks": [
+                              {
+                                "type": "Text",
+                                "text": {
+                                  "text": "Nested Table Col-2"
+                                }
+                              }
+                            ],
+                            "properties": {
+                              "cellType": "Cell",
+                              "width": 37.5,
+                              "widthWithUnit": {
+                                "unit": "Em",
+                                "value": 37.5
+                              }
+                            }
+                          }
+                        ],
+                        "properties": {
+                          "rowType": "Body"
+                        }
+                      },
+                      {
+                        "cells": [
+                          {
+                            "blocks": [
+                              {
+                                "type": "Image",
+                                "image": {
+                                  "url": "https://www.genesys.com/media/genesys-logo-base.svg",
+                                  "properties": {
+                                    "width": 28.125,
+                                    "widthWithUnit": {
+                                      "value": 50,
+                                      "unit": "Percentage"
+                                    }
+                                  }
+                                }
+                              }
+                            ],
+                            "properties": {
+                              "cellType": "Cell"
+                            }
+                          },
+                          {
+                            "blocks": [
+                              {
+                                "type": "Text",
+                                "text": {
+                                  "text": " "
+                                }
+                              }
+                            ],
+                            "properties": {
+                              "cellType": "Cell"
+                            }
+                          }
+                        ],
+                        "properties": {
+                          "rowType": "Body"
+                        }
+                      }
+                    ],
+                    "properties": {
+                      "height": 1.0625,
+                      "width": 45,
+                      "widthWithUnit": {
+                        "value": 80,
+                        "unit": "Percentage"
+                      }
+                    }
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell",
+                "width": 37.5,
+                "widthWithUnit": {
+                  "unit": "Em",
+                  "value": 37.5
+                }
+              }
+            },
+            {
+              "blocks": [
+                {
+                  "type": "Text",
+                  "text": {
+                    "text": "Outer Table Col - 2&nbsp;"
+                  }
+                }
+              ],
+              "properties": {
+                "cellType": "Cell",
+                "width": 37.5,
+                "widthWithUnit": {
+                  "unit": "Em",
+                  "value": 37.5
+                }
+              }
+            }
+          ],
+          "properties": {
+            "rowType": "Body"
+          }
+        }
+      ],
+      "properties": {
+        "width": 56.25,
+        "widthWithUnit": {
+          "value": 100,
+          "unit": "Percentage"
+        }
+      }
+    }
+  }
+]

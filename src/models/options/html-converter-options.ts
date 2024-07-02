@@ -1,7 +1,9 @@
 export class HtmlConverterOptions {
   /**
-   * if set true, handles the table width with unit. Sample output will be ' width: 100,  widthUnit: "Percentage" '.
-   * The default value is false, which does not have widthUnit property. This converts the width in to em units.
+   * if set true, adds the table and image widthWithUnit property.
+   * Sample output will be ' width: 100,  widthWithUnit: { value: 20, unit: "Percentage" } '.
+   * The default value is false, which does not have widthWithUnit property.
+   * The width property is always in em.
    */
   handleWidthWithUnits?: boolean = false;
   /**

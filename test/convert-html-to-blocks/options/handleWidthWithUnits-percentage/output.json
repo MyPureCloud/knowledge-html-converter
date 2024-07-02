@@ -18,7 +18,12 @@
                 "borderColor": "#e03e2d",
                 "borderStyle": "Double",
                 "borderWidth": 0.125,
-                "cellType": "Cell"
+                "cellType": "Cell",
+                "width": 28.125,
+                "widthWithUnit": {
+                  "value": 50,
+                  "unit": "Percentage"
+                }
               }
             },
             {
@@ -34,7 +39,12 @@
                 "borderColor": "#e03e2d",
                 "borderStyle": "Double",
                 "borderWidth": 0.125,
-                "cellType": "Cell"
+                "cellType": "Cell",
+                "width": 28.125,
+                "widthWithUnit": {
+                  "value": 50,
+                  "unit": "Percentage"
+                }
               }
             }
           ],
@@ -48,8 +58,11 @@
         "borderColor": "#e03e2d",
         "borderStyle": "Double",
         "borderWidth": 0.125,
-        "width": 100,
-        "widthUnit": "Percentage"
+        "width": 56.25,
+        "widthWithUnit": {
+          "value": 100,
+          "unit": "Percentage"
+        }
       }
     }
   }

@@ -1,9 +1,12 @@
-import { DocumentBodyLengthUnit } from '../models/blocks/document-body-table.js';
-import { Length } from '../models/html/length.js';
+import {
+  DocumentElementLength,
+  DocumentElementLengthUnit,
+} from '../models/blocks/document-element-length.js';
 
 const emPattern = /^\d+(?:\.\d+)?em$/;
 const pxPattern = /^\d+(?:\.\d+)?px$/;
 const percentagePattern = /^\d+(?:\.\d+)?%$/;
+const numberPattern = /^\d+(?:\.\d+)?$/;
 
 export const getLength = (
   size: string | undefined,
@@ -15,7 +18,7 @@ export const getLength = (
   let value: number | undefined = undefined;
   if (emPattern.test(size)) {
     value = Number(size.replace(/\s*em\s*/g, ''));
-  } else if (pxPattern.test(size)) {
+  } else if (pxPattern.test(size) || numberPattern.test(size)) {
     value = convertPixelsToEM(
       Number(size.replace(/\s*px\s*/g, '')),
       baseFontSize,
@@ -35,29 +38,27 @@ export const getLength = (
 
 export const getLengthWithUnit = (
   size: string | undefined,
-  baseFontSize: number = 16,
-): Length | undefined => {
+): DocumentElementLength | undefined => {
   if (!size) {
     return undefined;
   }
 
   let value: number | undefined = undefined;
-  let unit: DocumentBodyLengthUnit | undefined;
+  let unit: DocumentElementLengthUnit = DocumentElementLengthUnit.Em;
   if (emPattern.test(size)) {
     value = Number(size.replace(/\s*em\s*/g, ''));
-    unit = DocumentBodyLengthUnit.Em;
-  } else if (pxPattern.test(size)) {
-    value = convertPixelsToEM(
-      Number(size.replace(/\s*px\s*/g, '')),
-      baseFontSize,
-    );
-    unit = DocumentBodyLengthUnit.Em;
+    unit = DocumentElementLengthUnit.Em;
+  } else if (pxPattern.test(size) || numberPattern.test(size)) {
+    value = Number(size.replace(/\s*px\s*/g, ''));
+    unit = DocumentElementLengthUnit.Px;
   } else if (percentagePattern.test(size)) {
     value = Number(size.replace(/\s*%\s*/g, ''));
-    unit = DocumentBodyLengthUnit.Percentage;
+    unit = DocumentElementLengthUnit.Percentage;
+  } else {
+    return undefined;
   }
   const length = value ? truncateToSinglePrecisionFloat(value) : 0;
-  return { length, unit };
+  return { value: length, unit };
 };
 
 export const convertPixelsToEM = (

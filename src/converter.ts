@@ -48,17 +48,17 @@ const convertParsedHtmlToBlocks = (
       case Tag.Heading5:
       case Tag.Heading6:
       case Tag.Preformatted:
-        block = generateParagraphBlock(domNode);
+        block = generateParagraphBlock(domNode, options);
         break;
       case Tag.OrderedList:
-        block = generateListBlock(domNode, 'OrderedList');
+        block = generateListBlock(domNode, 'OrderedList', options);
         break;
       case Tag.UnorderedList:
-        block = generateListBlock(domNode, 'UnorderedList');
+        block = generateListBlock(domNode, 'UnorderedList', options);
         break;
       case Tag.Image:
         if (domNode?.attrs?.src) {
-          block = generateImageBlock(domNode);
+          block = generateImageBlock(domNode, options);
         }
         break;
       case Tag.IFrame:
@@ -68,11 +68,14 @@ const convertParsedHtmlToBlocks = (
         block = generateTableBlock(domNode, options);
         break;
       default:
-        block = generateParagraphBlock({
-          name: Tag.Paragraph,
-          type: DomNodeType.Text,
-          children: [domNode],
-        });
+        block = generateParagraphBlock(
+          {
+            name: Tag.Paragraph,
+            type: DomNodeType.Text,
+            children: [domNode],
+          },
+          options,
+        );
         break;
     }
     if (block) {

@@ -1,5 +1,13 @@
 # Change log
 
+## 0.4.0 (2024-07-02)
+
+### Changed:
+
+1. Changing widthUnit to widthWithUnit property, containing value and unit. Width property remained unchanged, returning value converted to em.
+2. Refactor handling tables width with units based on settings option 'handleWidthWithUnits'.
+3. Added handling images width with units based on settings option 'handleWidthWithUnits'.
+
 ## 0.3.4 (2024-06-11)
 
 ### Bugfixes:

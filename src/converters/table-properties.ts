@@ -20,7 +20,7 @@ import {
   postProcessTextBlocks,
 } from './text.js';
 import { generateVideoBlock } from './video.js';
-import { Length } from '../models/html/length.js';
+import { DocumentElementLength } from '../models/blocks/document-element-length.js';
 import { HtmlConverterOptions } from '../models/options/html-converter-options.js';
 
 export const getStyleKeyValues = (
@@ -186,45 +186,57 @@ export const getVerticalAlign = (
 
 export const getBorderWidth = (
   styleKeyValues: Record<string, string>,
+  converterOptions: HtmlConverterOptions = {},
 ): number | undefined => {
-  return getHeightAndWidthProperty(styleKeyValues, StyleAttribute.BorderWidth);
+  return getHeightAndWidthProperty(
+    styleKeyValues,
+    StyleAttribute.BorderWidth,
+    converterOptions,
+  );
 };
 
 export const getBorderSpacing = (
   styleKeyValues: Record<string, string>,
+  converterOptions: HtmlConverterOptions = {},
 ): number | undefined => {
   return getHeightAndWidthProperty(
     styleKeyValues,
     StyleAttribute.BorderSpacing,
+    converterOptions,
   );
 };
 
 export const getHeight = (
   styleKeyValues: Record<string, string>,
+  converterOptions: HtmlConverterOptions = {},
 ): number | undefined => {
-  return getHeightAndWidthProperty(styleKeyValues, StyleAttribute.Height);
+  return getHeightAndWidthProperty(
+    styleKeyValues,
+    StyleAttribute.Height,
+    converterOptions,
+  );
 };
 
 export const getWidth = (
   styleKeyValues: Record<string, string>,
-  options: HtmlConverterOptions = {},
+  converterOptions: HtmlConverterOptions = {},
 ): number | undefined => {
   return getHeightAndWidthProperty(
     styleKeyValues,
     StyleAttribute.Width,
-    options,
+    converterOptions,
   );
 };
 
 export const getWidthWithUnit = (
   styleKeyValues: Record<string, string>,
-  options: HtmlConverterOptions,
-): Length | undefined => {
-  return getWidthAndUnit(styleKeyValues, StyleAttribute.Width, options);
+): DocumentElementLength | undefined => {
+  return getWidthAndUnit(styleKeyValues, StyleAttribute.Width);
 };
 
 export const getCaption = (
   captionElement: DomNode,
+  converterOptions: HtmlConverterOptions = {},
 ): DocumentBodyTableCaptionBlock | undefined => {
   const captionBlock: DocumentBodyTableCaptionBlock = {
     blocks: [],
@@ -236,7 +248,7 @@ export const getCaption = (
     let textBlocks: DocumentContentBlock[] | undefined;
 
     if (child.type === DomNodeType.Text || htmlTagToTextMark(child.name)) {
-      textBlocks = generateTextBlocks(child);
+      textBlocks = generateTextBlocks(child, converterOptions);
     } else {
       switch (child.name) {
         case Tag.Paragraph:
@@ -247,16 +259,16 @@ export const getCaption = (
         case Tag.Heading5:
         case Tag.Heading6:
         case Tag.Preformatted:
-          block = generateParagraphBlock(child);
+          block = generateParagraphBlock(child, converterOptions);
           break;
         case Tag.OrderedList:
-          block = generateListBlock(child, 'OrderedList');
+          block = generateListBlock(child, 'OrderedList', converterOptions);
           break;
         case Tag.UnorderedList:
-          block = generateListBlock(child, 'UnorderedList');
+          block = generateListBlock(child, 'UnorderedList', converterOptions);
           break;
         case Tag.Image:
-          block = generateImageBlock(child);
+          block = generateImageBlock(child, converterOptions);
           break;
         case Tag.IFrame:
           block = generateVideoBlock(child);
@@ -264,7 +276,7 @@ export const getCaption = (
         case Tag.Span:
         case Tag.LineBreak:
         case Tag.Anchor:
-          textBlocks = generateTextBlocks(child);
+          textBlocks = generateTextBlocks(child, converterOptions);
           break;
       }
     }
@@ -282,10 +294,10 @@ export const getCaption = (
 const getHeightAndWidthProperty = (
   styleKeyValues: Record<string, string>,
   key: string,
-  options: HtmlConverterOptions = {},
+  converterOptions: HtmlConverterOptions = {},
 ): number | undefined => {
   if (Object.prototype.hasOwnProperty.call(styleKeyValues, key)) {
-    return getLength(styleKeyValues[key], options.baseFontSize);
+    return getLength(styleKeyValues[key], converterOptions.baseFontSize);
   }
   return undefined;
 };
@@ -293,10 +305,9 @@ const getHeightAndWidthProperty = (
 const getWidthAndUnit = (
   styleKeyValues: Record<string, string>,
   key: string,
-  options: HtmlConverterOptions,
-): Length | undefined => {
+): DocumentElementLength | undefined => {
   if (Object.prototype.hasOwnProperty.call(styleKeyValues, key)) {
-    return getLengthWithUnit(styleKeyValues[key], options.baseFontSize);
+    return getLengthWithUnit(styleKeyValues[key]);
   }
   return undefined;
 };

@@ -18,7 +18,8 @@
                 "borderColor": "#e03e2d",
                 "borderStyle": "Double",
                 "borderWidth": 0.125,
-                "cellType": "Cell"
+                "cellType": "Cell",
+                "width": 10
               }
             },
             {
@@ -34,7 +35,8 @@
                 "borderColor": "#e03e2d",
                 "borderStyle": "Double",
                 "borderWidth": 0.125,
-                "cellType": "Cell"
+                "cellType": "Cell",
+                "width": 15
               }
             }
           ],

@@ -45,7 +45,6 @@ import {
   DocumentBodyTableBlock,
 } from '../models/blocks/document-body-table.js';
 import { HtmlConverterOptions } from '../models/options/html-converter-options.js';
-import { Length } from '../models/html/length.js';
 
 type TablePaddingPropertyHolder = {
   value?: number;
@@ -53,9 +52,9 @@ type TablePaddingPropertyHolder = {
 
 export const generateTableBlock = (
   tableElement: DomNode,
-  options: HtmlConverterOptions,
+  converterOptions: HtmlConverterOptions,
 ): DocumentBodyTableBlock | undefined => {
-  const table = generateTable(tableElement, options);
+  const table = generateTable(tableElement, converterOptions);
   return table
     ? {
         type: 'Table',
@@ -66,12 +65,15 @@ export const generateTableBlock = (
 
 const generateTable = (
   tableElement: DomNode,
-  options: HtmlConverterOptions,
+  converterOptions: HtmlConverterOptions,
 ): DocumentBodyTable | undefined => {
   const table: DocumentBodyTable = {
     rows: [],
   };
-  const tableProperties = generateTableProperties(tableElement, options);
+  const tableProperties = generateTableProperties(
+    tableElement,
+    converterOptions,
+  );
   let defaultCellBorderProperties: DocumentBodyTableCellBlockProperties;
   if (tableElement.attrs?.border === '1') {
     const borderWidth = tableProperties?.borderWidth;
@@ -106,7 +108,7 @@ const generateTable = (
                 childrenInDifferentTags,
                 tablePaddingProperty,
                 defaultCellBorderProperties,
-                options,
+                converterOptions,
               );
               if (rowBlock) {
                 table.rows.push(rowBlock);
@@ -125,7 +127,7 @@ const generateTable = (
                 childrenInDifferentTags,
                 tablePaddingProperty,
                 defaultCellBorderProperties,
-                options,
+                converterOptions,
               );
               if (rowBlock) {
                 table.rows.push(rowBlock);
@@ -144,7 +146,7 @@ const generateTable = (
                 childrenInDifferentTags,
                 tablePaddingProperty,
                 defaultCellBorderProperties,
-                options,
+                converterOptions,
               );
               if (rowBlock) {
                 table.rows.push(rowBlock);
@@ -157,7 +159,7 @@ const generateTable = (
         childrenInDifferentTags = tableElement.children![colgroupIndex];
         break;
       case Tag.Caption:
-        caption = getCaption(child);
+        caption = getCaption(child, converterOptions);
         if (caption) {
           if (!table.properties) {
             table.properties = {};
@@ -182,7 +184,7 @@ const generateRowBlock = (
   childrenInDifferentTags: DomNode,
   tablePaddingProperty: TablePaddingPropertyHolder,
   defaultCellProperties: DocumentBodyTableCellBlockProperties = {},
-  options: HtmlConverterOptions,
+  converterOptions: HtmlConverterOptions,
 ): DocumentBodyTableRowBlock | undefined => {
   const rowBlock: DocumentBodyTableRowBlock = {
     cells: [],
@@ -194,13 +196,13 @@ const generateRowBlock = (
     const cellBlock: DocumentBodyTableCellBlock = {
       blocks: [],
     };
-    const blocksInCell = generateCellBlock(cellElement, options);
+    const blocksInCell = generateCellBlock(cellElement, converterOptions);
     const colGroup = childrenInDifferentTags?.children![index];
     let cellProperties = generateCellProperties(
       cellElement,
       colGroup,
       tablePaddingProperty,
-      options,
+      converterOptions,
     );
     // Merging the text properties to cell properties, to handle block level properties on text block.
     const textBlockProperties = blocksInCell[0]?.text?.properties;
@@ -218,13 +220,17 @@ const generateRowBlock = (
     }
     rowBlock.cells.push(cellBlock);
   });
-  rowBlock.properties = generateRowProperties(rowElement, rowType);
+  rowBlock.properties = generateRowProperties(
+    rowElement,
+    rowType,
+    converterOptions,
+  );
   return rowBlock.cells.length ? rowBlock : undefined;
 };
 
 const generateCellBlock = (
   domNode: DomNode,
-  options: HtmlConverterOptions,
+  converterOptions: HtmlConverterOptions,
 ): DocumentTableContentBlock[] => {
   const blocks: DocumentTableContentBlock[] = [];
 
@@ -233,7 +239,7 @@ const generateCellBlock = (
     let block: DocumentTableContentBlock | undefined;
     let textBlocks: DocumentContentBlock[] | undefined;
     if (child.type === DomNodeType.Text || htmlTagToTextMark(child.name)) {
-      textBlocks = generateTextBlocks(child);
+      textBlocks = generateTextBlocks(child, converterOptions);
     } else {
       switch (child.name) {
         case Tag.Paragraph:
@@ -244,27 +250,27 @@ const generateCellBlock = (
         case Tag.Heading5:
         case Tag.Heading6:
         case Tag.Preformatted:
-          block = generateParagraphBlock(child);
+          block = generateParagraphBlock(child, converterOptions);
           break;
         case Tag.OrderedList:
-          block = generateListBlock(child, 'OrderedList');
+          block = generateListBlock(child, 'OrderedList', converterOptions);
           break;
         case Tag.UnorderedList:
-          block = generateListBlock(child, 'UnorderedList');
+          block = generateListBlock(child, 'UnorderedList', converterOptions);
           break;
         case Tag.Image:
-          block = generateImageBlock(child);
+          block = generateImageBlock(child, converterOptions);
           break;
         case Tag.IFrame:
           block = generateVideoBlock(child);
           break;
         case Tag.Table:
-          block = generateTableBlock(child, options);
+          block = generateTableBlock(child, converterOptions);
           break;
         case Tag.Span:
         case Tag.LineBreak:
         case Tag.Anchor:
-          textBlocks = generateTextBlocks(child);
+          textBlocks = generateTextBlocks(child, converterOptions);
           break;
       }
     }
@@ -284,13 +290,13 @@ const generateCellBlock = (
 
 const generateTableProperties = (
   tableElement: DomNode,
-  options: HtmlConverterOptions,
+  converterOptions: HtmlConverterOptions,
 ): DocumentBodyTableProperties | undefined => {
   let tableProperties: DocumentBodyTableProperties | undefined;
   let borderWidth;
   let cellSpacing;
   let width;
-  let widthUnit;
+  let widthWithUnit;
   let height;
   let alignment;
   let borderStyle;
@@ -310,20 +316,14 @@ const generateTableProperties = (
   if (tableElement.attrs && tableElement.attrs?.style) {
     const styleKeyValues = getStyleKeyValues(tableElement);
 
-    borderWidth = getBorderWidth(styleKeyValues);
-    cellSpacing = getBorderSpacing(styleKeyValues);
+    borderWidth = getBorderWidth(styleKeyValues, converterOptions);
+    cellSpacing = getBorderSpacing(styleKeyValues, converterOptions);
 
-    if (options.handleWidthWithUnits) {
-      const widthWithUnit: Length | undefined = getWidthWithUnit(
-        styleKeyValues,
-        options,
-      );
-      width = widthWithUnit?.length;
-      widthUnit = widthWithUnit?.unit;
-    } else {
-      width = getWidth(styleKeyValues, options);
+    if (converterOptions.handleWidthWithUnits) {
+      widthWithUnit = getWidthWithUnit(styleKeyValues);
     }
-    height = getHeight(styleKeyValues);
+    width = getWidth(styleKeyValues, converterOptions);
+    height = getHeight(styleKeyValues, converterOptions);
     alignment = getAlignment(styleKeyValues);
     borderStyle = getBorderStyle(styleKeyValues);
     borderColor = getBorderColor(styleKeyValues);
@@ -348,7 +348,7 @@ const generateTableProperties = (
     cellSpacing ||
     height ||
     width ||
-    widthUnit
+    widthWithUnit
   ) {
     tableProperties = Object.assign(
       {},
@@ -360,7 +360,7 @@ const generateTableProperties = (
       cellSpacing && { cellSpacing },
       height && { height },
       width && { width },
-      widthUnit && { widthUnit },
+      widthWithUnit && { widthWithUnit },
     );
   }
   return tableProperties;
@@ -369,6 +369,7 @@ const generateTableProperties = (
 const generateRowProperties = (
   rowElement: DomNode,
   rowType: DocumentBodyTableBlockRowType,
+  converterOptions: HtmlConverterOptions,
 ): DocumentBodyTableRowBlockProperties => {
   let alignment: DocumentBodyTableBlockHorizontalAlignType | undefined;
   let height: number | undefined;
@@ -386,7 +387,7 @@ const generateRowProperties = (
     borderColor = getBorderColor(styleKeyValues);
     borderStyle = getBorderStyle(styleKeyValues);
     alignment = getHorizontalAlign(styleKeyValues);
-    height = getHeight(styleKeyValues);
+    height = getHeight(styleKeyValues, converterOptions);
   }
 
   return Object.assign(
@@ -403,7 +404,7 @@ const generateCellProperties = (
   cellElement: DomNode,
   colGroup: DomNode,
   tablePaddingProperty: TablePaddingPropertyHolder,
-  options: HtmlConverterOptions,
+  converterOptions: HtmlConverterOptions,
 ): DocumentBodyTableCellBlockProperties | undefined => {
   let cellProperties: DocumentBodyTableCellBlockProperties | undefined;
   let rowSpan;
@@ -411,7 +412,7 @@ const generateCellProperties = (
   let cellType: DocumentBodyTableBlockCellType | undefined;
   let scope: DocumentBodyTableBlockScopeType | undefined;
   let width;
-  let widthUnit;
+  let widthWithUnit;
   let cellStyleJson = {};
   let borderColor;
   let borderStyle;
@@ -426,12 +427,9 @@ const generateCellProperties = (
           const styleJson = {
             [keyValue[0]]: keyValue[1],
           };
-          if (options.handleWidthWithUnits) {
-            const widthAndUnit = getWidthWithUnit(styleJson, options);
-            width = widthAndUnit?.length;
-            widthUnit = widthAndUnit?.unit;
-          } else {
-            width = getWidth(styleJson, options);
+          width = getWidth(styleJson, converterOptions);
+          if (converterOptions.handleWidthWithUnits) {
+            widthWithUnit = getWidthWithUnit(styleJson);
           }
         }
       });
@@ -464,16 +462,19 @@ const generateCellProperties = (
   tablePaddingProperty.value = getPadding(cellStyleJson);
   const horizontalAlign = getHorizontalAlign(cellStyleJson);
   const verticalAlign = getVerticalAlign(cellStyleJson);
-  const height = getHeight(cellStyleJson);
+  const height = getHeight(cellStyleJson, converterOptions);
   const backgroundColor =
     getBackgroundColor(cellStyleJson) ?? cellElement.attrs?.bgcolor; // Handle bgcolor attribute
   borderColor = getBorderColor(cellStyleJson);
   borderStyle = getBorderStyle(cellStyleJson);
-  borderWidth = getBorderWidth(cellStyleJson);
+  borderWidth = getBorderWidth(cellStyleJson, converterOptions);
   if (
     Object.prototype.hasOwnProperty.call(cellStyleJson, StyleAttribute.Width)
   ) {
-    width = getWidth(cellStyleJson);
+    width = getWidth(cellStyleJson, converterOptions);
+    if (converterOptions.handleWidthWithUnits) {
+      widthWithUnit = getWidthWithUnit(cellStyleJson);
+    }
   }
   if (
     Object.prototype.hasOwnProperty.call(cellStyleJson, StyleAttribute.Border)
@@ -494,7 +495,7 @@ const generateCellProperties = (
     scope ||
     verticalAlign ||
     width ||
-    widthUnit
+    widthWithUnit
   ) {
     cellProperties = Object.assign(
       {},
@@ -510,7 +511,7 @@ const generateCellProperties = (
       scope && { scope },
       verticalAlign && { verticalAlign },
       width && { width },
-      widthUnit && { widthUnit },
+      widthWithUnit && { widthWithUnit },
     );
   }
   return cellProperties;
