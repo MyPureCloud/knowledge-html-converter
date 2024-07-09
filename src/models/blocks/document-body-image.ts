@@ -9,6 +9,8 @@ export interface DocumentBodyImageBlock {
 export interface DocumentBodyImage {
   url: string;
   hyperlink?: string;
+  externalDocumentId?: string;
+  externalVariationName?: string;
   properties?: DocumentBodyImageProperties;
 }
 

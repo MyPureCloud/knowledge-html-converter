@@ -17,6 +17,8 @@ export interface DocumentText {
   text: string;
   marks?: DocumentTextMarks[];
   hyperlink?: string;
+  externalDocumentId?: string;
+  externalVariationName?: string;
   properties?: DocumentTextProperties;
 }
 

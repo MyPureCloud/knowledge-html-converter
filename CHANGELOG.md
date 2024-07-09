@@ -1,5 +1,11 @@
 # Change log
 
+## 0.5.0 (2024-08-09)
+
+### Added:
+
+1. Adding internal document linking related fields to the models of text and image blocks
+
 ## 0.4.0 (2024-07-02)
 
 ### Changed:
