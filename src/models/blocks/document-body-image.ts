@@ -20,4 +20,5 @@ export interface DocumentBodyImageProperties {
   indentation?: number;
   width?: number;
   widthWithUnit?: DocumentElementLength;
+  altText?: string;
 }

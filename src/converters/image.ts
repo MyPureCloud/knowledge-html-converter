@@ -66,6 +66,7 @@ const getImageProperties = (
     let backgroundColor: string | undefined;
     let width: number | undefined;
     let widthWithUnit: DocumentElementLength | undefined;
+    let altText: string | undefined;
 
     if (imageElement.attrs.style) {
       const styleKeyValues = getStyleKeyValues(imageElement);
@@ -76,6 +77,11 @@ const getImageProperties = (
         widthWithUnit = getWidthWithUnit(styleKeyValues);
       }
     }
+
+    if (imageElement.attrs.alt) {
+      altText = imageElement.attrs.alt;
+    }
+
     if (align || backgroundColor || width || widthWithUnit) {
       imageProperties = Object.assign(
         {},
@@ -83,6 +89,7 @@ const getImageProperties = (
         backgroundColor && { backgroundColor },
         width && { width },
         widthWithUnit && { widthWithUnit },
+        altText && { altText },
       );
     }
   }

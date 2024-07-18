@@ -9,7 +9,8 @@
         "widthWithUnit": {
           "value": 10,
           "unit": "Em"
-        }
+        },
+        "altText": "No image available"
       }
     }
   }

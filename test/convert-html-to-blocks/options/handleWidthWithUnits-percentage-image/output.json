@@ -9,7 +9,8 @@
         "widthWithUnit": {
           "value": 100,
           "unit": "Percentage"
-        }
+        },
+        "altText": "No image available"
       }
     }
   }
