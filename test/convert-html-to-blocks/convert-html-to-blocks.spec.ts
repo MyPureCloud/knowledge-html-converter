@@ -92,6 +92,10 @@ describe('convert-html-to-blocks', function () {
 
   describe('video', function () {
     it('simple', test); // knowledge-administration-ui / video-block-utils.spec.ts / should generate video blocks from html
+    it('video-with-properties', test); // knowledge-administration-ui / video-block-utils.spec.ts / should generate video blocks from html with properties
+    it('video-with-properties-em-width-from-style', test); // knowledge-administration-ui / video-block-utils.spec.ts / should generate video blocks from html with properties
+    it('video-with-properties-px-width-from-style', test); // knowledge-administration-ui / video-block-utils.spec.ts / should generate video blocks from html with properties
+    it('video-with-properties-percentage-width-from-style', test); // knowledge-administration-ui / video-block-utils.spec.ts / should generate video blocks from html with properties
   });
 
   /*
@@ -120,7 +124,15 @@ describe('convert-html-to-blocks', function () {
     it('handleWidthWithUnits-disabled', testHandleWidthWithUnitDisabled);
     // handleWidthWithUnits - for images
     it('handleWidthWithUnits-percentage-image', testHandleWidthWithUnitEnabled);
+    it(
+      'handleWidthWithUnits-percentage-image-from-width-attribute',
+      testHandleWidthWithUnitEnabled,
+    );
     it('handleWidthWithUnits-pixel-image', testHandleWidthWithUnitEnabled);
+    it(
+      'handleWidthWithUnits-pixel-image-from-width-attribute',
+      testHandleWidthWithUnitEnabled,
+    );
     it(
       'handleWidthWithUnits-pixel-image-no-input-unit',
       testHandleWidthWithUnitEnabled,

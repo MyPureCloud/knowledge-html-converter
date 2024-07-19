@@ -1,0 +1,17 @@
+[
+  {
+    "type": "Image",
+    "image": {
+      "url": "https://www.genesys.com/media/genesys-logo-base.svg",
+      "properties": {
+        "align": "Right",
+        "width": 10,
+        "widthWithUnit": {
+          "value": 160,
+          "unit": "Px"
+        },
+        "altText": "No image available"
+      }
+    }
+  }
+]
