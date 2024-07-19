@@ -1,5 +1,13 @@
 # Change log
 
+## 0.7.0 (2024-07-26)
+
+### Added:
+
+1. Added width property to video blocks, containing value and unit properties.
+2. Added altText property to image blocks. Maximum length is 200 characters.
+3. Added support for generating width property from width attribute to image and video blocks.
+
 ## 0.6.0 (2024-07-23)
 
 ### Added:

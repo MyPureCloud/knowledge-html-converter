@@ -20,6 +20,16 @@ describe('convert-html-to-blocks', function () {
     it('image', test); // knowledge-administration-ui / image-block-utils.spec.ts / should generate image block from image html
     it('image-with-properties', test); // knowledge-administration-ui / image-block-utils.spec.ts / should generate image block with properties from image html
     it('image-with-embedded-src', test);
+    it('image-with-properties-max-alt-length', async function (this: Context, options: HtmlConverterOptions = {}) {
+      const dirName = join('test', ...this.test!.titlePath());
+      const html = (await readFile(join(dirName, 'input.html')))
+        .toString()
+        .replace(/\r/gi, '');
+
+      const actualJson = convertHtmlToBlocks(html, options);
+
+      expect(actualJson?.[0]?.image?.properties?.altText?.length).to.equal(200);
+    });
   });
 
   describe('list', function () {

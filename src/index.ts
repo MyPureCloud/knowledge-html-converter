@@ -1,5 +1,4 @@
 export { convertHtmlToBlocks } from './converter.js';
-export { traverseBlocks } from './traverse-blocks.js';
 
 export {
   DocumentBodyBlock,
@@ -21,8 +20,9 @@ export {
   DocumentBodyImageBlock,
 } from './models/blocks/document-body-image.js';
 export {
-  DocumentBodyVideo,
   DocumentBodyVideoBlock,
+  DocumentBodyVideo,
+  DocumentBodyVideoProperties,
 } from './models/blocks/document-body-video.js';
 export {
   DocumentBodyList,

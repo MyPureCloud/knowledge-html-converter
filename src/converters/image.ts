@@ -94,7 +94,7 @@ const getImageProperties = (
     }
 
     if (imageElement.attrs.alt) {
-      altText = imageElement.attrs.alt;
+      altText = imageElement.attrs.alt.substring(0, 200);
     }
 
     if (align || backgroundColor || width || widthWithUnit) {

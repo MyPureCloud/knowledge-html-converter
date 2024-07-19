@@ -18,12 +18,7 @@ export const generateVideoBlock = (
 };
 
 const generateVideo = (iframeElement: DomNode): DocumentBodyVideo => {
-  let videoUrl = iframeElement.attrs?.src || '';
-  videoUrl = videoUrl
-    .replace(/&amp;/g, '&')
-    .replace(/&gt;/g, '>')
-    .replace(/&lt;/g, '<')
-    .replace(/&quot;/g, '"');
+  const videoUrl = iframeElement.attrs?.src || '';
 
   const properties = getVideoProperties(iframeElement);
 
