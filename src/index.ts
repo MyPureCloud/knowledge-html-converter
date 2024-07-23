@@ -1,4 +1,5 @@
 export { convertHtmlToBlocks } from './converter.js';
+export { traverseBlocks } from './traverse-blocks.js';
 
 export {
   DocumentBodyBlock,
@@ -19,7 +20,10 @@ export {
   DocumentBodyImageProperties,
   DocumentBodyImageBlock,
 } from './models/blocks/document-body-image.js';
-export { DocumentBodyVideo } from './models/blocks/document-body-video.js';
+export {
+  DocumentBodyVideo,
+  DocumentBodyVideoBlock,
+} from './models/blocks/document-body-video.js';
 export {
   DocumentBodyList,
   DocumentBodyListBlock,
@@ -54,6 +58,7 @@ export {
 } from './models/blocks/document-body-table.js';
 export {
   DocumentText,
+  DocumentTextBlock,
   DocumentTextMarks,
   DocumentTextProperties,
 } from './models/blocks/document-text.js';
@@ -62,3 +67,5 @@ export {
   DocumentElementLength,
   DocumentElementLengthUnit,
 } from './models/blocks/document-element-length.js';
+
+export { Block } from './models/blocks/block.js';

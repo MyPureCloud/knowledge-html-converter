@@ -1,6 +1,12 @@
 # Change log
 
-## 0.5.0 (2024-08-09)
+## 0.6.0 (2024-07-23)
+
+### Added:
+
+1. Adding helper function for document traversal: traverseBlocks
+
+## 0.5.0 (2024-07-09)
 
 ### Added:
 
