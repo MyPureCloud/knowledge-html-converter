@@ -1,4 +1,5 @@
 export { convertHtmlToBlocks } from './converter.js';
+export { traverseBlocks } from './traverse-blocks.js';
 
 export {
   DocumentBodyBlock,
