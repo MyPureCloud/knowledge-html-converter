@@ -5,7 +5,11 @@ import {
   DocumentBodyVideoProperties,
 } from '../models/blocks/document-body-video.js';
 import { DocumentElementLength } from '../models/blocks/document-element-length.js';
-import { getStyleKeyValues, getWidthWithUnit } from './table-properties.js';
+import {
+  getHeightWithUnit,
+  getStyleKeyValues,
+  getWidthWithUnit,
+} from './table-properties.js';
 import { StyleAttribute } from '../models/html/style-attribute.js';
 
 export const generateVideoBlock = (
@@ -32,9 +36,14 @@ const getVideoProperties = (
 
   if (iframeElement.attrs) {
     let width: DocumentElementLength | undefined;
+    let height: DocumentElementLength | undefined;
 
     if (iframeElement.attrs?.width) {
       width = getWidthWithUnit({ width: iframeElement.attrs?.width });
+    }
+
+    if (iframeElement.attrs?.height) {
+      height = getHeightWithUnit({ height: iframeElement.attrs?.height });
     }
 
     if (iframeElement.attrs?.style) {
@@ -48,10 +57,23 @@ const getVideoProperties = (
       ) {
         width = getWidthWithUnit(styleKeyValues);
       }
+
+      if (
+        Object.prototype.hasOwnProperty.call(
+          styleKeyValues,
+          StyleAttribute.Height,
+        )
+      ) {
+        height = getHeightWithUnit(styleKeyValues);
+      }
     }
 
     if (width) {
-      videoProperties = Object.assign({}, width && { width });
+      videoProperties = Object.assign(
+        {},
+        width && { width },
+        height && { height },
+      );
     }
   }
 

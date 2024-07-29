@@ -7,6 +7,10 @@
         "width": {
           "value": 10,
           "unit": "Em"
+        },
+        "height": {
+          "value": 5,
+          "unit": "Em"
         }
       }
     }

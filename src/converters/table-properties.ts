@@ -234,6 +234,12 @@ export const getWidthWithUnit = (
   return getWidthAndUnit(styleKeyValues, StyleAttribute.Width);
 };
 
+export const getHeightWithUnit = (
+  styleKeyValues: Record<string, string>,
+): DocumentElementLength | undefined => {
+  return getWidthAndUnit(styleKeyValues, StyleAttribute.Height);
+};
+
 export const getCaption = (
   captionElement: DomNode,
   converterOptions: HtmlConverterOptions = {},

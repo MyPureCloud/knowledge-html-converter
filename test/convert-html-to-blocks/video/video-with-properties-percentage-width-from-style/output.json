@@ -5,8 +5,12 @@
       "url": "https://www.example.com/video",
       "properties": {
         "width": {
-          "value": 160,
-          "unit": "Px"
+          "value": 30,
+          "unit": "Percentage"
+        },
+        "height": {
+          "value": 5,
+          "unit": "Percentage"
         }
       }
     }
