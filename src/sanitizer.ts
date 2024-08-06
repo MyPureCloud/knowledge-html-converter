@@ -8,7 +8,7 @@ const options: IOptions = {
   allowedAttributes: {
     '*': ['style'],
     a: ['title', 'href', 'target'],
-    iframe: ['src'],
+    iframe: ['src', 'width', 'height', 'style'],
     img: [
       'src',
       'srcset',

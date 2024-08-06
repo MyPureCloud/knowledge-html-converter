@@ -1,0 +1,18 @@
+[
+  {
+    "type": "Video",
+    "video": {
+      "url": "https://www.example.com/video",
+      "properties": {
+        "width": {
+          "value": 30,
+          "unit": "Percentage"
+        },
+        "height": {
+          "value": 5,
+          "unit": "Percentage"
+        }
+      }
+    }
+  }
+]

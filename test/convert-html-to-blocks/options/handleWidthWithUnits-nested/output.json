@@ -50,7 +50,8 @@
               "widthWithUnit": {
                 "value": 160,
                 "unit": "Px"
-              }
+              },
+              "altText": "No image available"
             }
           }
         }
@@ -92,7 +93,8 @@
                   "widthWithUnit": {
                     "value": 10,
                     "unit": "Em"
-                  }
+                  },
+                  "altText": "No image available"
                 }
               }
             }
@@ -117,7 +119,8 @@
                             "widthWithUnit": {
                               "value": 10,
                               "unit": "Em"
-                            }
+                            },
+                            "altText": "No image available"
                           }
                         }
                       }
@@ -215,7 +218,8 @@
                                     "widthWithUnit": {
                                       "value": 50,
                                       "unit": "Percentage"
-                                    }
+                                    },
+                                    "altText": "No image available"
                                   }
                                 }
                               }

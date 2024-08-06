@@ -9,7 +9,8 @@
         "widthWithUnit": {
           "value": 160,
           "unit": "Px"
-        }
+        },
+        "altText": "No image available"
       }
     }
   }

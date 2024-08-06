@@ -21,8 +21,9 @@ export {
   DocumentBodyImageBlock,
 } from './models/blocks/document-body-image.js';
 export {
-  DocumentBodyVideo,
   DocumentBodyVideoBlock,
+  DocumentBodyVideo,
+  DocumentBodyVideoProperties,
 } from './models/blocks/document-body-video.js';
 export {
   DocumentBodyList,

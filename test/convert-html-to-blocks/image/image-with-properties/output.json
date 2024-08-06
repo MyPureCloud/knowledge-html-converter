@@ -4,7 +4,8 @@
     "image": {
       "url": "https://www.genesys.com/media/genesys-logo-base.svg",
       "properties": {
-        "align": "Right"
+        "align": "Right",
+        "altText": "No image available"
       }
     }
   }

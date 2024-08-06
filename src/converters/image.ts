@@ -66,16 +66,37 @@ const getImageProperties = (
     let backgroundColor: string | undefined;
     let width: number | undefined;
     let widthWithUnit: DocumentElementLength | undefined;
+    let altText: string | undefined;
+
+    if (imageElement.attrs?.width) {
+      width = getWidth({ width: imageElement.attrs?.width }, converterOptions);
+      if (converterOptions.handleWidthWithUnits) {
+        widthWithUnit = getWidthWithUnit({ width: imageElement.attrs?.width });
+      }
+    }
 
     if (imageElement.attrs.style) {
       const styleKeyValues = getStyleKeyValues(imageElement);
 
       align = getFloat(styleKeyValues);
-      width = getWidth(styleKeyValues, converterOptions);
-      if (converterOptions.handleWidthWithUnits) {
-        widthWithUnit = getWidthWithUnit(styleKeyValues);
+
+      if (
+        Object.prototype.hasOwnProperty.call(
+          styleKeyValues,
+          StyleAttribute.Width,
+        )
+      ) {
+        width = getWidth(styleKeyValues, converterOptions);
+        if (converterOptions.handleWidthWithUnits) {
+          widthWithUnit = getWidthWithUnit(styleKeyValues);
+        }
       }
     }
+
+    if (imageElement.attrs.alt) {
+      altText = imageElement.attrs.alt.substring(0, 200);
+    }
+
     if (align || backgroundColor || width || widthWithUnit) {
       imageProperties = Object.assign(
         {},
@@ -83,6 +104,7 @@ const getImageProperties = (
         backgroundColor && { backgroundColor },
         width && { width },
         widthWithUnit && { widthWithUnit },
+        altText && { altText },
       );
     }
   }
