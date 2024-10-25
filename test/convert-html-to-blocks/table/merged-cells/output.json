@@ -102,8 +102,8 @@
       "properties": {
         "width": 75.0315,
         "borderWidth": 0.0625,
-        "borderColor": "#E03E2D",
-        "backgroundColor": "#F8CAC6"
+        "borderColor": "#e03e2d",
+        "backgroundColor": "#f8cac6"
       }
     }
   }

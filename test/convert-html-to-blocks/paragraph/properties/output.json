@@ -101,7 +101,6 @@
           "text": {
             "text": "underline",
             "properties": {
-              "backgroundColor": "#f1c40f",
               "fontSize": "Large",
               "textColor": "#e03e2d"
             },
