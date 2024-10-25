@@ -1,5 +1,11 @@
 # Change log
 
+## 0.7.2 (2024-10-25)
+
+### Bugfixes:
+
+1. Fixed issue with unknown color expression defaulting to black instead of nothing.
+
 ## 0.7.0 (2024-08-06)
 
 ### Added:
