@@ -1,6 +1,6 @@
 {
   "name": "knowledge-html-converter",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Converts html to the json format of genesys knowledge article content.",
   "author": "Genesys Cloud Services, Inc.",
   "license": "MIT",
