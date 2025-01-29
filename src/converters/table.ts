@@ -205,9 +205,10 @@ const generateRowBlock = (
       converterOptions,
     );
     // Merging the text properties to cell properties, to handle block level properties on text block.
-    const textBlockProperties = blocksInCell[0]?.text?.properties;
-    cellProperties = textBlockProperties
-      ? Object.assign(cellProperties ?? {}, textBlockProperties)
+    const { textColor: _textColor, ...textBlockPropertiesWithoutTextColor } =
+      blocksInCell[0]?.text?.properties ?? {};
+    cellProperties = textBlockPropertiesWithoutTextColor
+      ? Object.assign(cellProperties ?? {}, textBlockPropertiesWithoutTextColor)
       : cellProperties;
     cellBlock.blocks = blocksInCell;
     // Default properties are overridden by cell properties.

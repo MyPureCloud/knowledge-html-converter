@@ -19,8 +19,7 @@
                 }
               ],
               "properties": {
-                "cellType": "Cell",
-                "textColor": "#000000"
+                "cellType": "Cell"
               }
             },
             {
@@ -37,8 +36,7 @@
                 }
               ],
               "properties": {
-                "cellType": "Cell",
-                "textColor": "#000000"
+                "cellType": "Cell"
               }
             }
           ],
