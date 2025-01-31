@@ -1,5 +1,11 @@
 # Change log
 
+## 0.7.3 (2025-01-31)
+
+### Bugfixes:
+
+1. Fixed issue where cellBlockText's textColor property was being copied to cell properties.
+
 ## 0.7.2 (2024-10-25)
 
 ### Bugfixes:
