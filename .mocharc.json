@@ -1,4 +1,4 @@
 {
   "spec": "test/**/*.spec.ts",
-  "node-option": ["loader=@istanbuljs/esm-loader-hook", "loader=ts-node/esm"]
+  "node-option": ["loader=ts-node/esm"]
 }

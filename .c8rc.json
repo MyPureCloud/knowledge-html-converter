@@ -1,0 +1,6 @@
+{
+  "all": true,
+  "exclude": ["src/test", "src/models", "**/*.d.ts"],
+  "include": ["src/**/*.ts"],
+  "reporter": ["text", "html", "cobertura"]
+}
