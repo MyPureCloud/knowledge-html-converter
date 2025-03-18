@@ -7,7 +7,7 @@
           "type": "Text",
           "text": {
             "text": "bold link",
-            "hyperlink": "https://google.com",
+            "hyperlink": "https://example.com",
             "marks": ["Italic", "Bold"],
             "properties": {
               "backgroundColor": "#f8cac6"

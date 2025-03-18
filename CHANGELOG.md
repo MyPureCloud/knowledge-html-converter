@@ -1,5 +1,12 @@
 # Change log
 
+## 0.8.0 (2025-03-17)
+
+### Added:
+
+1. Added new converter option: hyperlinkBaseUrl.
+2. Added support for relative hyperlink paths. These will be extended to absolute with hyperlinkBaseUrl.
+
 ## 0.7.3 (2025-01-31)
 
 ### Bugfixes:

@@ -13,7 +13,8 @@
         {
           "type": "Text",
           "text": {
-            "text": " link to link"
+            "text": "link to link",
+            "hyperlink": "#site-link"
           }
         }
       ],

@@ -115,6 +115,8 @@ describe('convert-html-to-blocks', function () {
     
     2) baseFontSize: Need this during the conversions of em, px. The default text size in browsers is 16px. So, the default size of 1em is 16px.
         If user needs to override, then use this option like 'baseFontSize : 20'.
+
+    3) hyperlinkBaseUrl: Relative hyperlink paths will be extended to absolute paths with the base url
   */
   describe('options', function () {
     // all options are undefined, then it should work Default values.
@@ -154,6 +156,9 @@ describe('convert-html-to-blocks', function () {
 
     // baseFontSize
     it('baseFontSize-set', testBaseFontSize); // Set to 32 {baseFontSize: 32}
+
+    // hyperlinkBaseUrl
+    it('hyperlink-with-relative-path', testHyperlinkWithRelativePath);
   });
 
   /**
@@ -220,6 +225,12 @@ describe('convert-html-to-blocks', function () {
     return test.call(this, {
       baseFontSize: undefined,
       handleWidthWithUnits: undefined,
+    } as HtmlConverterOptions);
+  }
+
+  async function testHyperlinkWithRelativePath(this: Context): Promise<void> {
+    return test.call(this, {
+      hyperlinkBaseUrl: 'https://www.example.com/',
     } as HtmlConverterOptions);
   }
 

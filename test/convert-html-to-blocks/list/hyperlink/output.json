@@ -16,7 +16,7 @@
               "type": "Text",
               "text": {
                 "text": "link",
-                "hyperlink": "https://google.com"
+                "hyperlink": "https://example.com"
               }
             }
           ]
@@ -34,7 +34,7 @@
               "type": "Text",
               "text": {
                 "text": "link",
-                "hyperlink": "https://www.youtube.com/"
+                "hyperlink": "https://www.example.com/"
               }
             }
           ]

@@ -4,6 +4,11 @@ import { DocumentContentBlock } from '../models/blocks/document-body-paragraph.j
 import { StyleAttribute } from '../models/html/style-attribute.js';
 import { DocumentBodyBlockFontSize, HtmlConverterOptions } from '../index.js';
 
+export const URL_PATTERNS = {
+  WWW: 'www.',
+  HTTPS: 'https://',
+};
+
 export const generateHyperlinkBlock = (
   anchorElement: DomNode,
   converterOptions: HtmlConverterOptions,
@@ -18,11 +23,11 @@ export const generateHyperlinkBlock = (
   const blockDisplay = 'block';
   let displayText = '';
 
-  let hyperlink: string | undefined =
-    anchorElement.attrs?.href || anchorElement.attrs?.title;
-  if (hyperlink && hyperlink.startsWith('#')) {
-    hyperlink = undefined;
-  }
+  const hyperlink: string | undefined = getHyperlink(
+    anchorElement,
+    converterOptions,
+  );
+
   // validate all the child nodes are block nodes i'e display: block
   const isBlockElement = anchorElement.children?.forEach((child) => {
     child.attrs?.style
@@ -94,4 +99,45 @@ export const generateHyperlinkBlock = (
     }
   }
   return textBlock;
+};
+
+const getHyperlink = (
+  anchorElement: DomNode,
+  converterOptions: HtmlConverterOptions,
+): string | undefined => {
+  const hyperlink: string | undefined =
+    anchorElement.attrs?.href || anchorElement.attrs?.title;
+
+  if (hyperlink && hyperlink.startsWith(URL_PATTERNS.WWW)) {
+    return `${URL_PATTERNS.HTTPS}${hyperlink}`;
+  } else if (
+    hyperlink &&
+    converterOptions.hyperlinkBaseUrl &&
+    isRelativeUrl(hyperlink)
+  ) {
+    return convertToAbsolute(hyperlink, converterOptions.hyperlinkBaseUrl);
+  }
+
+  return hyperlink;
+};
+
+const isRelativeUrl = (hyperlink: string): boolean => {
+  try {
+    const urlObject = new URL(hyperlink);
+    return urlObject.protocol === null;
+  } catch (error) {
+    // Invalid URL, treat it as relative if it doesn't start with //
+    return !hyperlink.startsWith('//');
+  }
+};
+
+const convertToAbsolute = (
+  url: string,
+  baseUrl: string,
+): string | undefined => {
+  try {
+    return new URL(url, baseUrl).href;
+  } catch (error) {
+    return undefined;
+  }
 };
