@@ -205,6 +205,69 @@
               }
             }
           ]
+        },
+        {
+          "type": "ListItem",
+          "blocks": [
+            {
+              "type": "Text",
+              "text": {
+                "text": "A list item with unordered list children"
+              }
+            },
+            {
+              "type": "UnorderedList",
+              "list": {
+                "blocks": [
+                  {
+                    "type": "ListItem",
+                    "blocks": [
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "This is a bullet point for list item3 with a "
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "link",
+                          "hyperlink": "https://example.com/"
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "&nbsp; and "
+                        }
+                      },
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "formatting",
+                          "properties": {
+                            "backgroundColor": "#f1c40f",
+                            "textColor": "#e03e2d"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "ListItem",
+                    "blocks": [
+                      {
+                        "type": "Text",
+                        "text": {
+                          "text": "This is a bullet point without formatting for list item3"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
         }
       ]
     }

@@ -189,6 +189,12 @@ const getFontType = (
   const children = listItemElement.children || [];
   for (let i = 0; i < children.length; i++) {
     if (children[i].type === DomNodeType.Tag) {
+      if (
+        children[i].name?.toLowerCase() === Tag.OrderedList ||
+        children[i].name?.toLowerCase() === Tag.UnorderedList
+      ) {
+        continue;
+      }
       const fontType = htmlTagToFontType(children[i].name);
       if (fontType) {
         return fontType;
