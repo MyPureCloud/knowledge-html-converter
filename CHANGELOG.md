@@ -7,7 +7,6 @@
 Updated to node (v18) and dependencies.
 Dropping support for node16.
 
-
 ## 0.8.0 (2025-03-17)
 
 ### Added:
