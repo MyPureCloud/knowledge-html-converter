@@ -125,7 +125,7 @@ const isRelativeUrl = (hyperlink: string): boolean => {
   try {
     const urlObject = new URL(hyperlink);
     return urlObject.protocol === null;
-  } catch (error) {
+  } catch {
     // Invalid URL, treat it as relative if it doesn't start with //
     return !hyperlink.startsWith('//');
   }
@@ -137,7 +137,7 @@ const convertToAbsolute = (
 ): string | undefined => {
   try {
     return new URL(url, baseUrl).href;
-  } catch (error) {
+  } catch {
     return undefined;
   }
 };

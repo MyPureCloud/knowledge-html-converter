@@ -1,5 +1,12 @@
 # Change log
 
+## 0.9.0 (2025-06-05)
+
+### Changed:
+
+Updated to node (v18) and dependencies.
+Dropping support for node16.
+
 ## 0.8.0 (2025-03-17)
 
 ### Added:
