@@ -97,7 +97,7 @@ fetch('https://api.mypurecloud.com/api/v2/knowledge/knowledgeBases/<kb-id>/docum
 
 ## Developer setup
 
-Node v18, npm v9.
+Node v22, npm v10.
 
 ### Git Pre-commit Hooks
 

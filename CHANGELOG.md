@@ -1,5 +1,13 @@
 # Change log
 
+## 0.10.0 (2026-07-27)
+
+### Changed:
+
+Updated to node (v22) and npm (v10).
+Dropping support for node18.
+Updated sanitize-html and postcss dependencies.
+
 ## 0.9.0 (2025-06-05)
 
 ### Changed:
