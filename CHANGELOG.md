@@ -1,5 +1,11 @@
 # Change log
 
+## 0.10.1 (2026-08-04)
+
+### Changed:
+
+Updated sanitize-html, postcss, and nanoid dependencies.
+
 ## 0.10.0 (2026-07-27)
 
 ### Changed:
