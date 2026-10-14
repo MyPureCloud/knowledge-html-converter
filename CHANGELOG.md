@@ -1,5 +1,11 @@
 # Change log
 
+## 0.10.2 (2026-10-14)
+
+### Changed:
+
+Updated sanitize-html dependency.
+
 ## 0.10.1 (2026-08-04)
 
 ### Changed:
