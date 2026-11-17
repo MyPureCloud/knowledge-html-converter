@@ -97,6 +97,20 @@ const generateTable = (
   }
   tableElement.children?.forEach((child, index) => {
     switch (child.name) {
+      case Tag.TableRow: {
+        const rowBlock = generateRowBlock(
+          child,
+          DocumentBodyTableBlockRowType.Body,
+          childrenInDifferentTags,
+          tablePaddingProperty,
+          defaultCellBorderProperties,
+          converterOptions,
+        );
+        if (rowBlock) {
+          table.rows.push(rowBlock);
+        }
+        break;
+      }
       case Tag.TableBody:
         if (child.children) {
           child.children
