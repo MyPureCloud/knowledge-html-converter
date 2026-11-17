@@ -1,6 +1,12 @@
 # Change log
 
-## 0.10.2 (2026-10-14)
+## 0.10.3 (2026-11-18)
+
+### Bugfixes:
+
+Fixed https://github.com/MyPureCloud/knowledge-html-converter/issues/11
+
+## 0.10.2 (2026-11-18)
 
 ### Changed:
 
