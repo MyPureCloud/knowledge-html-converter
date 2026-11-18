@@ -82,6 +82,8 @@ describe('convert-html-to-blocks', function () {
     it('colors', test);
     it('border', test);
     it('with-block-text', test);
+    it('tr-without-thead', test);
+    it('tr-with-thead-without-tbody', test);
   });
 
   describe('text', function () {
